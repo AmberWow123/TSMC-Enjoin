@@ -8,9 +8,9 @@ f = open('key.json', 'r')
 data = json.load(f)
 user = data["user"]
 password = data["password"]
-
+db = data["db"]
 # url = "mongodb://localhost:27017/hackathon"
-url = "mongodb+srv://"+user+":"+password+"@cluster0.56zcf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+url = "mongodb+srv://"+user+":"+password+db
 app = Flask(__name__)
 app.config["MONGO_URI"] = url
 mongo.init_app(app)
