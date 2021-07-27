@@ -25,5 +25,5 @@ app.register_blueprint(routes)
 
 if __name__ == '__main__':
     # app.debug = True
-    app.run()
+    app.run(debug=True)
     
