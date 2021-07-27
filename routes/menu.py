@@ -34,3 +34,16 @@ def show_all_factories():
 
     result = json.loads(json_util.dumps(output))
     return result
+
+@routes.route('/Menu/ListRestaurant/', methods=['GET'])
+def list_restaurants():
+    menu_table = db['menu']
+
+    output = {}
+    output['store'] = []
+
+    for store in menu_table.find():
+        print(store['name'])
+        output['store'].append(store['name'])
+    
+    return output
