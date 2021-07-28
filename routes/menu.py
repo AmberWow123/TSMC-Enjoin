@@ -35,15 +35,17 @@ def show_all_factories():
     result = json.loads(json_util.dumps(output))
     return result
 
-@routes.route('/Menu/ListRestaurant/', methods=['GET'])
-def list_restaurants():
+@routes.route('/Menu/ListRestaurant/<string:fab>', methods=['GET'])
+def list_restaurants(fab):
+    fab_table = db['factory']
     menu_table = db['menu']
 
-    output = {}
-    output['store'] = []
+    store_list = fab_table.find({'name': fab}, {"_id": 0, "name": 0})[0]
 
-    for store in menu_table.find():
-        print(store['name'])
-        output['store'].append(store['name'])
+    output = {}
+
+    for store in store_list['stores']:
+        fd_dr = menu_table.find({'name': store}, {'_id': 0, 'name': 0})[0]
+        output[store] = fd_dr['food_drink']
     
     return output
