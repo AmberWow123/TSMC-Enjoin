@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from models import mongo
 import dns
 import json
@@ -12,6 +13,7 @@ db = data["db"]
 # url = "mongodb://localhost:27017/hackathon"
 url = "mongodb+srv://"+user+":"+password+db
 app = Flask(__name__)
+CORS(app)
 app.config["MONGO_URI"] = url
 mongo.init_app(app)
 
