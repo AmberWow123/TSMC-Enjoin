@@ -20,20 +20,22 @@ def ListAllGroupOrder():
     return jsonify(message=json.dumps(order_list, default=json_util.default))
 
 # 搜尋hashtag
-@routes.route("/Order/SearchByHashtag", methods=['GET'])
+@routes.route("/Order/SearchByHashtag", methods=['POST'])
 def SearchByHashtag():
-    print(db.collection_names())
-    return jsonify(message='SeatchByHashtag!')
+    search_key = request.form.get("search_key")
+    search_result = list(db["order"].find({"hashtag":search_key}))
+    # for order in db["order"].find({"hashtag":search_key}):
+    #     print(order["_id"])
+    return jsonify(message=json.dumps(search_result, default=json_util.default))
 
 
-@routes.route("/Order/JoinOrder/<string:uuid>", methods=['POST'])
-def JoinOrder():
-    json = request.get_json()
-    print(json)
-    _id = json['id']
-    password = json['password']
-    fab = json['fab']
+@routes.route("/Order/JoinOrder/<string:uuid>/<string:goid>", methods=['POST'])
+def JoinOrder(uuid, goid):
+    print("uuid",uuid)
+    print("goid", goid)
+    json = request.form
+    # account_result = db["account"].find_one({'_id': ObjectId(uuid)})
 
-    db['account'].insert_one({'id': _id, 'password': password, 'fab': fab})
+    # db['account'].insert_one({'id': _id, 'password': password, 'fab': fab})
     return jsonify(message="success")
 
