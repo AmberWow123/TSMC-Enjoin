@@ -28,23 +28,23 @@ def accountCreate():
     password = request.form['password']
     fab = request.form['fab']
 
-    db['account'].insert_one({'id': _id, 'password': password, 'fab': fab})
-    
-    result = db['account'].find_one({'id': id})
+    result = db['account'].find_one({'id': _id})
     if result:
-        response = jsonify(message="error")
+        response = jsonify(message="已註冊過的工號")
     else:
+        db['account'].insert_one({'id': str(_id), 'password': password, 'fab': fab})
         response = jsonify(message="success")
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers['Access-Control-Allow-Method'] = '*'
     response.headers['Access-Control-Allow-Headers'] = '*'
+    print(response)
     return response
 
-@routes.route("Account/Login", methods=['POST'])
+@routes.route("/Account/Login", methods=['POST'])
 def accountLogin():
     _id = request.form['id']
     password = request.form['password']
-    result = db['account'].find_one({'id': id})
+    result = db['account'].find_one({'id': _id})
     if result:
         if result['password'] == password:
             response = jsonify(message="成功登入")
