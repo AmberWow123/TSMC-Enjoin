@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, Response
 from . import routes, db
 import json
 from bson.objectid import ObjectId
@@ -20,7 +20,10 @@ def ListAllGroupOrder():
     if len(order_list) ==0:
         return jsonify(message="No IN_PROGRESS Order")
     else:
-        return jsonify(message="Success", data=json.dumps(order_list, default=json_util.default))
+        #return jsonify(message="Success", data=json.dumps(order_list, default=json_util.default))
+        for order in order_list:
+            order['_id'] = str(order['_id'])
+        return Response(json.dumps(order_list), mimetype="application/json")
 # 搜尋hashtag
 @routes.route("/Order/SearchByHashtag", methods=['POST'])
 def SearchByHashtag():
@@ -43,12 +46,12 @@ def SearchByHashtag():
     # return result
 
     result = []
-    
     for s_k in search_key:
         search_result = list(db["order"].find({"hashtag":{"$regex":s_k}}))
         result += search_result
-
-    return jsonify(message=json.dumps(result, default=json_util.default))
+    for order in result:
+            order['_id'] = str(order['_id'])
+    return Response(json.dumps(result), mimetype="application/json")
 
 
 @routes.route("/Order/JoinOrder/<string:uuid>/<string:goid>", methods=["POST"])
