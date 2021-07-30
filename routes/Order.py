@@ -24,12 +24,31 @@ def ListAllGroupOrder():
 # 搜尋hashtag
 @routes.route("/Order/SearchByHashtag", methods=['POST'])
 def SearchByHashtag():
-    search_key = request.form.get("search_key")
+    order_table = db['order']
+    # list of hashtags
+    search_key = request.form.get("search_key").split()
     # search key=["FAB18", "starbucks", "美式咖啡"]
-    search_result = list(db["order"].find({"hashtag":search_key}))
-    # for order in db["order"].find({"hashtag":search_key}):
-    #     print(order["_id"])
-    return jsonify(message=json.dumps(search_result, default=json_util.default))
+
+    # result = {}
+    
+    # for s_k in search_key:
+    #     search_result = list(db["order"].find({"hashtag":{"$regex":s_k}}))
+    #     # result1 += search_result
+    #     for search_r in search_result:
+    #         group_order_id = str(search_r['_id'])
+    #         del search_r['_id']
+    #         if group_order_id not in result:
+    #             result[ group_order_id ] = search_r
+
+    # return result
+
+    result = []
+    
+    for s_k in search_key:
+        search_result = list(db["order"].find({"hashtag":{"$regex":s_k}}))
+        result += search_result
+
+    return jsonify(message=json.dumps(result, default=json_util.default))
 
 
 @routes.route("/Order/JoinOrder/<string:uuid>/<string:goid>", methods=["POST"])
