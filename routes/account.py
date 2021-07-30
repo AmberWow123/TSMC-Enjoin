@@ -3,6 +3,10 @@ from . import routes, db
 from bson.objectid import ObjectId
 from bson import json_util
 import json
+import jwt
+import config
+from datetime import datetime, timedelta
+from functools import wraps
 
 # {    # account
 #     id: 工號(int) # primary key, not null
@@ -11,12 +15,29 @@ import json
 #     ownOrder: []
 #     joinOrder: []
 # }
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+        if not token:
+            return 'Unauthorized Access!', 401
+        print("check token ", token)
+        data = jwt.decode(token, config.SECRET_KEY, algorithm="HS256")
+        print("token decode: ", data)
+        current_user = db['account'].find_one({'id': data['id']})
+        if not current_user:
+            return 'Unauthorized Access!', 401
+        return f(*args, **kwargs)
+    return decorated
 
 #account api
-@routes.route('/test', methods=['GET'])
+@routes.route('/Account/LoginTest', methods=['GET'])
+@token_required
 def test():
-    print("ok")
-    return jsonify(message='it works!')
+    print("authorized")
+    return jsonify(message="Authorized, is already logged in")
 
 @routes.route('/testDB', methods=['GET'])
 def testDB():
@@ -48,7 +69,12 @@ def accountLogin():
     result = db['account'].find_one({'id': _id})
     if result:
         if result['password'] == password:
-            response = jsonify(message="成功登入")
+            token = jwt.encode({
+                'id': _id,
+                'exp': datetime.utcnow() + timedelta(hours=24)
+            }, config.SECRET_KEY, algorithm="HS256")
+            # response["success"] = True
+            response = jsonify(message="成功登入", token= token.decode('UTF-8'))
         else:
             response = jsonify(message="登入失敗，密碼錯誤")
     else:
@@ -60,6 +86,7 @@ def accountLogin():
 
 
 @routes.route("/Account/CreateOrder/<string:tsmcid>", methods=['POST'])
+@token_required
 def createOrder(tsmcid):
     # check 是否已登入?
     form = request.form.to_dict()
@@ -98,6 +125,7 @@ def createOrder(tsmcid):
 
 ## 更新自己的單子(擁有者更新時間、地點、....)
 @routes.route("/Account/UpdateOrder/<string:tsmcid>/<string:goid>", methods=['POST'])
+@token_required
 def editOrder(tsmcid, goid):
     form = request.form.to_dict()
     result = db['account'].find_one({'id': tsmcid})
@@ -134,6 +162,7 @@ def editOrder(tsmcid, goid):
 
 ## 完成單子(確認揪團成功)
 @routes.route("/Account/CloseOrder/<string:tsmcid>/<string:goid>", methods=['POST'])
+@token_required
 def closeOrder(tsmcid, goid):
     result = db['account'].find_one({'id': tsmcid})
     print(result)
@@ -159,6 +188,7 @@ def closeOrder(tsmcid, goid):
 
 ## 棄單(刪除單子)
 @routes.route("/Account/DeleteCreatedOrder/<string:tsmcid>/<string:goid>", methods=['DELETE'])
+@token_required
 def deleteOrder(tsmcid, goid):
     result = db['account'].find_one({'id': tsmcid})
     if result: 
@@ -181,14 +211,16 @@ def deleteOrder(tsmcid, goid):
 
 ## get跟團的所有單子
 @routes.route("/Account/ListOwnerGroupOrder/<string:tsmcid>", methods=['GET'])
+@token_required
 def getJoinOrder(tsmcid):
     result = db['account'].find_one({'id': tsmcid})
-    if result: #之後會再+authentication
+    if result: 
         data = []
         if "joinOrder" in result:
             for objectid in result["joinOrder"]:
                 order = db["order"].find_one({'_id': objectid})
-                data.append(order)
+                if order:
+                    data.append(order)
             print(data)
             # response = json.dumps(data, default=json_util.default)
             response = jsonify(message="success", data=json.dumps(data, default=json_util.default))
@@ -203,14 +235,16 @@ def getJoinOrder(tsmcid):
 
 ## get自己創的所有單子
 @routes.route("/Account/ListOwnerCreatedGroupOrder/<string:tsmcid>", methods=['GET'])
+@token_required
 def getOwnerOrder(tsmcid):
     result = db['account'].find_one({'id': tsmcid})
-    if result: #之後會再+authentication
+    if result: 
         data = []
         if "ownOrder" in result:
             for objectid in result["ownOrder"]:
                 order = db["order"].find_one({'_id': objectid})
-                data.append(order)
+                if order:
+                    data.append(order)
             print(data)
             # response = jsonify(message=json.dumps(data, default=json_util.default))
             response = jsonify(message="success", data=json.dumps(data, default=json_util.default))
