@@ -222,8 +222,8 @@ def getJoinOrder(tsmcid):
                 if order:
                     data.append(order)
             print(data)
-            # response = json.dumps(data, default=json_util.default)
-            response = jsonify(message="success", data=json.dumps(data, default=json_util.default))
+            response = jsonify(message="success", data=data)
+            # response = jsonify(message="success", data=json.dumps(data, default=json_util.default))
         else:
             response = jsonify(message="無跟團的單子")
     else:
@@ -244,10 +244,10 @@ def getOwnerOrder(tsmcid):
             for objectid in result["ownOrder"]:
                 order = db["order"].find_one({'_id': objectid})
                 if order:
+                    order["_id"] = str(order["_id"])
                     data.append(order)
             print(data)
-            # response = jsonify(message=json.dumps(data, default=json_util.default))
-            response = jsonify(message="success", data=json.dumps(data, default=json_util.default))
+            response = jsonify(message="success", data=data)
         else:
             response = jsonify(message="無創建的單子")
     else:
