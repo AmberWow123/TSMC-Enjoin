@@ -6,4 +6,4 @@ routes = Blueprint('routes', __name__)
 db = mongo.db
 from .account import *
 from .menu import *
-
+from .Order import *
