@@ -125,7 +125,7 @@ def createOrder(tsmcid):
 
 ## 更新自己的單子(擁有者更新時間、地點、....)
 @routes.route("/Account/UpdateOrder/<string:tsmcid>/<string:goid>", methods=['POST'])
-@token_required
+# @token_required
 def editOrder(tsmcid, goid):
     form = request.form.to_dict()
     result = db['account'].find_one({'id': tsmcid})
@@ -138,16 +138,21 @@ def editOrder(tsmcid, goid):
                 meet_factory = request.form["meet_factory"]
                 store = request.form["store"]
                 drink = request.form["drink"]
-                form['status'] = "IN_PROGRESS"
-                form['hashtag'] = [meet_factory, store, drink]
-                form['creator_id'] = str(tsmcid)
-                form['meet_time'] = [request.form["meet_time_start"], request.form["meet_time_end"]]
-                form['join_people_bound'] = int(request.form["join_people_bound"])
-                form['join_people'] = 0
+                result["store"] = store
+                result["drink"] = drink
+                result['hashtag'] = [meet_factory, store, drink]
+                result['meet_time'] = [request.form["meet_time_start"], request.form["meet_time_end"]]
+                result['join_people_bound'] = int(request.form["join_people_bound"])
+                if (result['join_people_bound'] > len(result['join_people'])):
+                    result["status"] = "IN_PROGRESS"
+                # form['status'] = "IN_PROGRESS"
+                # form['creator_id'] = str(tsmcid)
+                # form['join_people'] = result['join_people']
                 del form['meet_time_start']
                 del form['meet_time_end']
-                print(form)
-                db["order"].replace_one({'_id': ObjectId(goid)}, form)
+                del result['_id']
+                print(result)
+                db["order"].replace_one({'_id': ObjectId(goid)}, result)
                 response = jsonify(message="編輯揪團單子成功")
             else:
                 response = jsonify(message="非此揪團單子的擁有者")
@@ -194,8 +199,18 @@ def deleteOrder(tsmcid, goid):
     if result: 
         if "ownOrder" in result:
             if ObjectId(goid) in result["ownOrder"]:
-                #需將joinOrder 拿走
                 order = db['order'].find_one({'_id': ObjectId(goid)})
+                #移除ownOrder list
+                ownOrder = result["ownOrder"]
+                ownOrder.remove(ObjectId(goid))
+                db["account"].update_one({'id': tsmcid}, {"$set": {'ownOrder': ownOrder}})
+                #移除joinOrder list
+                for joinPeopleId in order["join_people_id"]:
+                    res = db['account'].find_one({'id': joinPeopleId})
+                    joinOrder = res["joinOrder"]
+                    if ObjectId(goid) in joinOrder:
+                        joinOrder.remove(ObjectId(goid))
+                        db["account"].update_one({'id': tsmcid}, {"$set": {'joinOrder': joinOrder}})
                 db["order"].delete_one({'_id': ObjectId(goid)})
                 response = jsonify(message="刪除單子成功")
             else:
@@ -220,6 +235,7 @@ def getJoinOrder(tsmcid):
             for objectid in result["joinOrder"]:
                 order = db["order"].find_one({'_id': objectid})
                 if order:
+                    order["_id"] = str(order["_id"])
                     data.append(order)
             print(data)
             response = jsonify(message="success", data=data)
