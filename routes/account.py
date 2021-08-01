@@ -220,6 +220,7 @@ def getJoinOrder(tsmcid):
             for objectid in result["joinOrder"]:
                 order = db["order"].find_one({'_id': objectid})
                 if order:
+                    order["_id"] = str(order["_id"])
                     data.append(order)
             print(data)
             response = jsonify(message="success", data=data)
