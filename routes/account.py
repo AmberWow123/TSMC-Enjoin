@@ -143,8 +143,16 @@ def editOrder(tsmcid, goid):
                 result['hashtag'] = [meet_factory, store, drink]
                 result['meet_time'] = [request.form["meet_time_start"], request.form["meet_time_end"]]
                 result['join_people_bound'] = int(request.form["join_people_bound"])
-                if (result['join_people_bound'] > len(result['join_people'])):
+                if (result['join_people_bound'] > result['join_people']):
                     result["status"] = "IN_PROGRESS"
+                    db["order"].replace_one({'_id': ObjectId(goid)}, result)
+                    response = jsonify(message="編輯揪團單子成功")
+                elif (result['join_people_bound'] < result['join_people']):
+                    response = jsonify(message="跟團人數大於限制人數，無法進行修正")
+                else:
+                    result["status"] = "COMPLETED"
+                    db["order"].replace_one({'_id': ObjectId(goid)}, result)
+                    response = jsonify(message="編輯揪團單子成功")
                 # form['status'] = "IN_PROGRESS"
                 # form['creator_id'] = str(tsmcid)
                 # form['join_people'] = result['join_people']
@@ -152,8 +160,6 @@ def editOrder(tsmcid, goid):
                 del form['meet_time_end']
                 del result['_id']
                 print(result)
-                db["order"].replace_one({'_id': ObjectId(goid)}, result)
-                response = jsonify(message="編輯揪團單子成功")
             else:
                 response = jsonify(message="非此揪團單子的擁有者")
         else:
