@@ -3,7 +3,7 @@ from flask_cors import CORS
 from models import mongo
 import dns
 import json
-
+from config import url
 from flask.json import JSONEncoder
 class CustomJsonEncoder(JSONEncoder):
     def default(self, o):
@@ -12,13 +12,13 @@ class CustomJsonEncoder(JSONEncoder):
             return str(o)
         return super().default(o)
 
-f = open('key.json', 'r')
-data = json.load(f)
-user = data["user"]
-password = data["password"]
-db = data["db"]
+# f = open('key.json', 'r')
+# data = json.load(f)
+# user = data["user"]
+# password = data["password"]
+# db = data["db"]
 # url = "mongodb://localhost:27017/hackathon"
-url = "mongodb+srv://"+user+":"+password+db
+# url = "mongodb+srv://"+user+":"+password+db
 app = Flask(__name__)
 app.json_encoder=CustomJsonEncoder
 app.config['JSON_AS_ASCII'] = False
