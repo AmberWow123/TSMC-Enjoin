@@ -6,7 +6,7 @@
 
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python/tags/
-image: python:3.7
+
 before_script:
     - python -V  # Print out python version for debugging
     - apt-get update -qy
@@ -20,11 +20,14 @@ app:
  
 production:
     type: deploy
+    image: python:3.7
     script:
         - apt-get update -qy
         - apt-get install -y ruby-dev
         - gem install dpl
         - python -V  # Print out python version for debugging
         - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_SECRET_KEY
+        - export MONGODB_URL=$MONGODB_URL
+        - pip install -r requirements.txt
     only:
         - master
