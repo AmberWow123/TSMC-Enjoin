@@ -125,7 +125,7 @@ def createOrder(tsmcid):
 
 ## 更新自己的單子(擁有者更新時間、地點、....)
 @routes.route("/Account/UpdateOrder/<string:tsmcid>/<string:goid>", methods=['POST'])
-# @token_required
+@token_required
 def editOrder(tsmcid, goid):
     form = request.form.to_dict()
     result = db['account'].find_one({'id': tsmcid})
