@@ -3,6 +3,7 @@ from . import routes, db
 import json
 from bson.objectid import ObjectId
 from bson import json_util
+from .account import token_required
 
 # {    # account
 #     id: 工號(int) # primary key, not null
@@ -55,6 +56,7 @@ def SearchByHashtag():
 
 
 @routes.route("/Order/JoinOrder/<string:uuid>/<string:goid>", methods=["POST"])
+@token_required
 def JoinOrder(uuid, goid):
     print("uuid",uuid)
     print("goid", goid)
