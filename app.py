@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory, render_template
 from flask_cors import CORS
 from models import mongo
 import dns
@@ -29,11 +29,10 @@ mongo.init_app(app)
 
 from routes import *
 app.register_blueprint(routes)
-# @app.route('/testDB', methods=['GET'])
-# def testDB():
+# @app.route('/', methods=['GET'])
+# def home():
 #     print(db.collection_names())
 #     return jsonify(message='it works!')
-
 if __name__ == '__main__':
     app.debug = True
     app.run()

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <main>
+        <h2 style="text-align:center">首頁</h2>
+        <div class="row">
+            <div class="card2" id="test1">
+                <h1>User A</h1>
+                <p class="price">FAB 12</p>
+                <p>Hi, Welcome.</p>
+                <a class="button1" href="/login" class="button">login</a>
+                <a class="button2" href="/group" class="button">group</a>
+                <a class="button1" href="/chat" class="button">chat</a>
+                <a class="button2" href="/LoginRegister" class="button">Vue-Login</a>
+                <a class="button1" href="/profile" class="button">Get</a>
+            </div>
+        </div>
+        <div class="row">
+            <form id="search_form" action="/backend/Order/SearchByHashtag" method="POST">
+                <input type="text" id="search_bar" name="search_key" placeholder="Search" oninput="searchByHashTag(this)">
+                <!-- <input type="submit" value="Submit"> -->
+            </form>
+        </div>
+        <div id="app"></div>
+    </main>
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -74,7 +74,7 @@ def accountLogin():
                 'exp': datetime.utcnow() + timedelta(hours=24)
             }, config.SECRET_KEY, algorithm="HS256")
             # response["success"] = True
-            response = jsonify(message="成功登入", token= token.decode('UTF-8'))
+            response = jsonify(message="成功登入", token= token.decode('UTF-8'), id= _id, _id= result["_id"])
         else:
             response = jsonify(message="登入失敗，密碼錯誤")
     else:
