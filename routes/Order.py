@@ -55,7 +55,7 @@ def SearchByHashtag():
     return Response(json.dumps(result), mimetype="application/json")
 
 
-@routes.route("/Order/JoinOrder/<string:uuid>/<string:goid>", methods=["POST"])
+@routes.route("/Order/JoinOrder/<string:uuid>/<string:goid>", methods=["GET"])
 @token_required
 def JoinOrder(uuid, goid):
     print("uuid",uuid)
