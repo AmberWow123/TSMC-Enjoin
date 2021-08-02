@@ -125,7 +125,7 @@ def createOrder(tsmcid):
 
 ## 更新自己的單子(擁有者更新時間、地點、....)
 @routes.route("/Account/UpdateOrder/<string:tsmcid>/<string:goid>", methods=['POST'])
-# @token_required
+@token_required
 def editOrder(tsmcid, goid):
     form = request.form.to_dict()
     account = db['account'].find_one({'id': tsmcid})
@@ -161,10 +161,10 @@ def editOrder(tsmcid, goid):
                     # form['status'] = "IN_PROGRESS"
                     # form['creator_id'] = str(tsmcid)
                     # form['join_people'] = result['join_people']
-                    del form['meet_time_start']
-                    del form['meet_time_end']
-                    del result['_id']
-                    print(result)
+                    # del form['meet_time_start']
+                    # del form['meet_time_end']
+                    # del result['_id']
+                    # print(result)
                 else:
                     response = jsonify(message="此單子已被刪除")
             else:
