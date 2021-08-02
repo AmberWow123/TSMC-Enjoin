@@ -125,41 +125,48 @@ def createOrder(tsmcid):
 
 ## 更新自己的單子(擁有者更新時間、地點、....)
 @routes.route("/Account/UpdateOrder/<string:tsmcid>/<string:goid>", methods=['POST'])
-@token_required
+# @token_required
 def editOrder(tsmcid, goid):
     form = request.form.to_dict()
-    result = db['account'].find_one({'id': tsmcid})
-    if result:
+    account = db['account'].find_one({'id': tsmcid})
+    if account:
         #確認單子是否為此擁有者
-        print(result["ownOrder"])
+        print(account["ownOrder"])
         print(goid)
-        if "ownOrder" in result:
-            if ObjectId(goid) in result["ownOrder"]:
-                meet_factory = request.form["meet_factory"]
-                store = request.form["store"]
-                drink = request.form["drink"]
-                result["store"] = store
-                result["drink"] = drink
-                result['hashtag'] = [meet_factory, store, drink]
-                result['meet_time'] = [request.form["meet_time_start"], request.form["meet_time_end"]]
-                result['join_people_bound'] = int(request.form["join_people_bound"])
-                if (result['join_people_bound'] > result['join_people']):
-                    result["status"] = "IN_PROGRESS"
-                    db["order"].replace_one({'_id': ObjectId(goid)}, result)
-                    response = jsonify(message="編輯揪團單子成功")
-                elif (result['join_people_bound'] < result['join_people']):
-                    response = jsonify(message="跟團人數大於限制人數，無法進行修正")
+        if "ownOrder" in account:
+            if ObjectId(goid) in account["ownOrder"]:
+                result = db['order'].find_one({'_id': ObjectId(goid)})
+                if result:
+                    meet_factory = request.form["meet_factory"]
+                    store = request.form["store"]
+                    drink = request.form["drink"]
+                    result["store"] = store
+                    result["drink"] = drink
+                    result['hashtag'] = [meet_factory, store, drink]
+                    result['meet_time'] = [request.form["meet_time_start"], request.form["meet_time_end"]]
+                    result['join_people_bound'] = int(request.form["join_people_bound"])
+                    result['comment'] = request.form["comment"]
+                    result['title'] = request.form["title"]
+                    print(result)
+                    if (result['join_people_bound'] > result['join_people']):
+                        result["status"] = "IN_PROGRESS"
+                        db["order"].replace_one({'_id': ObjectId(goid)}, result)
+                        response = jsonify(message="編輯揪團單子成功")
+                    elif (result['join_people_bound'] < result['join_people']):
+                        response = jsonify(message="跟團人數大於限制人數，無法進行修正")
+                    else:
+                        result["status"] = "COMPLETED"
+                        db["order"].replace_one({'_id': ObjectId(goid)}, result)
+                        response = jsonify(message="編輯揪團單子成功")
+                    # form['status'] = "IN_PROGRESS"
+                    # form['creator_id'] = str(tsmcid)
+                    # form['join_people'] = result['join_people']
+                    del form['meet_time_start']
+                    del form['meet_time_end']
+                    del result['_id']
+                    print(result)
                 else:
-                    result["status"] = "COMPLETED"
-                    db["order"].replace_one({'_id': ObjectId(goid)}, result)
-                    response = jsonify(message="編輯揪團單子成功")
-                # form['status'] = "IN_PROGRESS"
-                # form['creator_id'] = str(tsmcid)
-                # form['join_people'] = result['join_people']
-                del form['meet_time_start']
-                del form['meet_time_end']
-                del result['_id']
-                print(result)
+                    response = jsonify(message="此單子已被刪除")
             else:
                 response = jsonify(message="非此揪團單子的擁有者")
         else:
