@@ -277,7 +277,7 @@ createApp({
 
     closeOrder(){
       axios
-        .post(`${apiUrl}/Account/CloseOrder/${param}/${this.tempOrder._id}`,{
+        .post(`${apiUrl}/Account/CloseOrder/${param}/${this.tempOrder._id}`,{},{
           headers: {'x-access-token': token}
         })
         .then((res) => {
