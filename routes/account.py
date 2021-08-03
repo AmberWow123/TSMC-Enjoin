@@ -100,9 +100,9 @@ def createOrder(tsmcid):
     # form = request.form.to_dict()
     result = db['account'].find_one({'id': tsmcid})
     if result:
-        meet_factory = req["meet_factory"]
-        store = req["store"]
-        drink = req["drink"]
+        meet_factory = form["meet_factory"]
+        store = form["store"]
+        drink = form["drink"]
         form['status'] = "IN_PROGRESS"
         form['hashtag'] = [meet_factory, store, drink]
         form['creator_id'] = str(tsmcid)
