@@ -64,8 +64,12 @@ def accountCreate():
 
 @routes.route("/Account/Login", methods=['POST'])
 def accountLogin():
-    _id = request.form['id']
-    password = request.form['password']
+    response = request.get_json()
+    print(response)
+    _id = response['id']
+    password = response['password']
+    # _id = request.form['id']
+    # password = request.form['password']
     result = db['account'].find_one({'id': _id})
     if result:
         if result['password'] == password:
