@@ -25,7 +25,7 @@ document.getElementById('user_id').innerText = user_tsmcid
 document.getElementById('login').parentNode.hidden = loggedIn
 const myorders = document.getElementById('myorders')
 myorders.parentNode.hidden = !loggedIn
-myorders.href += '?id=123456'
+// myorders.href += '?id=123456'
 
 // function postJSON(url, data) {
 //     // Default options are marked with *
