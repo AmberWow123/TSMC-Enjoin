@@ -1,3 +1,39 @@
+###################################################################################################
+# Cache pip files
+# https://gitlab.com/gitlab-org/gitlab/-/tree/master/lib/gitlab/ci/templates/Python.gitlab-ci.yml
+#
+image: python:3.7
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+# Pip's cache doesn't store the python packages
+# https://pip.pypa.io/en/stable/reference/pip_install/#caching
+#
+# If you want to also cache the installed packages, you have to install
+# them in a virtualenv and cache it as well.
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+before_script:
+  - python -V               # Print out python version for debugging
+  - pip install virtualenv
+  - virtualenv venv
+  - source venv/bin/activate
+
+# test:
+#   script:
+#     - python setup.py test
+#     - pip install flake8
+#     - flake8 .
+
+# End Cache pip files
+##################################################################################################
+
 # This file is a template, and might need editing before it works on your project.
 # To contribute improvements to CI/CD templates, please follow the Development guide at:
 # https://docs.gitlab.com/ee/development/cicd/templates.html
@@ -6,28 +42,30 @@
 
 # Official language image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/python/tags/
-image: python:3.7
-before_script:
-    - python -V  # Print out python version for debugging
-    - apt-get update -qy
-    - apt-get install -y python-dev python-pip
-    - pip install -r requirements.txt
+# image: python:3.7
+# before_script:
+#     - python -V  # Print out python version for debugging
+#     - apt-get update -qy
+#     - apt-get install -y python-dev python-pip
+#     - pip install -r requirements.txt
 
 app:
     script:
         - pip install -r requirements.txt
         - export MONGODB_URL=$MONGODB_URL
- 
-production:
-    type: deploy
-    image: python:3.7
-    script:
-        - apt-get update -qy
-        - apt-get install -y ruby-dev
-        - gem install dpl
-        - python -V  # Print out python version for debugging
-        - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_SECRET_KEY
-        - export MONGODB_URL=$MONGODB_URL
-        - pip install -r requirements.txt
     only:
         - master
+ 
+# deploy:
+#     stage: deploy
+#     image: python:3.7
+#     script:
+#         - apt-get update -qy
+#         - apt-get install -y ruby-dev
+#         - gem install dpl
+#         - python -V  # Print out python version for debugging
+#         - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_SECRET_KEY
+#         - export MONGODB_URL=$MONGODB_URL
+#         # - pip install -r requirements.txt
+#     only:
+#         - master
