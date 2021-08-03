@@ -379,6 +379,9 @@ createApp({
         this.tempOrder = { ...item };
         delOrderModal.show();
       }
+      else if (status === "getFoloow") {
+        followModal.show();
+      }
     },
     
     
