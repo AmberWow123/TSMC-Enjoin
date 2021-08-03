@@ -15,7 +15,7 @@ createApp({
   methods: {
     login() {
       axios
-        .post(`${this.apiUrl}/account/create`, this.user)
+        .post(`${this.apiUrl}/Account/Login`, this.user)
         .then((res) => {
           console.log(res);
           if (res.data.success) {
