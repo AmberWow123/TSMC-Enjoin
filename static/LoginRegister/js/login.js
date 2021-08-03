@@ -49,9 +49,9 @@ createApp({
             // console.log('expired:',expired) // gives 'undefined'
             document.cookie = `Token=${token};expires=${new Date(
               expired
-            )}; _id=${_id};id=${id};path=/`;
-            //document.cookie = `_id=${_id}; path=/`
-            //document.cookie = `id=${id}; path=/`
+            )}; path=/`;
+            document.cookie = `_id=${_id}; path=/`
+            document.cookie = `id=${id}; path=/`
             window.location.href = `../profile?id=${this.user.id}`;
           } else {
             alert(res.data.message);
