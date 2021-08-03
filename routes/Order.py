@@ -30,7 +30,8 @@ def ListAllGroupOrder():
 def SearchByHashtag():
     order_table = db['order']
     # list of hashtags
-    search_key = request.form.get("search_key").split()
+    # search_key = request.form.get("search_key").split()
+    search_key = request.get_json()['search_key'].split()
     # search key=["FAB18", "starbucks", "美式咖啡"]
 
     # result = {}
