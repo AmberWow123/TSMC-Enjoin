@@ -215,11 +215,50 @@ createApp({
     },
 
     updateOrder() {
-      let url = `${apiUrl}/Account/CreateOrder/${param}`;
-      let http = "post";
+      let url = ``;
+      let http = "";
       if (!this.isNew) {
         url = `${apiUrl}/Account/UpdateOrder/${param}/${this.tempOrder._id}`;
         http = "post";
+
+        axios[http](url,
+          this.tempOrder,
+          {headers: {'x-access-token': token}},
+        )
+        .then((res) => {
+          if (res.data.message==="編輯揪團單子成功") {
+            alert(res.data.message);
+            orderModal.hide();
+            this.getOwnerGroupOrder();
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+      else
+      {
+        url = `${apiUrl}/Account/CreateOrder/${param}`;
+        http = "post";
+
+        axios[http](url,
+          this.tempOrder,
+          {headers: {'x-access-token': token}},
+        )
+        .then((res) => {
+          if (res.data.message==="建立揪團單子成功") {
+            alert(res.data.message);
+            orderModal.hide();
+            this.getOwnerGroupOrder();
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       }
 
       /*
@@ -234,32 +273,15 @@ createApp({
       //formData.append('hashtag', this.tempOrder.hashtag);
       formData.append('join_people_bound', this.tempOrder.join_people_bound);
       */
-
-      axios[http](url,
-          this.tempOrder,
-          {headers: {'x-access-token': token}},
-        )
-        .then((res) => {
-          if (res.data.success) {
-            alert(res.data.message);
-            orderModal.hide();
-            this.getOwnerGroupOrder();
-          } else {
-            alert(res.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
 
     closeOrder(){
       axios
-        .post(`${this.apiUrl}/Account/CloseOrder/${param}/${this.tempOrder._id}`,{
+        .post(`${apiUrl}/Account/CloseOrder/${param}/${this.tempOrder._id}`,{
           headers: {'x-access-token': token}
         })
         .then((res) => {
-          if (res.data.success) {
+          if (res.data.message==="更新status成功") {
             alert(res.data.message);
             this.getOwnerGroupOrder();
           } else {
@@ -277,7 +299,7 @@ createApp({
           headers: {'x-access-token': token}
         })
         .then((res) => {
-          if (res.data.success) {
+          if (res.data.message==="刪除單子成功") {
             alert(res.data.message);
             delOrderModal.hide();
             this.getOwnerGroupOrder();
