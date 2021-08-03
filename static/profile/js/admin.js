@@ -12,6 +12,18 @@ const token = document.cookie.replace(
   /(?:(?:^|.*;\s*)Token\s*=\s*([^;]*).*$)|^.*$/,
   "$1"
 );
+const COOKIE_id = document.cookie.replace(
+  /(?:(?:^|.*;\s*)_id\s*=\s*([^;]*).*$)|^.*$/,
+  "$1"
+);
+const COOKIEid = document.cookie.replace(
+  /(?:(?:^|.*;\s*)id\s*=\s*([^;]*).*$)|^.*$/,
+  "$1"
+);
+
+console.log(token);
+console.log(COOKIE_id);
+console.log(COOKIEid);
 const url = new URL(window.location.href);
 const param = url.searchParams.get("id");
 
@@ -209,10 +221,8 @@ createApp({
         http = "post";
       }
 
+      /*
       const formData = new FormData();
-      //formData.append('meet_factory', this.tempOrder)
-      //formData.append('store', this.tempOrder.store)
-      
       formData.append('meet_factory', this.tempOrder.meet_factory);
       formData.append('store', this.tempOrder.store);
       formData.append('drink', this.tempOrder.drink);
@@ -222,9 +232,10 @@ createApp({
       formData.append('title', this.tempOrder.title);
       //formData.append('hashtag', this.tempOrder.hashtag);
       formData.append('join_people_bound', this.tempOrder.join_people_bound);
+      */
 
       axios[http](url,
-          formData,
+          this.tempOrder,
           {headers: {'x-access-token': token}},
         )
         .then((res) => {

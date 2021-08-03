@@ -19,11 +19,15 @@ createApp({
         .then((res) => {
           console.log(res);
           if (res.data.success) {
-            const { token, expired } = res.data;
+            const { token, expired, _id, id } = res.data;
+            // Warn!
+            // console.log('expired:',expired) // gives 'undefined'
             document.cookie = `Token=${token};expires=${new Date(
               expired
             )}; path=/`;
-            //window.location = "group.html";
+            document.cookie = `_id=${_id}; path=/`
+            document.cookie = `id=${id}; path=/`
+            window.location.href = `../profile?id=${this.user.id}`;
           } else {
             alert(res.data.message);
           }
