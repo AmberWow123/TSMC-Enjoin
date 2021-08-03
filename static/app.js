@@ -1,7 +1,7 @@
 const apiUrl = 'https://tsmc-enjoin.herokuapp.com'
 // const apiUrl = 'http://localhost:5000'
 const container = document.getElementById("app");
-const pokemons = 10;
+// const pokemons = 10;
 
 const token = document.cookie.replace(
     /(?:(?:^|.*;\s*)Token\s*=\s*([^;]*).*$)|^.*$/,
@@ -16,9 +16,9 @@ const user_tsmcid = document.cookie.replace(
     "$1"
 );
 // console.log('cookie:', document.cookie)
-console.log('token:', token)
-console.log('user_objectId:', user_objectId)
-console.log('user_tsmcid:', user_tsmcid)
+// console.log('token:', token)
+// console.log('user_objectId:', user_objectId)
+// console.log('user_tsmcid:', user_tsmcid)
 
 const loggedIn = (token != '')
 document.getElementById('user_id').innerText = user_tsmcid
@@ -89,14 +89,18 @@ function searchByHashTag(search_input) {
         showAllOrders()
         return
     }
-    const formElement = document.getElementById('search_form')
-    const data = new URLSearchParams(new FormData(formElement));
+    // const formElement = document.getElementById('search_form')
+    // const data = new URLSearchParams(new FormData(formElement));
     const url = 'https://tsmc-enjoin.herokuapp.com/Order/SearchByHashtag'
     // const url = 'http://localhost:5000/Order/SearchByHashtag'
     fetch(url, {
         method: 'post',
-        body: data,
         mode: 'cors', // no-cors, cors, *same-origin
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({search_key: search_input.value.trim()}),
     })
         .then(response => response.json())
         .then(data => showOrders(data));
