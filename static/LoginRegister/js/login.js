@@ -33,6 +33,26 @@ createApp({
         });
     },
 
+    create() {
+      axios
+        .post(`${this.apiUrl}/Account/Create`, this.user)
+        .then((res) => {
+          console.log(res);
+          if (res.data.success) {
+            const { token, expired } = res.data;
+            document.cookie = `Token=${token};expires=${new Date(
+              expired
+            )}; path=/`;
+            //window.location = "group.html";
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     loginForm() {
       const formData = new FormData()
       formData.append('id', this.user.id)
