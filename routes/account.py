@@ -68,7 +68,6 @@ def accountCreate():
 @routes.route("/Account/Login", methods=['POST'])
 def accountLogin():
     req = request.get_json()
-    print(response)
     _id = req['id']
     password = req['password']
     # _id = request.form['id']
