@@ -7,6 +7,7 @@ let orderModal = null;
 let closeOrderModal = null;
 let delProductModal = null;
 let delOrderModal = null;
+let followModal = null;
 //let token = null;
 const token = document.cookie.replace(
   /(?:(?:^|.*;\s*)Token\s*=\s*([^;]*).*$)|^.*$/,
@@ -96,6 +97,12 @@ createApp({
         keyboard: false,
       }
     );
+    followModal = new bootstrap.Modal(
+      document.getElementById("followModal"),
+      {
+        keyboard: false,
+      }
+    );
     delOrderModal = new bootstrap.Modal(
       document.getElementById("delOrderModal"),
       {
@@ -165,6 +172,7 @@ createApp({
           console.log(res.data.data[0])
           if (res.data.message==='success') {
             this.followList = res.data.data;
+            followModal.show();
           } else {
             console.log(res.data.message);
           }
