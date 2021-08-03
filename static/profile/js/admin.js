@@ -24,8 +24,9 @@ const COOKIEid = document.cookie.replace(
 console.log(token);
 console.log(COOKIE_id);
 console.log(COOKIEid);
-const url = new URL(window.location.href);
-const param = url.searchParams.get("id");
+//const url = new URL(window.location.href);
+//const param = url.searchParams.get("id");
+const param = COOKIEid;
 
 createApp({
   data() {

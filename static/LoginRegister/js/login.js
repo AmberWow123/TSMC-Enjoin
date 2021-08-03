@@ -22,11 +22,13 @@ createApp({
             const { token, expired, _id, id } = res.data;
             // Warn!
             // console.log('expired:',expired) // gives 'undefined'
-            document.cookie = `Token=${token};expires=${new Date(
+            document.cookie = 
+              `Token=${token};`+
+              `_id=${token};`+
+              `id=${token};`+
+              `expires=${new Date(
               expired
             )}; path=/`;
-            document.cookie = `_id=${_id}; path=/`
-            document.cookie = `id=${id}; path=/`
             window.location.href = `../profile`;
           } else {
             alert(res.data.message);
