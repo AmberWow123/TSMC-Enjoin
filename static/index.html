@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+<head></head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <main>
-        <h2 style="text-align:center">首頁</h2>
+        <h2 style="text-align:center">TSMC Enjoin</h2>
         <div class="row">
             <div class="card2" id="test1">
-                <h1>User A</h1>
-                <p class="price">FAB 12</p>
-                <p>Hi, Welcome.</p>
-                <a class="button1" href="/login" class="button">login</a>
-                <a class="button2" href="/group" class="button">group</a>
-                <a class="button1" href="/chat" class="button">chat</a>
-                <a class="button2" href="/LoginRegister" class="button">Vue-Login</a>
-                <a class="button1" href="/profile" class="button">Get</a>
+                <h1 id="user_id">User</h1>
+                <!-- <p class="price">FAB</p> -->
+                <p>Welcome</p>
+                <div>
+                    <a id="login" class="button2" href="/LoginRegister" class="button">Login</a>
+                </div>
+                <!-- <a class="button2" href="/group" class="button">group</a> -->
+                <div>
+                    <a id="myorders" class="button1" href="/profile" class="button">My Orders</a>
+                </div>
             </div>
         </div>
         <div class="row">
-            <form id="search_form" action="/backend/Order/SearchByHashtag" method="POST">
-                <input type="text" id="search_bar" name="search_key" placeholder="Search" oninput="searchByHashTag(this)">
-                <!-- <input type="submit" value="Submit"> -->
+            <form id="search_form" method="POST" onsubmit="false">
+                <button type="submit" disabled hidden>This Button is here to prevent 'enter' submit</button>
+                <input type="text" id="search_bar" name="search_key" placeholder="Search"
+                    oninput="searchByHashTag(this)">
             </form>
         </div>
         <div id="app"></div>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+    <main>
+        <h2 style="text-align:center">首頁</h2>
+        <div class="row">
+            <div class="card2" id="test1">
+                <h1>User A</h1>
+                <p class="price">FAB 12</p>
+                <p>Hi, Welcome.</p>
+                <a class="button1" href="/login" class="button">login</a>
+                <a class="button2" href="/group" class="button">group</a>
+                <a class="button1" href="/chat" class="button">chat</a>
+                <a class="button2" href="/LoginRegister" class="button">Vue-Login</a>
+                <a class="button1" href="/profile" class="button">Get</a>
+            </div>
+        </div>
+        <div class="row">
+            <form id="create_order_form" method="POST" onsubmit="return onsubmit_create_order_form(this);">
+                <label for="meet_factory">meet_factory</label><br><input type="text" name="meet_factory"><br>
+                <label for="store">store</label><br><input type="text" name="store"><br>
+                <label for="drink">drink</label><br><input type="text" name="drink"><br>
+                <label for="drink">meet_time_start</label><br><input type="datetime-local" name="meet_time_start"><br>
+                <label for="drink">meet_time_end</label><br><input type="datetime-local" name="meet_time_end"><br>
+                <label for="join_people_bound">join_people_bound</label><br><input type="number" step="1" min="1" name="join_people_bound"><br>
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+            <div id="message"></div>
+        </div>
+    </main>
+    <script src="createOrder.js"></script>
+</body>
+
+</html>

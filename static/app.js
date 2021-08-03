@@ -1,44 +1,31 @@
+const apiUrl = 'https://tsmc-enjoin.herokuapp.com'
+// const apiUrl = 'http://localhost:5000'
 const container = document.getElementById("app");
 const pokemons = 10;
 
-// My blog: https://www.ibrahima-ndaw.com/
+const token = document.cookie.replace(
+    /(?:(?:^|.*;\s*)Token\s*=\s*([^;]*).*$)|^.*$/,
+    "$1"
+);
+const user_objectId = document.cookie.replace(
+    /(?:(?:^|.*;\s*)_id\s*=\s*([^;]*).*$)|^.*$/,
+    "$1"
+);
+const user_tsmcid = document.cookie.replace(
+    /(?:(?:^|.*;\s*)id\s*=\s*([^;]*).*$)|^.*$/,
+    "$1"
+);
+// console.log('cookie:', document.cookie)
+console.log('token:', token)
+console.log('user_objectId:', user_objectId)
+console.log('user_tsmcid:', user_tsmcid)
 
-const showPokemon = (pokemon) => {
-    let output = `
-        <div class="card">
-            <span class="card--id">#${pokemon.id}</span>
-            <img class="card--image" src=${pokemon.image} alt=${pokemon.name} />
-            <h1 class="card--name">${pokemon.name}</h1>
-            <span class="card--details">${pokemon.type}</span>
-        </div>
-    `;
-    container.innerHTML += output;
-};
-
-const getPokemon = async (id) => {
-    const data = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-    const pokemon = await data.json();
-    const pokemonType = pokemon.types
-        .map((poke) => poke.type.name)
-        .join(", ");
-
-    const transformedPokemon = {
-        id: pokemon.id,
-        name: pokemon.name,
-        image: `${pokemon.sprites.front_default}`,
-        type: pokemonType
-    };
-
-    showPokemon(transformedPokemon);
-};
-
-const fetchData = () => {
-    for (let i = 1; i <= pokemons; i++) {
-        getPokemon(i);
-    }
-};
-
-// fetchData();
+const loggedIn = (token != '')
+document.getElementById('user_id').innerText = user_tsmcid
+document.getElementById('login').parentNode.hidden = loggedIn
+const myorders = document.getElementById('myorders')
+myorders.parentNode.hidden = !loggedIn
+myorders.href += '?id=123456'
 
 // function postJSON(url, data) {
 //     // Default options are marked with *
@@ -58,16 +45,37 @@ const fetchData = () => {
 //         .then(response => response.json()) // 輸出成 json
 // }
 
+function joinOrder(orderId) {
+    // Default options are marked with *
+    return fetch(apiUrl + `/Order/JoinOrder/${user_objectId}/${orderId}`, {
+        headers: {
+            'x-access-token': token
+        },
+        mode: 'cors', // no-cors, cors, *same-origin
+    })
+        .then(res => res.json())
+        .then(json => {
+            document.getElementById(orderId).innerText = json.message
+        })
+}
+
 function showOrders(orders) {
     var s = ''
     orders.forEach(order => {
+        // <span hidden>#${order._id}</span>
+        // <p style="margin: -10px;">-</p>
+        // <p>From ${order.meet_time[0].slice(0,-8)}</p>
+        // <p>To ${order.meet_time[1].slice(0,-8)}</p>
+        var joinButton = loggedIn ? `<a id="${order._id}" class="button1" onclick="joinOrder('${order._id}')">Join</a>` : ''
         s += `
             <div class="card">
-                <span hidden>#${order._id}</span>
                 <h1 class="card--name">${order.title}</h1>
                 <span class="card--details">${order.comment}</span>
                 <p><span class="card--details">${order.meet_factory}</span></p>
                 <p class="price">${order.hashtag}</p>
+                <p>From ${order.meet_time[0]}</p>
+                <p>To ${order.meet_time[1]}</p>
+                ${joinButton}
             </div>
         `;
     });
