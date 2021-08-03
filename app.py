@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, send_from_directory, render_template
-from flask import send_from_directory, redirect
+from flask import send_from_directory, redirect, request
+from flask.helpers import send_file
 from flask_cors import CORS
+from werkzeug.exceptions import abort
+import os
 from models import mongo
 import dns
 import json
@@ -44,14 +47,22 @@ app.register_blueprint(routes)
 
 @app.route('/', defaults={'path': 'index.html'}, methods=['GET'])
 @app.route('/<path:path>', methods=['GET'])
-def staticHost(path):
+def staticHost(path: str):
+    if request.path[-1]=='/':
+        try:
+            return send_file(app.static_folder+request.path+'index.html')
+        except Exception:
+            abort(404)
     try:
-        return send_from_directory(app.static_folder, path)
+        return send_file(app.static_folder+request.path)
     except Exception:
-        if path[-1]=='/':
-            return send_from_directory(app.static_folder, path+'index.html')
-        else:
-            return redirect(request.url+'/')
+        # Maybe 'request.path' is a directory?
+        newUrl = request.base_url+'/'
+        # request.base_url : http://xxx/abc
+        # request.url      : http://xxx/abc?a=123
+        if len(request.base_url) < len(request.url):
+            newUrl += request.url[len(request.base_url):]
+        return redirect(newUrl)
 
 if __name__ == '__main__':
     app.debug = True
