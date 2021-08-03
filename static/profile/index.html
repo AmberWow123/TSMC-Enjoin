@@ -31,53 +31,128 @@
           <button type="button" class="btn btn-info m-2" @click="getOwnerGroupOrder()">取得創立單</button>
           <button type="button" class="btn btn-danger m-2" @click="logout()">登出</button>
         </div>
-        <table class="table mt-4">
-          <thead>
-            <tr>
-              <!--th width="90">編號</th-->
-              <th width="150">標題</th>
-              <th width="150">備註</th>
-              <th width="90">店家</th>
-              <th width="90">品項</th>
-              <th width="90">廠區</th>
-              <th width="150">標籤</th>
-              <th width="90">跟單人數</th>
-              <th width="90">跟單上限</th>
-              <th width="210">時間</th>
-              <th width="120">狀態</th>
-              <th width="150">編輯</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in ownList">
-            <!--tr v-for="item in defaultList"-->  
-              <!--td>{{ item._id }}</td-->
-              <td>{{ item.title }}</td>
-              <td>{{ item.comment }}</td>
-              <td>{{ item.store }}</td>
-              <td>{{ item.drink }}</td>
-              <td>{{ item.fab }}</td>
-              <td>{{ item.hashtag }}</td>
-              <td>{{ item.join_people }}</td>
-              <td>{{ item.join_people_bound }}</td>
-              <td><div>{{ item.meet_time[0] }}</div><div>{{ item.meet_time[1] }}</div></td>
-              <td>{{ item.status }}</td>
-              <td>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-primary"
-                    @click="openModal('editOrder',item)">編輯</button>
-                  <button type="button" class="btn btn-sm btn-outline-warning"
-                    @click="openModal('closeOrder',item)">結單</button>
-                  <button type=" button" class="btn btn-sm btn-outline-danger" @click="openModal('deleteOrder',item
+        <div>
+          <table class="table mt-4">
+            <thead>
+              <tr>
+                <!--th width="90">編號</th-->
+                <th width="150">標題</th>
+                <th width="150">備註</th>
+                <th width="90">店家</th>
+                <th width="90">品項</th>
+                <th width="90">廠區</th>
+                <th width="150">標籤</th>
+                <th width="100">跟單人數</th>
+                <th width="100">跟單上限</th>
+                <th width="210">時間</th>
+                <th width="120">狀態</th>
+                <th width="200">編輯</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in ownList">
+                <!--tr v-for="item in defaultList"-->
+                <!--td>{{ item._id }}</td-->
+                <td>{{ item.title }}</td>
+                <td>{{ item.comment }}</td>
+                <td>{{ item.store }}</td>
+                <td>{{ item.drink }}</td>
+                <td>{{ item.fab }}</td>
+                <td>{{ item.hashtag }}</td>
+                <td>{{ item.join_people }}</td>
+                <td>{{ item.join_people_bound }}</td>
+                <td>
+                  <div>{{ item.meet_time[0] }}</div>
+                  <div>{{ item.meet_time[1] }}</div>
+                </td>
+                <td>{{ item.status }}</td>
+                <td>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-primary"
+                      @click="openModal('editOrder',item)">編輯</button>
+                    <button type="button" class="btn btn-sm btn-outline-warning"
+                      @click="openModal('closeOrder',item)">結單</button>
+                    <button type=" button" class="btn btn-sm btn-outline-danger" @click="openModal('deleteOrder',item
                     )">刪除</button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
 
-        </table>
+          </table>
+        </div>
       </div>
     </div>
+
+    <div id="followModal" ref="followModal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content border-0">
+          <div class="modal-header bg-dark text-white">
+            <h5 id="productModalLabel" class="modal-title">
+              <span>用戶跟單</span>
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table mt-4">
+              <thead>
+                <tr>
+                  <!--th width="90">編號</th-->
+                  <th width="150">標題</th>
+                  <th width="150">備註</th>
+                  <th width="90">店家</th>
+                  <th width="90">品項</th>
+                  <th width="90">廠區</th>
+                  <th width="150">標籤</th>
+                  <th width="100">跟單人數</th>
+                  <th width="100">跟單上限</th>
+                  <th width="210">跟單夥伴</th>
+                  <th width="210">時間</th>
+                  <th width="120">狀態</th>
+                  <th width="200">編輯</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in followList">
+                  <!--tr v-for="item in defaultList"-->
+                  <!--td>{{ item._id }}</td-->
+                  <td>{{ item.title }}</td>
+                  <td>{{ item.comment }}</td>
+                  <td>{{ item.store }}</td>
+                  <td>{{ item.drink }}</td>
+                  <td>{{ item.fab }}</td>
+                  <td>{{ item.hashtag }}</td>
+                  <td>{{ item.join_people }}</td>
+                  <td>{{ item.join_people_bound }}</td>
+                  <td>{{ item.join_people_id }}</td>
+                  <td>
+                    <div>{{ item.meet_time[0] }}</div>
+                    <div>{{ item.meet_time[1] }}</div>
+                  </td>
+                  <td>{{ item.status }}</td>
+                  <td>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm btn-outline-primary" @click="">聊天</button>
+                      <button type=" button" class="btn btn-sm btn-outline-danger" @click="">刪除</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+  
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              取消
+            </button>
+            <button type="button" class="btn btn-primary" @click="updateOrder">
+              確認
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="productModal" ref="productModal" class="modal fade" tabindex="-1">
       <div class="modal-dialog modal-xl">
         <div class="modal-content border-0">
@@ -202,53 +277,53 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
+            <div class="form-group">
+              <label for="orderTitle">標題</label>
+              <input id="orderTitle" v-model="tempOrder.title" type="text" class="form-control" placeholder="請輸入標題">
+            </div>
+            <div class="form-group">
+              <label for="orderComment">備註</label>
+              <input id="orederComment" v-model="tempOrder.comment" type="text" class="form-control"
+                placeholder="請輸入備註">
+            </div>
             <div class="row">
-              <div class="col-sm-8">
-                <div class="form-group">
-                  <label for="orderTitle">標題</label>
-                  <input id="orderTitle" v-model="tempOrder.title" type="text" class="form-control" placeholder="請輸入標題">
-                </div>
-                <div class="form-group">
-                  <label for="orderComment">備註</label>
-                  <input id="orederComment" v-model="tempOrder.comment" type="text" class="form-control" placeholder="請輸入備註">
-                </div>
-                <div class="row">
-                  <div class="form-group col-md-6">
-                    <label for="drink">品項</label>
-                    <input id="drink" v-model="tempOrder.drink" type="text" class="form-control" placeholder="請輸入品項">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="store">店家</label>
-                    <input id="store" v-model="tempOrder.store" type="text" class="form-control" placeholder="請輸入店家">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="join_people_bound">上限人數</label>
-                  <input id="join_people_bound" v-model="tempOrder.join_people_bound" type="number" min="1" class="form-control" placeholder="請輸入最大需求人數">
-                </div>
-                <div class="row">
-                  <div class="form-group col-md-6">
-                    <label for="meet_factory">會面廠區</label>
-                    <input id="meet_factory" v-model="tempOrder.meet_factory" type="number" min="1" class="form-control" placeholder="請輸入會面廠區">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="meet_time1">會面時間(開始)</label>
-                    <input id="meet_time1" v-model="tempOrder.meet_time_start" type="datetime-local" class="form-control" placeholder="請輸入會面開始時間">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="meet_time2">會面時間(結束)</label>
-                    <input id="meet_time2" v-model="tempOrder.meet_time_end" type="datetime-local" class="form-control" placeholder="請輸入會面結束時間">
-                  </div>
-                </div>
-                <hr>
-
-                <div class="form-group">
-                  <label for="hashtag">標籤</label>
-                  <textarea id="hashtag" v-model="tempOrder.hashtag" type="text" class="form-control"
-                    placeholder="請輸入自訂標籤">
-                  </textarea>
-                </div>
+              <div class="form-group col-md-6">
+                <label for="drink">品項</label>
+                <input id="drink" v-model="tempOrder.drink" type="text" class="form-control" placeholder="請輸入品項">
               </div>
+              <div class="form-group col-md-6">
+                <label for="store">店家</label>
+                <input id="store" v-model="tempOrder.store" type="text" class="form-control" placeholder="請輸入店家">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="join_people_bound">上限人數</label>
+              <input id="join_people_bound" v-model="tempOrder.join_people_bound" type="number" min="1"
+                class="form-control" placeholder="請輸入最大需求人數">
+            </div>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="meet_factory">會面廠區</label>
+                <input id="meet_factory" v-model="tempOrder.meet_factory" type="number" min="1" class="form-control"
+                  placeholder="請輸入會面廠區">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="meet_time1">會面時間(開始)</label>
+                <input id="meet_time1" v-model="tempOrder.meet_time_start" type="datetime-local" class="form-control"
+                  placeholder="請輸入會面開始時間">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="meet_time2">會面時間(結束)</label>
+                <input id="meet_time2" v-model="tempOrder.meet_time_end" type="datetime-local" class="form-control"
+                  placeholder="請輸入會面結束時間">
+              </div>
+            </div>
+            <hr>
+
+            <div class="form-group">
+              <label for="hashtag">標籤</label>
+              <textarea id="hashtag" v-model="tempOrder.hashtag" type="text" class="form-control" placeholder="請輸入自訂標籤">
+                  </textarea>
             </div>
           </div>
           <div class="modal-footer">
