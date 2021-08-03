@@ -1,5 +1,7 @@
 Restful API
 
+Deployed at https://tsmc-enjoin.herokuapp.com/
+
 ## Python Environment
 1. python==3.7
 
