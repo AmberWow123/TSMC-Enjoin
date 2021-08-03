@@ -61,20 +61,11 @@ def staticHost(path: str):
             except Exception as e:
                 abort(404)
         else:
-            if len(request.base_url) != len(request.url):
-                try:
-                    # return send_file(app.static_folder+request.path+'/index.html')
-                    return redirect(request.path+'/')
-                except Exception as e:
-                    abort(404)
+            if len(request.base_url) == len(request.url):
+                return redirect(request.path+'/')
             else:
                 print(request.base_url+'/'+request.url[len(request.base_url):])
                 return redirect(request.base_url+'/'+request.url[len(request.base_url):])
-            try:
-                return send_file(app.static_folder+request.path+'/index.html')
-            except Exception as e:
-                print('Exception:',e)
-                abort(404)
 
 if __name__ == '__main__':
     app.debug = True
