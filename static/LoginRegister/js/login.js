@@ -18,7 +18,7 @@ createApp({
         .post(`${this.apiUrl}/Account/Login`, this.user)
         .then((res) => {
           console.log(res);
-          if (res.data.success==="成功登入") {
+          if (res.data.message==="成功登入") {
             const { token, expired, _id, id } = res.data;
             // Warn!
             // console.log('expired:',expired) // gives 'undefined'
@@ -42,12 +42,12 @@ createApp({
         .post(`${this.apiUrl}/Account/Create`, this.user)
         .then((res) => {
           console.log(res);
-          if (res.data.success) {
+          if (res.data.message==="註冊成功") {
             const { token, expired } = res.data;
             document.cookie = `Token=${token};expires=${new Date(
               expired
             )}; path=/`;
-            //window.location = "group.html";
+            window.location.href = `../profile?id=${this.user.id}`;
           } else {
             alert(res.data.message);
           }
