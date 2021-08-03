@@ -2,7 +2,7 @@
 # Cache pip files
 # https://gitlab.com/gitlab-org/gitlab/-/tree/master/lib/gitlab/ci/templates/Python.gitlab-ci.yml
 #
-image: python:3.7
+# image: python:3.7
 
 # Change pip's cache directory to be inside the project directory since we can
 # only cache local items.
