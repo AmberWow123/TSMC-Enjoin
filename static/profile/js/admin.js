@@ -295,7 +295,7 @@ createApp({
 
     delOrder() {
       axios
-        .delete(`${apiUrl}/Account/DeleteCreatedOrder/${param}/${this.tempOrder._id}`,{},{
+        .delete(`${apiUrl}/Account/DeleteCreatedOrder/${param}/${this.tempOrder._id}`,{
           headers: {'x-access-token': token}
         })
         .then((res) => {
