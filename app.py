@@ -48,24 +48,21 @@ app.register_blueprint(routes)
 @app.route('/', defaults={'path': 'index.html'}, methods=['GET'])
 @app.route('/<path:path>', methods=['GET'])
 def staticHost(path: str):
-    # print('request.path', request.path)
-    # print('request.url', request.url)
-    # print('request.base_url', request.base_url)
-    # print('request.url_root', request.url_root+request.path[1:])
+    if request.path[-1]=='/':
+        try:
+            return send_file(app.static_folder+request.path+'index.html')
+        except Exception:
+            abort(404)
     try:
         return send_file(app.static_folder+request.path)
     except Exception:
-        if request.path[-1]=='/':
-            try:
-                return send_file(app.static_folder+request.path+'index.html')
-            except Exception as e:
-                abort(404)
-        else:
-            if len(request.base_url) == len(request.url):
-                return redirect(request.path+'/')
-            else:
-                print(request.base_url+'/'+request.url[len(request.base_url):])
-                return redirect(request.base_url+'/'+request.url[len(request.base_url):])
+        # Maybe 'request.path' is a directory?
+        newUrl = request.base_url+'/'
+        # request.base_url : http://xxx/abc
+        # request.url      : http://xxx/abc?a=123
+        if len(request.base_url) < len(request.url):
+            newUrl += request.url[len(request.base_url):]
+        return redirect(newUrl)
 
 if __name__ == '__main__':
     app.debug = True
