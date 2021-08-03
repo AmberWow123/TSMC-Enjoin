@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, send_from_directory, render_template
-from flask import send_from_directory, redirect
+from flask import send_from_directory, redirect, request
+from flask.helpers import send_file
 from flask_cors import CORS
+from werkzeug.exceptions import abort
+import os
 from models import mongo
 import dns
 import json
@@ -44,14 +47,34 @@ app.register_blueprint(routes)
 
 @app.route('/', defaults={'path': 'index.html'}, methods=['GET'])
 @app.route('/<path:path>', methods=['GET'])
-def staticHost(path):
+def staticHost(path: str):
+    # print('request.path', request.path)
+    # print('request.url', request.url)
+    # print('request.base_url', request.base_url)
+    # print('request.url_root', request.url_root+request.path[1:])
     try:
-        return send_from_directory(app.static_folder, path)
+        return send_file(app.static_folder+request.path)
     except Exception:
-        if path[-1]=='/':
-            return send_from_directory(app.static_folder, path+'index.html')
+        if request.path[-1]=='/':
+            try:
+                return send_file(app.static_folder+request.path+'index.html')
+            except Exception as e:
+                abort(404)
         else:
-            return redirect(request.url+'/')
+            if len(request.base_url) != len(request.url):
+                try:
+                    # return send_file(app.static_folder+request.path+'/index.html')
+                    return redirect(request.path+'/')
+                except Exception as e:
+                    abort(404)
+            else:
+                print(request.base_url+'/'+request.url[len(request.base_url):])
+                return redirect(request.base_url+'/'+request.url[len(request.base_url):])
+            try:
+                return send_file(app.static_folder+request.path+'/index.html')
+            except Exception as e:
+                print('Exception:',e)
+                abort(404)
 
 if __name__ == '__main__':
     app.debug = True
