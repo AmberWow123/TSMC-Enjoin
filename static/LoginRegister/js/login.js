@@ -27,7 +27,7 @@ createApp({
             )}; path=/`;
             document.cookie = `_id=${_id}; path=/`
             document.cookie = `id=${id}; path=/`
-            window.location.href = `../profile?id=${this.user.id}`;
+            window.location.href = `../profile`;
           } else {
             alert(res.data.message);
           }
@@ -42,15 +42,8 @@ createApp({
         .post(`${this.apiUrl}/Account/Create`, this.user)
         .then((res) => {
           console.log(res);
-          if (res.data.message==="註冊成功") {
-            const { token, expired } = res.data;
-            document.cookie = `Token=${token};expires=${new Date(
-              expired
-            )}; path=/`;
-            window.location.href = `../profile?id=${this.user.id}`;
-          } else {
-            alert(res.data.message);
-          }
+          alert(res.data.message);
+          
         })
         .catch((err) => {
           console.log(err);
