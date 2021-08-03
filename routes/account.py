@@ -47,10 +47,13 @@ def testDB():
 #create account
 @routes.route("/Account/Create", methods=['POST'])
 def accountCreate():
-    _id = request.form['id']
-    password = request.form['password']
-    fab = request.form['fab']
-
+    # _id = request.form['id']
+    # password = request.form['password']
+    # fab = request.form['fab']
+    req = request.get_json()
+    _id = req['id']
+    password = req['password']
+    fab = req['fab']
     result = db['account'].find_one({'id': _id})
     if result:
         response = jsonify(message="已註冊過的工號")
@@ -64,10 +67,10 @@ def accountCreate():
 
 @routes.route("/Account/Login", methods=['POST'])
 def accountLogin():
-    response = request.get_json()
+    req = request.get_json()
     print(response)
-    _id = response['id']
-    password = response['password']
+    _id = req['id']
+    password = req['password']
     # _id = request.form['id']
     # password = request.form['password']
     result = db['account'].find_one({'id': _id})
@@ -93,19 +96,18 @@ def accountLogin():
 @token_required
 def createOrder(tsmcid):
     # check 是否已登入?
-    form = request.form.to_dict()
-    
-    # response = jsonify()
+    form = request.get_json()
+    # form = request.form.to_dict()
     result = db['account'].find_one({'id': tsmcid})
     if result:
-        meet_factory = request.form["meet_factory"]
-        store = request.form["store"]
-        drink = request.form["drink"]
+        meet_factory = req["meet_factory"]
+        store = req["store"]
+        drink = req["drink"]
         form['status'] = "IN_PROGRESS"
         form['hashtag'] = [meet_factory, store, drink]
         form['creator_id'] = str(tsmcid)
-        form['meet_time'] = [request.form["meet_time_start"], request.form["meet_time_end"]]
-        form['join_people_bound'] = int(request.form["join_people_bound"])
+        form['meet_time'] = [form["meet_time_start"], form["meet_time_end"]]
+        form['join_people_bound'] = int(form["join_people_bound"])
         form['join_people'] = 0
         del form['meet_time_start']
         del form['meet_time_end']
@@ -131,7 +133,8 @@ def createOrder(tsmcid):
 @routes.route("/Account/UpdateOrder/<string:tsmcid>/<string:goid>", methods=['POST'])
 @token_required
 def editOrder(tsmcid, goid):
-    form = request.form.to_dict()
+    form = request.get_json()
+    # form = request.form.to_dict()
     account = db['account'].find_one({'id': tsmcid})
     if account:
         #確認單子是否為此擁有者
@@ -141,16 +144,16 @@ def editOrder(tsmcid, goid):
             if ObjectId(goid) in account["ownOrder"]:
                 result = db['order'].find_one({'_id': ObjectId(goid)})
                 if result:
-                    meet_factory = request.form["meet_factory"]
-                    store = request.form["store"]
-                    drink = request.form["drink"]
+                    meet_factory = form["meet_factory"]
+                    store = form["store"]
+                    drink = form["drink"]
                     result["store"] = store
                     result["drink"] = drink
                     result['hashtag'] = [meet_factory, store, drink]
-                    result['meet_time'] = [request.form["meet_time_start"], request.form["meet_time_end"]]
-                    result['join_people_bound'] = int(request.form["join_people_bound"])
-                    result['comment'] = request.form["comment"]
-                    result['title'] = request.form["title"]
+                    result['meet_time'] = [form["meet_time_start"], form["meet_time_end"]]
+                    result['join_people_bound'] = int(form["join_people_bound"])
+                    result['comment'] = form["comment"]
+                    result['title'] = form["title"]
                     print(result)
                     if (result['join_people_bound'] > result['join_people']):
                         result["status"] = "IN_PROGRESS"
