@@ -263,8 +263,8 @@ createApp({
     formatDate(value) {
       if (value) {
         let tmp = value
-        tmp = String(tmp).replace('T');
-        tmp = String(tmp).replace('Z');
+        tmp = String(tmp).replace('T',' ');
+        tmp = String(tmp).replace('Z',' ');
         return tmp;
       }
       return "format ERR"

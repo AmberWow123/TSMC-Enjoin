@@ -62,8 +62,8 @@
                 <td>{{ item.join_people }}</td>
                 <td>{{ item.join_people_bound }}</td>
                 <td>
-                  <div>{{ item.meet_time[0] }}</div>
-                  <div>{{ item.meet_time[1] }}</div>
+                  <div>{{ formatDate(item.meet_time[0]) }}</div>
+                  <div>{{ formatDate(item.meet_time[1]) }}</div>
                 </td>
                 <td>{{ item.status }}</td>
                 <td>
@@ -133,7 +133,7 @@
                   </td>
                   <td>
                     <div>{{ formatDate(item.meet_time[0]) }}</div>
-                    <div>{{ item.meet_time[1] }}</div>
+                    <div>{{ formatDate(item.meet_time[1]) }}</div>
                   </td>
                   <td>{{ item.status }}</td>
                   <td>
@@ -194,8 +194,30 @@
             <div class="row">
               <div class="form-group col-md-6">
                 <label for="meet_factory">會面廠區</label>
-                <input id="meet_factory" v-model="tempOrder.meet_factory" type="text" min="1" class="form-control"
-                  placeholder="請輸入會面廠區" required>
+                <select id="meet_factory" v-model="tempOrder.meet_factory" class="form-control">
+                  <option disabled value="">請輸入會面廠區</option>
+                  <option value="F2_F5">F2_F5</option>
+                  <option value="F3">F3</option>
+                  <option value="F6">F6</option>
+                  <option value="F7">F7</option>
+                  <option value="F8">F8</option>
+                  <option value="F12P1">F12P1</option>
+                  <option value="F12P4">F12P4</option>
+                  <option value="F12P7">F12P7</option>
+                  <option value="F14P1">F14P1</option>
+                  <option value="F14P3">F14P3</option>
+                  <option value="F14P5">F14P5</option>
+                  <option value="F14P7">F14P7</option>
+                  <option value="F15A">F15A</option>
+                  <option value="F15B">F15B</option>
+                  <option value="F18P1">F18P1</option>
+                  <option value="AP2">AP2</option>
+                  <option value="AP3">AP3</option>
+                  <option value="CP03">CP03</option>
+                  <option value="Epistar Office">Epistar Office</option>
+                </select>
+                <!--input id="meet_factory" v-model="tempOrder.meet_factory" type="text" min="1" class="form-control"
+                  placeholder="請輸入會面廠區" required-->
               </div>
               <div class="form-group col-md-6">
                 <label for="meet_time1">會面時間(開始)</label>
