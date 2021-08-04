@@ -267,7 +267,7 @@ createApp({
         end = moment(String(v1)).format('MM/DD/YYYY hh:mm');
         return "From"+start+"to"+end;
       }
-    }
+    },
     
     logout() {
       alert("請重新登入");
