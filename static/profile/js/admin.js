@@ -1,4 +1,5 @@
 import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js";
+import moment from 'moment'
 const apiUrl = "https://tsmc-enjoin.herokuapp.com";
 //const apiUrl = `http://127.0.0.1:5000`;
 
@@ -259,6 +260,14 @@ createApp({
         delOrderModal.show();
       }
     },
+
+    formatDate(v1,v2) {
+      if (v1 && v2) {
+        start = moment(String(v1)).format('MM/DD/YYYY hh:mm');
+        end = moment(String(v1)).format('MM/DD/YYYY hh:mm');
+        return "From"+start+"to"+end;
+      }
+    }
     
     logout() {
       alert("請重新登入");

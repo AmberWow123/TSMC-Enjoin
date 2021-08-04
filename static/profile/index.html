@@ -41,8 +41,8 @@
                 <th width="90">品項</th>
                 <th width="90">會面廠區</th>
                 <th width="150">標籤</th>
-                <th width="120">揪團已有人數</th>
-                <th width="120">揪團需求人數</th>
+                <th width="150">已有人數</th>
+                <th width="150">需求人數</th>
                 <th width="210">時間</th>
                 <th width="120">狀態</th>
                 <th width="200">編輯</th>
@@ -60,8 +60,9 @@
                 <td>{{ item.join_people }}</td>
                 <td>{{ item.join_people_bound }}</td>
                 <td>
-                  <div>{{ item.meet_time[0] }}</div>
-                  <div>{{ item.meet_time[1] }}</div>
+                  {{ item.meet_time | formatDate(item.meet_time[0],item.meet_time[1])}}
+                  <!--div>{{ item.meet_time[0] }}</div-->
+                  <!--div>{{ item.meet_time[1] }}</div-->
                 </td>
                 <td>{{ item.status }}</td>
                 <td>
@@ -102,8 +103,8 @@
                   <th width="90">品項</th>
                   <th width="90">廠區</th>
                   <th width="150">標籤</th>
-                  <th width="120">揪團已有人數</th>
-                  <th width="120">揪團需求人數</th>
+                  <th width="120">已有人數</th>
+                  <th width="120">需求人數</th>
                   <th width="120">揪團創辦人</th>
                   <th width="210">揪團夥伴</th>
                   <th width="210">時間</th>
