@@ -17,12 +17,3 @@ body {
   padding: 15px;
   margin: auto;
 }
-
-a {
-  color: #555;
-  font-weight: bold;
-  text-decoration: none;
-}
-a:hover{
-  text-decoration: underline;
-}

@@ -22,7 +22,7 @@ createApp({
         .post(`${this.apiUrl}/Account/Login`, this.user)
         .then((res) => {
           console.log(res);
-          if (res.data.message==="成功登入") {
+          if (res.data.message === "成功登入") {
             const { token, expired, _id, id } = res.data;
             // Warn!
             // console.log('expired:',expired) // gives 'undefined'
@@ -39,19 +39,6 @@ createApp({
         .catch((err) => {
           console.log(err);
         });
-    },
-
-    create() {
-      axios
-        .post(`${this.apiUrl}/Account/Create`, this.register)
-        .then((res) => {
-          console.log(res);
-          alert(res.data.message);
-          
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    }
   },
 }).mount("#app");
