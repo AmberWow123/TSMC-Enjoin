@@ -39,10 +39,10 @@
                 <th width="150">備註</th>
                 <th width="90">店家</th>
                 <th width="90">品項</th>
-                <th width="90">廠區</th>
+                <th width="90">會面廠區</th>
                 <th width="150">標籤</th>
-                <th width="100">跟單人數</th>
-                <th width="100">跟單上限</th>
+                <th width="120">揪團已有人數</th>
+                <th width="120">揪團需求人數</th>
                 <th width="210">時間</th>
                 <th width="120">狀態</th>
                 <th width="200">編輯</th>
@@ -55,7 +55,7 @@
                 <td>{{ item.comment }}</td>
                 <td>{{ item.store }}</td>
                 <td>{{ item.drink }}</td>
-                <td>{{ item.fab }}</td>
+                <td>{{ item.meet_factory }}</td>
                 <td>{{ item.hashtag }}</td>
                 <td>{{ item.join_people }}</td>
                 <td>{{ item.join_people_bound }}</td>
@@ -102,9 +102,10 @@
                   <th width="90">品項</th>
                   <th width="90">廠區</th>
                   <th width="150">標籤</th>
-                  <th width="100">目前人數</th>
-                  <th width="100">人數上限</th>
-                  <th width="210">跟單夥伴</th>
+                  <th width="120">揪團已有人數</th>
+                  <th width="120">揪團需求人數</th>
+                  <th width="120">揪團創辦人</th>
+                  <th width="210">揪團夥伴</th>
                   <th width="210">時間</th>
                   <th width="120">狀態</th>
                   <th width="200">選項</th>
@@ -118,10 +119,11 @@
                   <td>{{ item.comment }}</td>
                   <td>{{ item.store }}</td>
                   <td>{{ item.drink }}</td>
-                  <td>{{ item.fab }}</td>
+                  <td>{{ item.meet_factory }}</td>
                   <td>{{ item.hashtag }}</td>
                   <td>{{ item.join_people }}</td>
                   <td>{{ item.join_people_bound }}</td>
+                  <td>{{ item.creator_id }}</td>
                   <td>{{ item.join_people_id }}</td>
                   <td>
                     <div>{{ item.meet_time[0] }}</div>
