@@ -235,27 +235,13 @@ createApp({
 
 
     openModal(status, item) {
-      if (status === "new") 
-      {
-        this.tempProduct = {
-          imagesUrl: [],
-        };
-        this.isNew = true;
-        productModal.show();
-      } 
-      else if(status === "newOrder")
+      if(status === "newOrder")
       {
         this.tempOrder = {
           id: param,
         };
         this.isNew = true;
         orderModal.show();
-      }
-      else if (status === "edit") 
-      {
-        this.tempProduct = { ...item };
-        this.isNew = false;
-        productModal.show();
       }
       else if(status === "editOrder")
       {
@@ -268,16 +254,9 @@ createApp({
         this.tempOrder = {...item};
         closeOrderModal.show();
       }
-      else if (status === "delete") {
-        this.tempProduct = { ...item };
-        delProductModal.show();
-      }
       else if (status === "deleteOrder") {
         this.tempOrder = { ...item };
         delOrderModal.show();
-      }
-      else if (status === "getFoloow") {
-        followModal.show();
       }
     },
     
