@@ -56,13 +56,14 @@
                 <td>{{ item.store }}</td>
                 <td>{{ item.drink }}</td>
                 <td>{{ item.meet_factory }}</td>
-                <td>{{ item.hashtag }}</td>
+                <td v-for="element in item.elements">
+                  <div>{{ element }}</div>
+                </td>
                 <td>{{ item.join_people }}</td>
                 <td>{{ item.join_people_bound }}</td>
                 <td>
-                  {{ item.meet_time | formatDate(item.meet_time[0],item.meet_time[1])}}
-                  <!--div>{{ item.meet_time[0] }}</div-->
-                  <!--div>{{ item.meet_time[1] }}</div-->
+                  <div>{{ item.meet_time[0] }}</div>
+                  <div>{{ item.meet_time[1] }}</div>
                 </td>
                 <td>{{ item.status }}</td>
                 <td>
