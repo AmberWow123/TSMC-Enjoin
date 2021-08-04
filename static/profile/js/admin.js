@@ -276,9 +276,8 @@ createApp({
       return value;
     },
 
-    formatDate(value) {
-      if (value,type) {
-        let tmp = value
+    formatDate(value,type) {
+        let tmp = value;
         tmp = String(tmp).replace('T',' ');
         tmp = String(tmp).replace('Z',' ');
         if(type===0)
@@ -290,8 +289,6 @@ createApp({
           return "結束: "+tmp;
         }
         return tmp;
-      }
-      return value;
     },
     
     logout() {
