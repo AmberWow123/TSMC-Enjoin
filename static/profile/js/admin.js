@@ -272,8 +272,8 @@ createApp({
       {
         return '揪團已結單';
       }
-      return value
-    }
+      return value;
+    },
 
     formatDate(value) {
       if (value) {
@@ -282,7 +282,7 @@ createApp({
         tmp = String(tmp).replace('Z',' ');
         return tmp;
       }
-      return "format ERR"
+      return value;
     },
     
     logout() {
