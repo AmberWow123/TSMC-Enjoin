@@ -1,5 +1,5 @@
 import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js";
-import moment from "moment";
+import moment from "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js";
 const apiUrl = "https://tsmc-enjoin.herokuapp.com";
 //const apiUrl = `http://127.0.0.1:5000`;
 
