@@ -3,7 +3,7 @@ from . import routes, db
 import json
 from bson.objectid import ObjectId
 from bson import json_util
-
+import datetime
 # {    # account
 #     id: 工號(int) # primary key, not null
 #     password: (string) # not null
@@ -12,18 +12,50 @@ from bson import json_util
 #     joinList: [1,2,3]
 # }
 
-# 列出所有跟團單子
-@routes.route("/Order/ListAllGroupOrder", methods=['GET'])
-def ListAllGroupOrder():
+# 列出IN_PROGRESS且未過期所有跟團單子
+@routes.route("/Order/ListAllInProgressGroupOrder", methods=['GET'])
+def ListAllInProgressGroupOrder():
     print("ListAllGroupOrder is doing something")
     order_list=list(db["order"].find({"status":"IN_PROGRESS"}))
-    if len(order_list) ==0:
+    still_alive_order = []
+    for order in order_list:
+        current_time = datetime.datetime.now()
+        order_end_time = datetime.datetime.strptime(order["meet_time"][1], "%Y-%m-%dT%H:%M")
+        
+        if  current_time - order_end_time < datetime.timedelta(minutes=1):
+            still_alive_order.append(order)
+
+    if len(still_alive_order) ==0:
         return jsonify(message="No IN_PROGRESS Order")
     else:
-        #return jsonify(message="Success", data=json.dumps(order_list, default=json_util.default))
+        for order in still_alive_order:
+            order['_id'] = str(order['_id'])
+        return Response(json.dumps(still_alive_order), mimetype="application/json")
+
+# 列出COMPLETED所有跟團單子
+@routes.route("/Order/ListAllCompletedGroupOrder", methods=['GET'])
+def ListAllCompletedGroupOrder():
+    print("ListAllGroupOrder is doing something")
+    order_list=list(db["order"].find({"status":"COMPLETED"}))
+    if len(order_list) ==0:
+        return jsonify(message="No COMPLETED Order")
+    else:
         for order in order_list:
             order['_id'] = str(order['_id'])
         return Response(json.dumps(order_list), mimetype="application/json")
+
+# 列出CLOSED所有跟團單子
+@routes.route("/Order/ListAllClosedGroupOrder", methods=['GET'])
+def ListAllClosedGroupOrder():
+    print("ListAllGroupOrder is doing something")
+    order_list=list(db["order"].find({"status":"CLOSED"}))
+    if len(order_list) ==0:
+        return jsonify(message="No CLOSED Order")
+    else:
+        for order in order_list:
+            order['_id'] = str(order['_id'])
+        return Response(json.dumps(order_list), mimetype="application/json")
+
 # 搜尋hashtag
 @routes.route("/Order/SearchByHashtag", methods=['POST'])
 def SearchByHashtag():
@@ -32,22 +64,12 @@ def SearchByHashtag():
     search_key = request.form.get("search_key").split()
     # search key=["FAB18", "starbucks", "美式咖啡"]
 
-    # result = {}
-    
-    # for s_k in search_key:
-    #     search_result = list(db["order"].find({"hashtag":{"$regex":s_k}}))
-    #     # result1 += search_result
-    #     for search_r in search_result:
-    #         group_order_id = str(search_r['_id'])
-    #         del search_r['_id']
-    #         if group_order_id not in result:
-    #             result[ group_order_id ] = search_r
-
-    # return result
-
     result = []
     for s_k in search_key:
         search_result = list(db["order"].find({"hashtag":{"$regex":s_k}}))
+        result += search_result
+    for s_k in search_key:
+        search_result = list(db["order"].find({"title":{"$regex":s_k}}))
         result += search_result
     for order in result:
             order['_id'] = str(order['_id'])
