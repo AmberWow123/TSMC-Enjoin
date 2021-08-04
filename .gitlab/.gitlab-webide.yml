@@ -3,7 +3,7 @@ terminal:
   image: python:3.7
 #   before_script:
 #     - apk update
-#   script: sleep 60
+  script: sleep 60
 #   variables:
 #     RAILS_ENV: "test"
 #     NODE_ENV: "test"
