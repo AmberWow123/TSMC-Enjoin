@@ -43,7 +43,7 @@
                 <th width="150">標籤</th>
                 <th width="150">已有人數</th>
                 <th width="150">需求人數</th>
-                <th width="210">時間</th>
+                <th width="250">時間</th>
                 <th width="120">狀態</th>
                 <th width="200">編輯</th>
               </tr>
@@ -65,7 +65,10 @@
                   <div>{{ formatDate(item.meet_time[0]) }}</div>
                   <div>{{ formatDate(item.meet_time[1]) }}</div>
                 </td>
-                <td>{{ item.status }}</td>
+                <td v-if="{{ item.status }}==='IN_PROGRESS'">揪團中</td>
+                <td v-if="{{ item.status }}==='COMPLETED'">揪團已滿</td>
+                <td v-if="{{ item.status }}==='CLOSED'">揪團已結單</td>
+                <td v-else>{{ item.status }}</td>
                 <td>
                   <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-outline-primary"
@@ -108,7 +111,7 @@
                   <th width="120">需求人數</th>
                   <th width="120">揪團創辦人</th>
                   <th width="210">揪團夥伴</th>
-                  <th width="210">時間</th>
+                  <th width="250">時間</th>
                   <th width="120">狀態</th>
                   <th width="200">選項</th>
                 </tr>
