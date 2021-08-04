@@ -217,23 +217,28 @@ def deleteOrder(tsmcid, goid):
     result = db['account'].find_one({'id': tsmcid})
     if result: 
         if "ownOrder" in result:
-            if ObjectId(goid) in result["ownOrder"]:
-                order = db['order'].find_one({'_id': ObjectId(goid)})
-                #移除ownOrder list
-                ownOrder = result["ownOrder"]
-                ownOrder.remove(ObjectId(goid))
-                db["account"].update_one({'id': tsmcid}, {"$set": {'ownOrder': ownOrder}})
-                #移除joinOrder list
-                for joinPeopleId in order["join_people_id"]:
-                    res = db['account'].find_one({'id': joinPeopleId})
-                    joinOrder = res["joinOrder"]
-                    if ObjectId(goid) in joinOrder:
-                        joinOrder.remove(ObjectId(goid))
-                        db["account"].update_one({'id': tsmcid}, {"$set": {'joinOrder': joinOrder}})
-                db["order"].delete_one({'_id': ObjectId(goid)})
-                response = jsonify(message="刪除單子成功")
+            order = db['order'].find_one({'_id': ObjectId(goid)})
+            if order:
+                if ObjectId(goid) in result["ownOrder"]:
+                    print("刪除單子")
+                    response = jsonify(message="刪除單子成功")
+                    #移除ownOrder list
+                    ownOrder = result["ownOrder"]
+                    ownOrder.remove(ObjectId(goid))
+                    db["account"].update_one({'id': tsmcid}, {"$set": {'ownOrder': ownOrder}})
+                    #移除joinOrder list
+                    for joinPeopleId in order["join_people_id"]:
+                        res = db['account'].find_one({'id': joinPeopleId})
+                        joinOrder = res["joinOrder"]
+                        if ObjectId(goid) in joinOrder:
+                            joinOrder.remove(ObjectId(goid))
+                            db["account"].update_one({'id': tsmcid}, {"$set": {'joinOrder': joinOrder}})
+                    db["order"].delete_one({'_id': ObjectId(goid)})
+                    response.status_code = 200
+                else:
+                    response = jsonify(message="非此單子的擁有者")
             else:
-                response = jsonify(message="非此單子的擁有者")
+                response = jsonify(message="此單子已刪除")
         else:
             response = jsonify(message="無建立的單子")
     else:
