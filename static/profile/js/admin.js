@@ -1,4 +1,5 @@
 import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.js";
+import moment from "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.25.1/moment.min.js";
 const apiUrl = "https://tsmc-enjoin.herokuapp.com";
 //const apiUrl = `http://127.0.0.1:5000`;
 
@@ -260,12 +261,12 @@ createApp({
       }
     },
 
-    formatDate(v1,v2) {
-      if (v1 && v2) {
-        start = moment(String(v1)).format('MM/DD/YYYY hh:mm');
-        end = moment(String(v1)).format('MM/DD/YYYY hh:mm');
-        return "From"+start+"to"+end;
+    formatDate(value) {
+      if (value) {
+        time = moment(String(value)).format('MM/DD/YYYY hh:mm');
+        return time
       }
+      return "format ERR"
     },
     
     logout() {

@@ -132,7 +132,7 @@
                     <div v-for="ids in item.join_people_id">{{ ids }}</div>
                   </td>
                   <td>
-                    <div>{{ item.meet_time[0] }}</div>
+                    <div>{{ formatDate(item.meet_time[0]) }}</div>
                     <div>{{ item.meet_time[1] }}</div>
                   </td>
                   <td>{{ item.status }}</td>
