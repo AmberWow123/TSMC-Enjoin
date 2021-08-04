@@ -141,7 +141,7 @@ def editOrder(tsmcid, goid):
                     result["drink"] = drink
                     result["meet_factory"] = meet_factory
                     result['hashtag'] = [meet_factory, store, drink]
-                    result['meet_time'] = [form["meet_time_start"], form["meet_time_end"]]
+                    result['meet_time'] = form["meet_time"]
                     result['join_people_bound'] = int(form["join_people_bound"])
                     result['comment'] = form["comment"]
                     result['title'] = form["title"]
