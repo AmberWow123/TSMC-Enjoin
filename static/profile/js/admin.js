@@ -264,7 +264,7 @@ createApp({
       if(value==='IN_PROGRESS'){
         return '揪團中';
       }
-      else if(vlaue==='COMPLETED')
+      else if(value==='COMPLETED')
       {
         return '揪團已滿';
       }
