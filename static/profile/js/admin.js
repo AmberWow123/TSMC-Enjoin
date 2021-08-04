@@ -204,6 +204,7 @@ createApp({
         .then((res) => {
           if (res.data.message==="更新status成功") {
             alert(res.data.message);
+            closeOrderModal.hide();
             this.getOwnerGroupOrder();
           } else {
             alert(res.data.message);
@@ -266,27 +267,35 @@ createApp({
       }
       else if(value==='COMPLETED')
       {
-        return '揪團已滿';
+        return '人數已滿';
       }
       else if(value==='CLOSED')
       {
-        return '揪團已結單';
+        return '揪團成立';
       }
       return value;
     },
 
     formatDate(value) {
-      if (value) {
+      if (value,type) {
         let tmp = value
         tmp = String(tmp).replace('T',' ');
         tmp = String(tmp).replace('Z',' ');
+        if(type===0)
+        {
+          return "開始: "+tmp;
+        }
+        else if(type===1)
+        {
+          return "結束: "+tmp;
+        }
         return tmp;
       }
       return value;
     },
     
     logout() {
-      alert("請重新登入");
+      alert("登出成功!!");
       window.location = "../LoginRegister";
     },
   },
