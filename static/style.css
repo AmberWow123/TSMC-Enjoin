@@ -1,4 +1,5 @@
 * {
+  box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -8,11 +9,11 @@ h1 {
 
 main {
   padding: 1rem;
-  max-width: 1100px;
+  max-width: 1350px;
   margin: auto;
 }
 
-.card2 {
+.header_card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   max-width: 300px;
   margin: auto;
@@ -27,16 +28,19 @@ main {
   font-size: 22px;
 }
 
-.href:hover {
+.hover_opacity:hover {
   opacity: 80%;
 }
 
 .hashtag {
   font-size: 14px;
+  cursor: pointer;
 }
 
-.button1 {
-  display: block; width: auto; text-decoration: none;
+.button {
+  display: block;
+  width: auto;
+  text-decoration: none;
   border: none;
   outline: 0;
   padding: 12px;
@@ -46,42 +50,60 @@ main {
   cursor: pointer;
   font-size: 18px;
 }
-
-.button1:hover {
+.button:hover {
   opacity: 0.7;
 }
-
-.button2 {
-  display: block; width: auto; text-decoration: none;
-  border: none;
-  outline: 0;
-  padding: 12px;
-  color: white;
+.red_bg {
   background-color: #ff5050;
-  text-align: center;
+}
+
+.round_bar_button {
   cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
   font-size: 18px;
+  text-align: center;
+  color: white;
+  background-color: #000;
+  max-width: 160px;
+  width: 100%;
+  border-radius: 100px;
+  border-width: 0;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
+  padding: 12px 16px;
+  transition: 0.2s ease-in-out all;
+  margin: 14px 0;
+}
+.round_bar_button:focus {
+  outline: none;
+  box-shadow: 0 5.5px 16px 0 rgb(0 0 0 / 20%);
+  transform: scale(1.05);
+}
+.round_bar_button:hover {
+  outline: none;
+  box-shadow: 0 5.5px 16px 0 rgb(0 0 0 / 20%);
+  transform: scale(1.05);
+}
+.joined_button{
+  cursor: default;
+  background-color: rgb(68 68 68);
+  color: #adadad;
 }
 
-.button2:hover {
-  opacity: 0.7;
-}
-
-.row{
+.row {
   text-align: center;
   margin-bottom: 50px;
 }
 
 #app {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, .9fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   grid-gap: 1.5rem;
   justify-content: center;
   align-items: center;
 }
 
 .card {
-  width: 12rem auto;
   background: #444;
   color: #e4c439;
   padding: 1rem;
@@ -92,7 +114,7 @@ main {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   position: relative;
   overflow: hidden;
-  cursor: pointer;
+  cursor: default;
   transition: 0.2s ease-in-out all;
 }
 
@@ -111,6 +133,7 @@ main {
   top: 0;
   left: 0;
 }
+
 .card--title {
   text-transform: capitalize;
   color: #fff;
@@ -130,17 +153,24 @@ main {
   display: block;
 }
 
-#search_bar{
-  max-width: 160px;
+#search_bar {
+  max-width: 173px;
   width: 100%;
   border-radius: 100px;
   border-width: 0;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%);
   padding: 12px 16px;
+  font-size: 14px;
   transition: 0.2s ease-in-out all;
 }
 
-#search_bar:focus{
+#search_bar:focus {
+  outline: none;
+  box-shadow: 0 5.5px 16px 0 rgb(0 0 0 / 20%);
+  transform: scale(1.05);
+}
+
+#search_bar:hover {
   outline: none;
   box-shadow: 0 5.5px 16px 0 rgb(0 0 0 / 20%);
   transform: scale(1.05);

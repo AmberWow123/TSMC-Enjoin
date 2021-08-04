@@ -46,9 +46,10 @@ const search_input = document.getElementById('search_bar')
 //         .then(response => response.json()) // 輸出成 json
 // }
 
-function joinOrder(orderId) {
-    // Default options are marked with *
-    return fetch(apiUrl + `/Order/JoinOrder/${user_objectId}/${orderId}`, {
+function joinOrder(joinButton, orderId) {
+    joinButton.innerHTML = 'joining...'
+    joinButton.style.color = '#adadad'
+    fetch(apiUrl + `/Order/JoinOrder/${user_objectId}/${orderId}`, {
         headers: {
             'x-access-token': token
         },
@@ -56,21 +57,29 @@ function joinOrder(orderId) {
     })
         .then(res => res.json())
         .then(json => {
-            document.getElementById(orderId).innerText = json.message
+            var message = json.message
+            if (message == 'you are already in this order')
+                message = 'Already joined'
+            else
+                joinButton.style.color = '#fff'
+            document.getElementById(orderId).innerText = message
+        })
+        .catch(err => {
+            document.getElementById(orderId).innerText = 'error'
         })
 }
 
-function clickHashTag(tag){
+function clickHashTag(tag) {
     const str = tag.text.slice(1) // #text -> text
     search_input.value = str
     searchByHashTag(str)
 }
 
-function getTime(date){
-    return `${date.getHours()}:${('0'+date.getMinutes()).slice(-2)}`
+function getTime(date) {
+    return `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`
 }
 
-function getDate(date){
+function getDate(date) {
     return `${date.getMonth()}/${date.getDate()}`
 }
 
@@ -81,19 +90,34 @@ function showOrders(orders) {
         // <p style="margin: -10px;">-</p>
         // <p>From ${order.meet_time[0].slice(0,-8)}</p>
         // <p>To ${order.meet_time[1].slice(0,-8)}</p>
-        var joinButton = loggedIn ? `<a id="${order._id}" class="button1" onclick="joinOrder('${order._id}')">Join</a>` : ''
+        var joined = false
+        try {
+            for (let i = 0; i < order.join_people_id.length; i++) {
+                const e = order.join_people_id[i];
+                if (e == user_tsmcid) {
+                    joined=true
+                    break
+                }
+            }
+        } catch (error) { }
+        if(joined){
+            var joinButton = `<a class="round_bar_button joined_button">Joined</a>`
+        }else{
+            var joinButton = loggedIn ? `<a id="${order._id}" class="round_bar_button" onclick="joinOrder(this, '${order._id}')">Join</a>` : ''
+        }
+
 
         var meet_time_start = new Date(order.meet_time[0])
         var meet_time_end = new Date(order.meet_time[1])
         var meet_time
-        if(meet_time_start.toLocaleDateString() == meet_time_end.toLocaleDateString()){
+        if (meet_time_start.toLocaleDateString() == meet_time_end.toLocaleDateString()) {
             meet_time = `
                 <p class="lightgraytext">
                     <span class="short_date">${getDate(meet_time_start)}</span><br>
                     ${getTime(meet_time_start)} - ${getTime(meet_time_end)}
                 </p>
             `;
-        }else{
+        } else {
             meet_time = `
                 <p class="lightgraytext">
                     From ${meet_time_start.toLocaleString()}
@@ -106,7 +130,7 @@ function showOrders(orders) {
         order.hashtag.forEach(hashtag => {
             // if(hashtags.length > 0)
             //     hashtags += 
-            hashtags += `<a class="hashtag href" onclick="clickHashTag(this)">#${hashtag}</a> `
+            hashtags += `<a class="hashtag hover_opacity" onclick="clickHashTag(this)">#${hashtag}</a> `
         })
 
         s += `
@@ -115,7 +139,7 @@ function showOrders(orders) {
                 <span class="card--comment">${order.comment}</span>
                 ${meet_time}
                 <span class="card--fab">${order.meet_factory}</span>
-                <p>${hashtags}<p>
+                <p>${hashtags}</p>
                 ${joinButton}
             </div>
         `;
@@ -144,7 +168,7 @@ function searchByHashTag(str) {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({search_key: str}),
+        body: JSON.stringify({ search_key: str }),
     })
         .then(response => response.json())
         .then(data => showOrders(data));
