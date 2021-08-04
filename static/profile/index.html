@@ -104,9 +104,9 @@
                   <th width="90">品項</th>
                   <th width="90">廠區</th>
                   <th width="150">標籤</th>
-                  <th width="120">已有人數</th>
-                  <th width="120">需求人數</th>
-                  <th width="120">揪團創辦人</th>
+                  <th width="150">已有人數</th>
+                  <th width="150">需求人數</th>
+                  <th width="150">揪團創辦人</th>
                   <th width="210">揪團夥伴</th>
                   <th width="250">時間</th>
                   <th width="120">狀態</th>
@@ -135,7 +135,7 @@
                     <div>{{ formatDate(item.meet_time[0]) }}</div>
                     <div>{{ formatDate(item.meet_time[1]) }}</div>
                   </td>
-                  <td>{{ item.status }}</td>
+                  <td>{{ checkStatus(item.status) }}</td>
                   <td>
                     <div class="btn-group">
                       <button type="button" class="btn btn-sm btn-outline-primary" @click="">聊天</button>

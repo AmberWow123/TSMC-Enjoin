@@ -268,7 +268,7 @@ createApp({
       {
         return '揪團已滿';
       }
-      else if(value==='COMPLETED')
+      else if(value==='CLOSED')
       {
         return '揪團已結單';
       }
