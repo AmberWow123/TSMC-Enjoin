@@ -66,6 +66,14 @@ function clickHashTag(tag){
     searchByHashTag(str)
 }
 
+function getTime(date){
+    return `${date.getHours()}:${('0'+date.getMinutes()).slice(-2)}`
+}
+
+function getDate(date){
+    return `${date.getMonth()}/${date.getDate()}`
+}
+
 function showOrders(orders) {
     var s = ''
     orders.forEach(order => {
@@ -74,6 +82,25 @@ function showOrders(orders) {
         // <p>From ${order.meet_time[0].slice(0,-8)}</p>
         // <p>To ${order.meet_time[1].slice(0,-8)}</p>
         var joinButton = loggedIn ? `<a id="${order._id}" class="button1" onclick="joinOrder('${order._id}')">Join</a>` : ''
+
+        var meet_time_start = new Date(order.meet_time[0])
+        var meet_time_end = new Date(order.meet_time[1])
+        var meet_time
+        if(meet_time_start.toLocaleDateString() == meet_time_end.toLocaleDateString()){
+            meet_time = `
+                <p class="lightgraytext">
+                    <span class="short_date">${getDate(meet_time_start)}</span><br>
+                    ${getTime(meet_time_start)} - ${getTime(meet_time_end)}
+                </p>
+            `;
+        }else{
+            meet_time = `
+                <p class="lightgraytext">
+                    From ${meet_time_start.toLocaleString()}
+                    To ${meet_time_end.toLocaleString()}
+                </p>
+            `;
+        }
 
         var hashtags = ''
         order.hashtag.forEach(hashtag => {
@@ -84,12 +111,11 @@ function showOrders(orders) {
 
         s += `
             <div class="card">
-                <h1 class="card--name">${order.title}</h1>
-                <span class="card--details">${order.comment}</span>
-                <p><span class="card--details">${order.meet_factory}</span></p>
-                <p>From ${order.meet_time[0]}</p>
-                <p>To ${order.meet_time[1]}</p>
-                ${hashtags}
+                <h1 class="card--title">${order.title}</h1>
+                <span class="card--comment">${order.comment}</span>
+                ${meet_time}
+                <span class="card--fab">${order.meet_factory}</span>
+                <p>${hashtags}<p>
                 ${joinButton}
             </div>
         `;
