@@ -219,12 +219,30 @@
                 <!--input id="meet_factory" v-model="tempOrder.meet_factory" type="text" min="1" class="form-control"
                   placeholder="請輸入會面廠區" required-->
               </div>
-              <div class="form-group col-md-6" v-for="(meet_time, index) in tempOrder.meet_time">
+              <!-- <div class="form-group col-md-6" v-for="(mtime, index) in tempOrder.meet_time">
+                <label v-if="index==0">會面時間(開始)</label>
+                <label v-if="index==1">會面時間(結束)</label>
+                <input v-if="index==0" v-model="mtime.value" type="datetime-local" class="form-control"
+                  placeholder="請輸入會面開始時間" required>
+                <input v-if="index==1" v-model="mtime.value" type="datetime-local" class="form-control"
+                  placeholder="請輸入會面結束時間" required>
+              </div> -->
+              <!-- <div class="form-group col-md-6" v-for="(meet_time, index) in tempOrder.meet_time">
                 <label v-if="index==0">會面時間(開始)</label>
                 <label v-if="index==1">會面時間(結束)</label>
                 <input v-if="index==0" v-model="meet_time" :key="index" type="datetime-local" class="form-control"
                   placeholder="請輸入會面開始時間" required>
-                <input v-if="index==1" v-model="meet_time" :key="index" type="datetime-local" class="form-control"
+                <input v-if="index==1" v-model="meet_time" type="datetime-local" class="form-control"
+                  placeholder="請輸入會面結束時間" required>
+              </div> -->
+              <div class="form-group col-md-6">
+                <label for="meet_time1">會面時間(開始)</label>
+                <input id="meet_time1" v-model="tempOrder.meet_time_start" type="datetime-local" class="form-control"
+                  placeholder="請輸入會面開始時間" required>
+              </div>
+              <div class="form-group col-md-6">
+                <label for="meet_time2">會面時間(結束)</label>
+                <input id="meet_time2" v-model="tempOrder.meet_time_end" type="datetime-local" class="form-control"
                   placeholder="請輸入會面結束時間" required>
               </div>
             </div>

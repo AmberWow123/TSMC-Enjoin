@@ -246,7 +246,12 @@ createApp({
       }
       else if(status === "editOrder")
       {
-        this.tempOrder = { ...item };
+        this.tempOrder = {
+          ...item,
+          meet_time_start: item.meet_time[0],
+          meet_time_end: item.meet_time[1]
+        };
+        delete this.tempOrder.meet_time; 
         this.isNew = false;
         orderModal.show();
       }
