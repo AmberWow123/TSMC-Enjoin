@@ -260,6 +260,21 @@ createApp({
       }
     },
 
+    checkStatus(value){
+      if(value==='IN_PROGRESS'){
+        return '揪團中';
+      }
+      else if(vlaue==='COMPLETED')
+      {
+        return '揪團已滿';
+      }
+      else if(value==='COMPLETED')
+      {
+        return '揪團已結單';
+      }
+      return value
+    }
+
     formatDate(value) {
       if (value) {
         let tmp = value
