@@ -26,6 +26,7 @@ document.getElementById('login').parentNode.hidden = loggedIn
 const myorders = document.getElementById('myorders')
 myorders.parentNode.hidden = !loggedIn
 // myorders.href += '?id=123456'
+const search_input = document.getElementById('search_bar')
 
 // function postJSON(url, data) {
 //     // Default options are marked with *
@@ -59,6 +60,12 @@ function joinOrder(orderId) {
         })
 }
 
+function clickHashTag(tag){
+    const str = tag.text.slice(1) // #text -> text
+    search_input.value = str
+    searchByHashTag(str)
+}
+
 function showOrders(orders) {
     var s = ''
     orders.forEach(order => {
@@ -67,14 +74,22 @@ function showOrders(orders) {
         // <p>From ${order.meet_time[0].slice(0,-8)}</p>
         // <p>To ${order.meet_time[1].slice(0,-8)}</p>
         var joinButton = loggedIn ? `<a id="${order._id}" class="button1" onclick="joinOrder('${order._id}')">Join</a>` : ''
+
+        var hashtags = ''
+        order.hashtag.forEach(hashtag => {
+            // if(hashtags.length > 0)
+            //     hashtags += 
+            hashtags += `<a class="hashtag href" onclick="clickHashTag(this)">#${hashtag}</a> `
+        })
+
         s += `
             <div class="card">
                 <h1 class="card--name">${order.title}</h1>
                 <span class="card--details">${order.comment}</span>
                 <p><span class="card--details">${order.meet_factory}</span></p>
-                <p class="price">${order.hashtag}</p>
                 <p>From ${order.meet_time[0]}</p>
                 <p>To ${order.meet_time[1]}</p>
+                ${hashtags}
                 ${joinButton}
             </div>
         `;
@@ -82,10 +97,13 @@ function showOrders(orders) {
     container.innerHTML = s
 }
 
-function searchByHashTag(search_input) {
+
+
+function searchByHashTag(str) {
     // console.log('searchBar_onKeyUp()')
     // console.log(e)
-    if (search_input.value.trim() == '') {
+    str = str.trim()
+    if (str == '') {
         showAllOrders()
         return
     }
@@ -100,7 +118,7 @@ function searchByHashTag(search_input) {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({search_key: search_input.value.trim()}),
+        body: JSON.stringify({search_key: str}),
     })
         .then(response => response.json())
         .then(data => showOrders(data));

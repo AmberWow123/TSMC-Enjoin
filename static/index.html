@@ -27,7 +27,7 @@
             <form id="search_form" method="POST" onsubmit="false">
                 <button type="submit" disabled hidden>This Button is here to prevent 'enter' submit</button>
                 <input type="text" id="search_bar" name="search_key" placeholder="Search"
-                    oninput="searchByHashTag(this)">
+                    oninput="searchByHashTag(this.value)">
             </form>
         </div>
         <div id="app"></div>
