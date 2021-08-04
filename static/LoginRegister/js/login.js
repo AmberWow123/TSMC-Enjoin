@@ -27,7 +27,7 @@ createApp({
             )}; path=/`;
             document.cookie = `_id=${_id}; path=/`
             document.cookie = `id=${id}; path=/`
-            window.location.href = `../profile`;
+            window.location.href = `/`;
           } else {
             alert(res.data.message);
           }

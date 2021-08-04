@@ -20,13 +20,30 @@ const user_tsmcid = document.cookie.replace(
 // console.log('user_objectId:', user_objectId)
 // console.log('user_tsmcid:', user_tsmcid)
 
-const loggedIn = (token != '')
-document.getElementById('user_id').innerText = user_tsmcid
-document.getElementById('login').parentNode.hidden = loggedIn
 const myorders = document.getElementById('myorders')
-myorders.parentNode.hidden = !loggedIn
-// myorders.href += '?id=123456'
 const search_input = document.getElementById('search_bar')
+const logoutButton = document.getElementById('logout')
+
+document.getElementById('user_id').innerText = user_tsmcid
+
+const loggedIn = (token != '')
+function animateHidden(e, hidden) {
+    e.style.height = hidden ? 0 : e.scrollHeight + 'px'
+}
+animateHidden(document.getElementById('login').parentNode, loggedIn)
+animateHidden(myorders.parentNode, !loggedIn)
+animateHidden(logoutButton.parentNode, !loggedIn)
+
+function removeCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+}
+function logout() {
+    removeCookie('Token');
+    removeCookie('_id');
+    removeCookie('id');
+    window.location.replace('/')
+}
+logoutButton.onclick = logout
 
 // function postJSON(url, data) {
 //     // Default options are marked with *
@@ -58,10 +75,17 @@ function joinOrder(joinButton, orderId) {
         .then(res => res.json())
         .then(json => {
             var message = json.message
-            if (message == 'you are already in this order')
-                message = 'Already joined'
-            else
-                joinButton.style.color = '#fff'
+            switch (message) {
+                case 'you are already in this order':
+                    message = 'Already joined'
+                    break;
+                case 'success':
+                    message = 'Joined Successfully'
+                    joinButton.style.background = '#59cc01'
+                    break
+                default:
+                    joinButton.style.color = '#fff'
+            }
             document.getElementById(orderId).innerText = message
         })
         .catch(err => {
@@ -80,7 +104,7 @@ function getTime(date) {
 }
 
 function getDate(date) {
-    return `${date.getMonth()}/${date.getDate()}`
+    return `${date.getMonth()+1}/${date.getDate()}`
 }
 
 function showOrders(orders) {
@@ -95,17 +119,16 @@ function showOrders(orders) {
             for (let i = 0; i < order.join_people_id.length; i++) {
                 const e = order.join_people_id[i];
                 if (e == user_tsmcid) {
-                    joined=true
+                    joined = true
                     break
                 }
             }
         } catch (error) { }
-        if(joined){
+        if (joined) {
             var joinButton = `<a class="round_bar_button joined_button">Joined</a>`
-        }else{
+        } else {
             var joinButton = loggedIn ? `<a id="${order._id}" class="round_bar_button" onclick="joinOrder(this, '${order._id}')">Join</a>` : ''
         }
-
 
         var meet_time_start = new Date(order.meet_time[0])
         var meet_time_end = new Date(order.meet_time[1])
@@ -133,18 +156,27 @@ function showOrders(orders) {
             hashtags += `<a class="hashtag hover_opacity" onclick="clickHashTag(this)">#${hashtag}</a> `
         })
 
+        var meet_factory = order.meet_factory
+        try {
+            if (!isNaN(meet_factory[0]))
+                meet_factory = 'FAB' + meet_factory
+        } catch (error) { }
+
         s += `
-            <div class="card">
+            <div class="card" style="padding-bottom: ${loggedIn ? '272px' : '194px'};">
                 <h1 class="card--title">${order.title}</h1>
                 <span class="card--comment">${order.comment}</span>
-                ${meet_time}
-                <span class="card--fab">${order.meet_factory}</span>
-                <p>${hashtags}</p>
-                ${joinButton}
+                <div class="absoluteBottom">
+                    ${meet_time}
+                    <span class="card--fab">${meet_factory}</span>
+                    <p>${hashtags}</p>
+                    ${joinButton}
+                </div>
             </div>
         `;
     });
     container.innerHTML = s
+    container.style.opacity = 1
 }
 
 
