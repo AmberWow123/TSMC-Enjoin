@@ -227,12 +227,13 @@ def deleteOrder(tsmcid, goid):
                     ownOrder.remove(ObjectId(goid))
                     db["account"].update_one({'id': tsmcid}, {"$set": {'ownOrder': ownOrder}})
                     #移除joinOrder list
-                    for joinPeopleId in order["join_people_id"]:
-                        res = db['account'].find_one({'id': joinPeopleId})
-                        joinOrder = res["joinOrder"]
-                        if ObjectId(goid) in joinOrder:
-                            joinOrder.remove(ObjectId(goid))
-                            db["account"].update_one({'id': tsmcid}, {"$set": {'joinOrder': joinOrder}})
+                    if "join_people_id" in order:
+                        for joinPeopleId in order["join_people_id"]:
+                            res = db['account'].find_one({'id': joinPeopleId})
+                            joinOrder = res["joinOrder"]
+                            if ObjectId(goid) in joinOrder:
+                                joinOrder.remove(ObjectId(goid))
+                                db["account"].update_one({'id': tsmcid}, {"$set": {'joinOrder': joinOrder}})
                     db["order"].delete_one({'_id': ObjectId(goid)})
                     response.status_code = 200
                 else:
