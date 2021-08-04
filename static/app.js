@@ -80,9 +80,9 @@ function joinOrder(joinButton, orderId) {
                     message = 'Already joined'
                     break;
                 case 'success':
-                    message = 'Joined Successfully'
+                    message = 'Joined'
                     joinButton.style.background = '#59cc01'
-                    break
+                    joinButton.onclick = undefined
                 default:
                     joinButton.style.color = '#fff'
             }
@@ -104,7 +104,7 @@ function getTime(date) {
 }
 
 function getDate(date) {
-    return `${date.getMonth()+1}/${date.getDate()}`
+    return `${date.getMonth() + 1}/${date.getDate()}`
 }
 
 function showOrders(orders) {
@@ -180,11 +180,16 @@ function showOrders(orders) {
 }
 
 
-
+var searchStr=''
 function searchByHashTag(str) {
     // console.log('searchBar_onKeyUp()')
     // console.log(e)
     str = str.trim()
+    if (str === searchStr)
+        return
+    searchStr=str
+
+    // container.style.opacity = 0
     if (str == '') {
         showAllOrders()
         return
