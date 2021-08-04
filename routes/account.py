@@ -11,7 +11,7 @@ from functools import wraps
 # {    # account
 #     id: 工號(int) # primary key, not null
 #     password: (string) # not null
-#     FAB: FAB2(選單) # not null
+#     epidemic_prevention_group : A/B # not null
 #     ownOrder: []
 #     joinOrder: []
 # }
@@ -47,18 +47,15 @@ def testDB():
 #create account
 @routes.route("/Account/Create", methods=['POST'])
 def accountCreate():
-    # _id = request.form['id']
-    # password = request.form['password']
-    # fab = request.form['fab']
     req = request.get_json()
     _id = req['id']
     password = req['password']
-    fab = req['fab']
+    group = req['epidemic_prevention_group']
     result = db['account'].find_one({'id': _id})
     if result:
         response = jsonify(message="已註冊過的工號")
     else:
-        db['account'].insert_one({'id': str(_id), 'password': password, 'fab': fab})
+        db['account'].insert_one({'id': str(_id), 'password': password, 'epidemic_prevention_group': group})
         response = jsonify(message="註冊成功")
     response.headers["Access-Control-Allow-Origin"] = "*"
     response.headers['Access-Control-Allow-Method'] = '*'
@@ -70,8 +67,6 @@ def accountLogin():
     req = request.get_json()
     _id = req['id']
     password = req['password']
-    # _id = request.form['id']
-    # password = request.form['password']
     result = db['account'].find_one({'id': _id})
     if result:
         if result['password'] == password:
@@ -79,7 +74,6 @@ def accountLogin():
                 'id': _id,
                 'exp': datetime.utcnow() + timedelta(hours=24)
             }, config.SECRET_KEY, algorithm="HS256")
-            # response["success"] = True
             response = jsonify(message="成功登入", token= token.decode('UTF-8'), id= _id, _id= result["_id"])
         else:
             response = jsonify(message="登入失敗，密碼錯誤")
@@ -94,9 +88,7 @@ def accountLogin():
 @routes.route("/Account/CreateOrder/<string:tsmcid>", methods=['POST'])
 @token_required
 def createOrder(tsmcid):
-    # check 是否已登入?
     form = request.get_json()
-    # form = request.form.to_dict()
     result = db['account'].find_one({'id': tsmcid})
     if result:
         meet_factory = form["meet_factory"]
@@ -108,6 +100,8 @@ def createOrder(tsmcid):
         form['meet_time'] = [form["meet_time_start"], form["meet_time_end"]]
         form['join_people_bound'] = int(form["join_people_bound"])
         form['join_people'] = 0
+        if "epidemic_prevention_group" in result:
+            form['epidemic_prevention_group'] = result["epidemic_prevention_group"]
         del form['meet_time_start']
         del form['meet_time_end']
         print(form)
@@ -133,12 +127,9 @@ def createOrder(tsmcid):
 @token_required
 def editOrder(tsmcid, goid):
     form = request.get_json()
-    # form = request.form.to_dict()
     account = db['account'].find_one({'id': tsmcid})
     if account:
         #確認單子是否為此擁有者
-        print(account["ownOrder"])
-        print(goid)
         if "ownOrder" in account:
             if ObjectId(goid) in account["ownOrder"]:
                 result = db['order'].find_one({'_id': ObjectId(goid)})
@@ -148,6 +139,7 @@ def editOrder(tsmcid, goid):
                     drink = form["drink"]
                     result["store"] = store
                     result["drink"] = drink
+                    result["meet_factory"] = meet_factory
                     result['hashtag'] = [meet_factory, store, drink]
                     result['meet_time'] = [form["meet_time_start"], form["meet_time_end"]]
                     result['join_people_bound'] = int(form["join_people_bound"])
@@ -164,13 +156,6 @@ def editOrder(tsmcid, goid):
                         result["status"] = "COMPLETED"
                         db["order"].replace_one({'_id': ObjectId(goid)}, result)
                         response = jsonify(message="編輯揪團單子成功")
-                    # form['status'] = "IN_PROGRESS"
-                    # form['creator_id'] = str(tsmcid)
-                    # form['join_people'] = result['join_people']
-                    # del form['meet_time_start']
-                    # del form['meet_time_end']
-                    # del result['_id']
-                    # print(result)
                 else:
                     response = jsonify(message="此單子已被刪除")
             else:
@@ -198,7 +183,7 @@ def closeOrder(tsmcid, goid):
                     db["order"].update_one({'_id': ObjectId(goid)}, {"$set": {'status': "CLOSED"}})
                     response = jsonify(message="更新status成功")
                 else:
-                    response = jsonify(message="status非completed狀態")
+                    response = jsonify(message="揪團人數尚未滿員，無法結單")
             else:
                 response = jsonify(message="非此單子的擁有者")
         else:
@@ -220,7 +205,6 @@ def deleteOrder(tsmcid, goid):
             order = db['order'].find_one({'_id': ObjectId(goid)})
             if order:
                 if ObjectId(goid) in result["ownOrder"]:
-                    print("刪除單子")
                     response = jsonify(message="刪除單子成功")
                     #移除ownOrder list
                     ownOrder = result["ownOrder"]
@@ -262,9 +246,7 @@ def getJoinOrder(tsmcid):
                 if order:
                     order["_id"] = str(order["_id"])
                     data.append(order)
-            print(data)
             response = jsonify(message="success", data=data)
-            # response = jsonify(message="success", data=json.dumps(data, default=json_util.default))
         else:
             response = jsonify(message="無跟團的單子")
     else:
@@ -287,7 +269,6 @@ def getOwnerOrder(tsmcid):
                 if order:
                     order["_id"] = str(order["_id"])
                     data.append(order)
-            print(data)
             response = jsonify(message="success", data=data)
         else:
             response = jsonify(message="無創建的單子")
@@ -298,19 +279,3 @@ def getOwnerOrder(tsmcid):
     response.headers['Access-Control-Allow-Headers'] = '*'
     return response
 
-#update joinlist
-# @routes.route("/Account/updatejoinList/<string:uuid>", methods=['POST'])
-# def updateList(uuid):
-#     print("uuid ", uuid)
-#     json = request.get_json(force=True)
-#     print(json)
-#     lst = [json['list']]
-
-#     result = db['account'].find_one({'_id': ObjectId(uuid)})
-#     print(result)
-#     if 'joinList' in result:
-#         lst += result['joinList']
-#     print(lst)
-#     db['account'].update_one({'_id': ObjectId(uuid)}, {"$set": {'joinOrder': lst}})
-
-#     return jsonify(message="success")
