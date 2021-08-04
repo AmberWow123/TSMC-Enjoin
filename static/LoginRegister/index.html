@@ -14,38 +14,83 @@
 
 <body>
   <div id="app">
+    <div class="container-fluid bg-dark py-2 mb-3">
+      <div class="container">
+        <a href="/" class="text-decoration-none">
+          <h1 class="text-white h3">
+            TSMC Enjoin Login / Register
+          </h1>
+        </a>
+      </div>
+    </div>
     <div class="container">
       <div class="row justify-content-center">
-        <h1 class="h1 mb-3 font-weight-normal">
-          LOGIN
-        </h1>
-        <div>
-          <form id="form" class="form-signIn" @submit.prevent="login">
+                <div>
+          <form id="loginform" class="form-sign" @submit.prevent="login">
             <div class="form-floating mb-3">
-              <input type="text" class="form-control userEmail" id="username" placeholder="username or email"
+              <input type="text" class="form-control userEmail" id="username" placeholder="username"
                 v-model="user.id" required autofocus>
-              <label for="username">Email address or Username</label>
+              <label for="username">Username (NT account as Username)</label>
             </div>
             <div class="form-floating mb-3">
               <input type="password" class="form-control userPw" id="password" placeholder="Password" v-model="user.password"
                 required>
               <label for="password">Password</label>
             </div>
-            <div class="form-floating mb-3">
-              <input type="number" min="0" class="form-control userFab" id="fab" placeholder="12"
-                v-model="user.fab" required>
-              <label for="Fab">Fab</label>
-            </div>
             <ul class="d-flex justify-content-end list-unstyled mt-3">
-              <li>
-                <button class="btn btn-lg btn-light" type="button" @click="create">註冊</button>
-              </li>
               <li>
                 <button class="loginBtn btn btn-lg btn-primary" type="submit">登入</button>
               </li>
             </ul>
           </form>
         </div>
+        <hr>
+        <div>
+          <form id="registerform" class="form-sign" @submit.prevent="create">
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control userEmail" id="R_username" placeholder="register username"
+                v-model="register.id" required autofocus>
+              <label for="R_username">Username (suggest use NT account)</label>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="password" class="form-control userPw" id="R_password" placeholder="Password" v-model="register.password"
+                required>
+              <label for="R_password">Password</label>
+            </div>
+            <div class="form-floating mb-3">
+              <select id="R_fab" v-model="register.epidemic_prevention_group" class="form-control">
+                <option disabled value="">user fab</option>
+                <option value="F2_F5">F2_F5</option>
+                <option value="F3">F3</option>
+                <option value="F6">F6</option>
+                <option value="F7">F7</option>
+                <option value="F8">F8</option>
+                <option value="F12P1">F12P1</option>
+                <option value="F12P4">F12P4</option>
+                <option value="F12P7">F12P7</option>
+                <option value="F14P1">F14P1</option>
+                <option value="F14P3">F14P3</option>
+                <option value="F14P5">F14P5</option>
+                <option value="F14P7">F14P7</option>
+                <option value="F15A">F15A</option>
+                <option value="F15B">F15B</option>
+                <option value="F18P1">F18P1</option>
+                <option value="AP2">AP2</option>
+                <option value="AP3">AP3</option>
+                <option value="CP03">CP03</option>
+                <option value="Epistar Office">Epistar Office</option>
+              </select>
+              <label for="R_fab">Fab</label>
+            </div>
+            <ul class="d-flex justify-content-end list-unstyled mt-3">
+              <li>
+                <button class="btn btn-lg btn-light" type="submit">註冊</button>
+              </li>
+            </ul>
+          </form>
+        </div>
+        
+
       </div>
     </div>
   </div>
