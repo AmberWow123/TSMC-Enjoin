@@ -1,7 +1,5 @@
 const apiUrl = ''
-// const apiUrl = 'http://localhost:5000'
 const container = document.getElementById("app");
-// const pokemons = 10;
 
 const token = document.cookie.replace(
     /(?:(?:^|.*;\s*)Token\s*=\s*([^;]*).*$)|^.*$/,
@@ -184,7 +182,7 @@ function showOrders(orders) {
         } else {
             meet_time = `
                 <p class="lightgraytext">
-                    ${meet_time_start.toLocaleString().slice(0,-3)} - ${meet_time_end.toLocaleString().slice(0,-3)}
+                    ${meet_time_start.toLocaleString().slice(0, -3)} - ${meet_time_end.toLocaleString().slice(0, -3)}
                 </p>
             `;
         }
@@ -242,11 +240,8 @@ function searchByHashTag(str) {
         showAllOrders()
         return
     }
-    // const formElement = document.getElementById('search_form')
-    // const data = new URLSearchParams(new FormData(formElement));
-    const url = 'https://tsmc-enjoin.herokuapp.com/Order/SearchByHashtag'
-    // const url = 'http://localhost:5000/Order/SearchByHashtag'
-    fetch(url, {
+
+    fetch(apiUrl + '/Order/SearchByHashtag', {
         method: 'POST',
         mode: 'cors', // no-cors, cors, *same-origin
         headers: {
@@ -261,8 +256,7 @@ function searchByHashTag(str) {
 }
 
 function showAllOrders() {
-    const url = 'https://tsmc-enjoin.herokuapp.com/Order/ListAllInProgressGroupOrder'
-    fetch(url, {
+    fetch(apiUrl + '/Order/ListAllInProgressGroupOrder', {
         mode: 'cors',
     })
         .then(response => response.json())

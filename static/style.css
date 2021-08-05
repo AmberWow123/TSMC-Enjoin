@@ -139,9 +139,7 @@ div.absoluteBottom {
 #app {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, max-content));
-  /* grid-template-columns: repeat(auto-fit, minmax(240px, 300px)); */
-  /* grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  grid-template-columns: 1fr fit-content(20%); */
+  /* grid-template-columns: repeat(auto-fit, minmax(220px, max-content)); */
   grid-gap: 1.5rem;
   opacity: 0;
   justify-content: center;
