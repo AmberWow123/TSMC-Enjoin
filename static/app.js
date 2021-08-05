@@ -207,7 +207,7 @@ function showOrders(orders) {
                         <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
                         <h1 class="card--title">${order.drink} ${order.title}</h1>
                         <p class="card--comment">${order.comment}</p>
-                        <p class="card--creator_id" title="Creator">${order.creator_id}</p>
+                        <p class="card--creator_id mar_bottom0" title="Creator">${order.creator_id}</p>
                     </div>
                 </div>
                 <div class="absoluteBottom">
@@ -215,7 +215,7 @@ function showOrders(orders) {
                     <div class="invisible_scroll hashtag_panel">
                         <div>
                             <span class="card--fab">${order.store}, ${meet_factory}</span>
-                            <p class="p_hashtag">${hashtags}</p>
+                            <p class="mar_bottom0">${hashtags}</p>
                         </div>
                     </div>
                     ${joinButton}
