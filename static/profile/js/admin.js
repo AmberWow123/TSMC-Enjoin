@@ -100,9 +100,8 @@ createApp({
           })
           //.get(`${apiUrl}/${apiPath}/admin/products?page=${page}`)
           .then((res) => {
-            console.log(res);
-            console.log(res.data);
-            console.log(res.data.data[0])
+            //console.log(res);
+            //console.log(res.data);
             if (res.data.message==='success') {
               this.ownList = res.data.data;
             } else {
@@ -124,9 +123,8 @@ createApp({
         })
         //.get(`${apiUrl}/${apiPath}/admin/products?page=${page}`)
         .then((res) => {
-          console.log(res);
-          console.log(res.data);
-          console.log(res.data.data[0])
+          //console.log(res);
+          //console.log(res.data);
           if (res.data.message==='success') {
             this.followList = res.data.data;
             followModal.show();
