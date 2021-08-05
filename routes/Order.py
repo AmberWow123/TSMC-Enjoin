@@ -127,16 +127,17 @@ def QuitOrder(uuid, goid):
     if order_result["status"]=="CLOSED":
         ## Return old account collections and order collections
         orders = db["order"].find()
-        order_lst = []
-        for order in orders:
-            order["_id"] = str(order["_id"])
-            order_lst.append(order)
+        # order_lst = []
+        # for order in orders:
+        #     order["_id"] = str(order["_id"])
+        #     order_lst.append(order)
         accounts = db["account"].find()
-        account_lst = []
-        for account in accounts:
-            account["_id"] = str(account["_id"])
-            account_lst.append(account)
-        return jsonify(message = "This order is already closed, you couldn't quit", order=order_lst, account=account_lst)
+        # account_lst = []
+        # for account in accounts:
+        #     account["_id"] = str(account["_id"])
+        #     account_lst.append(account)
+        # return jsonify(message = "This order is already closed, you couldn't quit", order=order_lst, account=account_lst)
+        return jsonify(message = "This order is already closed, you couldn't quit", order=list(orders), account=list(accounts))
     
     ## Find account and remove order from join order
     account_result = db["account"].find_one({'_id': ObjectId(uuid)})
@@ -152,13 +153,22 @@ def QuitOrder(uuid, goid):
     db["order"].update_one({'_id': ObjectId(goid)}, {"$set": {"join_people": join_people, "join_people_id":order_result["join_people_id"], "status":"IN_PROGRESS"}})
     ## Return new account collections and order collections
     orders = db["order"].find()
-    order_lst = []
-    for order in orders:
-        order["_id"] = str(order["_id"])
-        order_lst.append(order)
+    # order_lst = []
+    # for order in orders:
+    #     order["_id"] = str(order["_id"])
+    #     order_lst.append(order)
     accounts = db["account"].find()
-    account_lst = []
-    for account in accounts:
-        account["_id"] = str(account["_id"])
-        account_lst.append(account)
-    return jsonify(message='Remove Success!', order=order_lst, account=account_lst)
+    # account_lst = []
+    # for account in accounts:
+    #     account["_id"] = str(account["_id"])
+    #     if account.get("joinOrder")!=None:
+    #         for i in range (len(account["joinOrder"])):
+    #             account["joinOrder"][i] = str(account["joinOrder"][i])
+    #     if account.get("ownOrder") !=None:
+    #         for i in range (len(account["ownOrder"])):
+    #             account["ownOrder"][i] = str(account["ownOrder"][i])
+
+    #     account["joinOrder"] = str(account["joinOrder"])
+    #     account_lst.append(account)
+    # return jsonify(message='Remove Success!', order=order_lst, account=account_lst)
+    return jsonify(message='Remove Success!', order=list(orders), account=list(accounts))
