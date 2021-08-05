@@ -169,7 +169,7 @@
           <div class="modal-body">
             <div class="form-group">
               <label for="orderTitle">標題</label>
-              <input id="orderTitle" v-model="tempOrder.title" type="text" class="form-control" placeholder="請輸入標題" required>
+              <input id="orderTitle" v-model="tempOrder.title" type="text" class="form-control" placeholder="請輸入標題(必填)" required>
             </div>
             <div class="form-group">
               <label for="orderComment">備註</label>
@@ -179,23 +179,23 @@
             <div class="row">
               <div class="form-group col-md-6">
                 <label for="drink">品項</label>
-                <input id="drink" v-model="tempOrder.drink" type="text" class="form-control" placeholder="請輸入品項" required>
+                <input id="drink" v-model="tempOrder.drink" type="text" class="form-control" placeholder="請輸入品項(必填)" required>
               </div>
               <div class="form-group col-md-6">
                 <label for="store">店家</label>
-                <input id="store" v-model="tempOrder.store" type="text" class="form-control" placeholder="請輸入店家" required>
+                <input id="store" v-model="tempOrder.store" type="text" class="form-control" placeholder="請輸入店家(必填)" required>
               </div>
             </div>
             <div class="form-group">
               <label for="join_people_bound">上限人數</label>
               <input id="join_people_bound" v-model="tempOrder.join_people_bound" type="number" min="1"
-                class="form-control" placeholder="請輸入最大需求人數" required>
+                class="form-control" placeholder="請輸入最大需求人數(必填)" required>
             </div>
             <div class="row">
               <div class="form-group col-md-6">
                 <label for="meet_factory">會面廠區</label>
                 <select id="meet_factory" v-model="tempOrder.meet_factory" class="form-control">
-                  <option disabled value="">請輸入會面廠區</option>
+                  <option disabled value="">會面廠區(必填)</option>
                   <option value="F2_F5">F2_F5</option>
                   <option value="F3">F3</option>
                   <option value="F6">F6</option>
@@ -238,12 +238,12 @@
               <div class="form-group col-md-6">
                 <label for="meet_time1">會面時間(開始)</label>
                 <input id="meet_time1" v-model="tempOrder.meet_time_start" type="datetime-local" class="form-control"
-                  placeholder="請輸入會面開始時間" required>
+                  placeholder="請輸入會面開始時間(必填)" required>
               </div>
               <div class="form-group col-md-6">
                 <label for="meet_time2">會面時間(結束)</label>
                 <input id="meet_time2" v-model="tempOrder.meet_time_end" type="datetime-local" class="form-control"
-                  placeholder="請輸入會面結束時間" required>
+                  placeholder="請輸入會面結束時間(必填)" required>
               </div>
             </div>
             <hr>

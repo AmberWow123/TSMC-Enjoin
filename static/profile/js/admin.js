@@ -140,69 +140,80 @@ createApp({
     },
 
     updateOrder() {
-      let url = ``;
-      let http = "";
-      let button = document.getElementById("orderModal_confirmBTN");
-      if (!this.isNew) {
-        button.disabled = true;
-        url = `${apiUrl}/Account/UpdateOrder/${param}/${this.tempOrder._id}`;
-        http = "post";
+      let checkValidate = false;
+      if(this.tempOrder.title && this.tempOrder.store && this.tempOrder.drink && this.tempOrder.meet_factory && this.tempOrder.join_people_bound && this.tempOrder.meet_factory && this.tempOrder.meet_time_start && this.tempOrder.meet_time_end)
+        { checkValidate = true; }
+      if(checkValidate)
+      {
+        let url = ``;
+        let http = "";
+        let button = document.getElementById("orderModal_confirmBTN");
+        if (!this.isNew) {
+          button.disabled = true;
+          url = `${apiUrl}/Account/UpdateOrder/${param}/${this.tempOrder._id}`;
+          http = "post";
 
-        axios[http](url,
-          this.tempOrder,
-          {headers: {'x-access-token': token}},
-        )
-        .then((res) => {
-          button.disabled=false;
-          if (res.data.message==="編輯揪團單子成功") {
-            alert(res.data.message);
-            orderModal.hide();
-            this.getOwnerGroupOrder();
-          } else {
-            alert(res.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+          axios[http](url,
+            this.tempOrder,
+            {headers: {'x-access-token': token}},
+          )
+          .then((res) => {
+            button.disabled=false;
+            if (res.data.message==="編輯揪團單子成功") {
+              alert(res.data.message);
+              orderModal.hide();
+              this.getOwnerGroupOrder();
+            } else {
+              alert(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        }
+        else
+        {
+          url = `${apiUrl}/Account/CreateOrder/${param}`;
+          http = "post";
+          button.disabled = true;
+
+          axios[http](url,
+            this.tempOrder,
+            {headers: {'x-access-token': token}},
+          )
+          .then((res) => {
+            button.disabled = false;
+            if (res.data.message==="建立揪團單子成功") {
+              alert(res.data.message);
+              orderModal.hide();
+              this.getOwnerGroupOrder();
+            } else {
+              alert(res.data.message);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        }
+
+        /*
+        const formData = new FormData();
+        formData.append('meet_factory', this.tempOrder.meet_factory);
+        formData.append('store', this.tempOrder.store);
+        formData.append('drink', this.tempOrder.drink);
+        formData.append('meet_time_start', this.tempOrder.meet_time_start);
+        formData.append('meet_time_end',this.tempOrder.meet_time_end);
+        formData.append('comment', this.tempOrder.comment);
+        formData.append('title', this.tempOrder.title);
+        //formData.append('hashtag', this.tempOrder.hashtag);
+        formData.append('join_people_bound', this.tempOrder.join_people_bound);
+        */
       }
       else
       {
-        url = `${apiUrl}/Account/CreateOrder/${param}`;
-        http = "post";
-        button.disabled = true;
-
-        axios[http](url,
-          this.tempOrder,
-          {headers: {'x-access-token': token}},
-        )
-        .then((res) => {
-          button.disabled = false;
-          if (res.data.message==="建立揪團單子成功") {
-            alert(res.data.message);
-            orderModal.hide();
-            this.getOwnerGroupOrder();
-          } else {
-            alert(res.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        alert("請確認必填欄位是否都已填寫!");
       }
-
-      /*
-      const formData = new FormData();
-      formData.append('meet_factory', this.tempOrder.meet_factory);
-      formData.append('store', this.tempOrder.store);
-      formData.append('drink', this.tempOrder.drink);
-      formData.append('meet_time_start', this.tempOrder.meet_time_start);
-      formData.append('meet_time_end',this.tempOrder.meet_time_end);
-      formData.append('comment', this.tempOrder.comment);
-      formData.append('title', this.tempOrder.title);
-      //formData.append('hashtag', this.tempOrder.hashtag);
-      formData.append('join_people_bound', this.tempOrder.join_people_bound);
-      */
+      
     },
 
     closeOrder(){
