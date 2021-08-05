@@ -142,16 +142,24 @@ main {
   transform: scale(1.05);
 }
 
-.card--id {
+/* A/B Group left-top notation */
+.card--group {
   background: #cebf7b;
   width: 3rem;
-  color: #333;
+  color: #fff;
   padding: 0.1rem;
   font-weight: 700;
   position: absolute;
   border-radius: 0 0 10px 0;
   top: 0;
   left: 0;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.card--group.A{
+  background: #b60000;
+}
+.card--group.B{
+  background: #0000D3;
 }
 
 .card--title {
