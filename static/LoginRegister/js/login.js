@@ -18,7 +18,7 @@ createApp({
   },
   methods: {
     login() {
-      let button = document.getElementById("registerBTN");
+      let button = document.getElementById("loginBTN");
       button.disabled = true;
       axios
         .post(`${this.apiUrl}/Account/Login`, this.user)
