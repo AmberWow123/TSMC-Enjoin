@@ -61,7 +61,8 @@ def ListAllClosedGroupOrder():
 def SearchByHashtag():
     order_table = db['order']
     # list of hashtags
-    search_key = request.form.get("search_key").split()
+    # search_key = request.form.get("search_key").split()
+    search_key = request.get_json()['search_key'].split()
     # search key=["FAB18", "starbucks", "美式咖啡"]
 
     result = []
@@ -71,9 +72,11 @@ def SearchByHashtag():
     for s_k in search_key:
         search_result = list(db["order"].find({"title":{"$regex":s_k}}))
         result += search_result
+    result = list(set(result))
     for order in result:
             order['_id'] = str(order['_id'])
     return Response(json.dumps(result), mimetype="application/json")
+
 
 
 @routes.route("/Order/JoinOrder/<string:uuid>/<string:goid>", methods=["POST"])
