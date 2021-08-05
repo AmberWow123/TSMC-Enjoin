@@ -139,13 +139,13 @@ def QuitOrder(uuid, goid):
     
     ## Find account and remove order from join order
     account_result = db["account"].find_one({'_id': ObjectId(uuid)})
-    account_result["joinOrder"].remove(ObjectId(goid))
-    db['account'].update_one({'_id': ObjectId(uuid)}, {"$set": {"joinOrder": account_result["joinOrder"]}})
-    ## Remove join account from order
-    order_result["join_people_id"].remove(account_result["id"])
-    #print("After join_people_id: ", join_id_list)
-    join_people = order_result["join_people"]-1
-    db["order"].update_one({'_id': ObjectId(goid)}, {"$set": {"join_people": join_people, "join_people_id":order_result["join_people_id"], "status":"IN_PROGRESS"}})
+    if ObjectId(goid) in account_result["joinOrder"]:
+        account_result["joinOrder"].remove(ObjectId(goid))
+        db['account'].update_one({'_id': ObjectId(uuid)}, {"$set": {"joinOrder": account_result["joinOrder"]}})
+        ## Remove join account from order
+        order_result["join_people_id"].remove(account_result["id"])
+        join_people = order_result["join_people"]-1
+        db["order"].update_one({'_id': ObjectId(goid)}, {"$set": {"join_people": join_people, "join_people_id":order_result["join_people_id"], "status":"IN_PROGRESS"}})
     ## Return new account collections and order collections
     orders = db["order"].find()
     order_lst = []
