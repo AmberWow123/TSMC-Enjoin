@@ -271,6 +271,28 @@ createApp({
         });
     },
 
+    leaveOrder(){
+      this.tempOrder = {...item};
+      let button = document.getElementById("leaveOrderBTN");
+      button.disabled = true;
+      axios
+        .delete(`${apiUrl}/Order/QuitOrder/${param}/${this.tempOrder._id}`,{
+          headers: {'x-access-token': token}
+        })
+        .then((res) => {
+          button.disabled = false;
+          if (res.data.message==="Remove Success") {
+            alert(res.data.message);
+            this.getAllGroupOrder();
+          } else {
+            console.log(res.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
 
     openModal(status, item) {
       if(status === "newOrder")
