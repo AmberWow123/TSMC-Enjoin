@@ -1,4 +1,4 @@
-const apiUrl = 'https://tsmc-enjoin.herokuapp.com'
+const apiUrl = ''
 // const apiUrl = 'http://localhost:5000'
 const container = document.getElementById("app");
 // const pokemons = 10;
@@ -67,7 +67,7 @@ logoutButton.onclick = logout
 function onClickJoinButton(joinButton, orderId) {
     if (joinButton.classList.contains('joined')) { // quit order
         joinButton.disabled = true
-        joinButton.innerHTML = 'canceling...'
+        joinButton.innerHTML = 'unjoining...'
         // joinButton.style.color = '#adadad'
         fetch(apiUrl + `/Order/QuitOrder/${user_objectId}/${orderId}`, {
             headers: {
@@ -83,7 +83,7 @@ function onClickJoinButton(joinButton, orderId) {
                     case 'you are already in this order':
                         message = 'Not joined'
                         break;
-                    case 'Remove Success!"':
+                    case 'Remove Success!':
                         message = 'Join'
                         joinButton.classList.remove('joined')
                     //     joinButton.onclick = undefined

@@ -145,7 +145,10 @@ def QuitOrder(uuid, goid):
     
     ## Find account and remove order from join order
     account_result = db["account"].find_one({'_id': ObjectId(uuid)})
-    account_result["joinOrder"].remove(ObjectId(goid))
+    for objectId in account_result["joinOrder"]:
+        if str(objectId) == goid:
+            account_result["joinOrder"].remove(objectId)
+            break
     db['account'].update_one({'_id': ObjectId(uuid)}, {"$set": {"joinOrder": account_result["joinOrder"]}})
     ## Remove join account from order
     order_result["join_people_id"].remove(account_result["id"])
