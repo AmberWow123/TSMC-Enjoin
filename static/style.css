@@ -198,6 +198,11 @@ div.absoluteBottom {
   height: 66px;
 }
 
+.title_scroll{
+  margin-top: -16px;
+  padding-top: 16px;
+}
+
 /* A/B Group left-top notation */
 
 .card--group {

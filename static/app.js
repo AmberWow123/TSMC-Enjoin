@@ -202,7 +202,7 @@ function showOrders(orders) {
 
         s += `
             <div class="card ${loggedIn ? 'loggedIn' : ''}">
-                <div class="invisible_scroll">
+                <div class="invisible_scroll title_scroll">
                     <div>
                         <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
                         <h1 class="card--title">${order.drink} ${order.title}</h1>
