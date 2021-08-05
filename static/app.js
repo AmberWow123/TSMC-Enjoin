@@ -21,6 +21,17 @@ const user_tsmcid = document.cookie.replace(
 const myorders = document.getElementById('myorders')
 const search_input = document.getElementById('search_bar')
 const logoutButton = document.getElementById('logout')
+const toggle_bar = document.getElementById('toggle_bar')
+
+function onclickToggleBarButton(button, routeName) {
+    toggle_bar.childNodes.forEach(e => {
+        try {
+            e.classList.remove('accent_color')
+        } catch { }
+    })
+    button.classList.add('accent_color')
+    fetchOrders(routeName)
+}
 
 document.getElementById('user_id').innerText = user_tsmcid
 
@@ -235,12 +246,12 @@ function searchByHashTag(str) {
         return
     searchStr = str
 
-    // container.style.opacity = 0
     if (str == '') {
-        showAllOrders()
+        fetchOrders()
         return
     }
 
+    container.style.opacity = 0
     fetch(apiUrl + '/Order/SearchByHashtag', {
         method: 'POST',
         mode: 'cors', // no-cors, cors, *same-origin
@@ -255,12 +266,13 @@ function searchByHashTag(str) {
     // .catch(error => {})
 }
 
-function showAllOrders() {
-    fetch(apiUrl + '/Order/ListAllInProgressGroupOrder', {
+function fetchOrders(route = 'ListAllInProgressGroupOrder') {
+    container.style.opacity = 0
+    fetch(apiUrl + '/Order/' + route, {
         mode: 'cors',
     })
         .then(response => response.json())
         .then(data => showOrders(data));
 }
 
-showAllOrders()
+fetchOrders()

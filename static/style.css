@@ -259,6 +259,7 @@ div.absoluteBottom {
   padding: 12px 16px;
   font-size: 14px;
   transition: 0.2s ease-in-out all;
+  margin-right: 13px;
 }
 
 #search_bar:focus {
@@ -283,4 +284,30 @@ div.absoluteBottom {
 
 .mar_bottom0 {
   margin-bottom: 0;
+}
+
+button {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 100px;
+  background: none;
+  font-size: 14px;
+  transition: all .2s;
+  margin: -5px;
+}
+
+button:hover {
+  background-color: #00000012;
+}
+
+button:active {
+  transform: scale(.9);
+}
+
+#toggle_bar>button {
+  color: #b8b8b8;
+}
+
+#toggle_bar>.accent_color {
+  color: #000000;
 }
