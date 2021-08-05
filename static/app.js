@@ -215,7 +215,7 @@ function showOrders(orders) {
                     <div class="invisible_scroll hashtag_panel">
                         <div>
                             <span class="card--fab">${order.store}, ${meet_factory}</span>
-                            <p>${hashtags}</p>
+                            <p class="p_hashtag">${hashtags}</p>
                         </div>
                     </div>
                     ${joinButton}
