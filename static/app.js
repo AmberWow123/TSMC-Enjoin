@@ -45,6 +45,7 @@ function logout() {
 }
 logoutButton.onclick = logout
 
+// fetch template
 // function postJSON(url, data) {
 //     // Default options are marked with *
 //     return fetch(url, {
@@ -63,34 +64,77 @@ logoutButton.onclick = logout
 //         .then(response => response.json()) // 輸出成 json
 // }
 
-function joinOrder(joinButton, orderId) {
-    joinButton.innerHTML = 'joining...'
-    joinButton.style.color = '#adadad'
-    fetch(apiUrl + `/Order/JoinOrder/${user_objectId}/${orderId}`, {
-        headers: {
-            'x-access-token': token
-        },
-        mode: 'cors', // no-cors, cors, *same-origin
-    })
-        .then(res => res.json())
-        .then(json => {
-            var message = json.message
-            switch (message) {
-                case 'you are already in this order':
-                    message = 'Already joined'
-                    break;
-                case 'success':
-                    message = 'Joined'
-                    joinButton.style.background = '#59cc01'
-                    joinButton.onclick = undefined
-                default:
-                    joinButton.style.color = '#fff'
-            }
-            document.getElementById(orderId).innerText = message
+function onClickJoinButton(joinButton, orderId) {
+    if (joinButton.classList.contains('joined')) {
+        // quit order
+        joinButton.disabled = true
+        joinButton.innerHTML = 'canceling...'
+        // joinButton.style.color = '#adadad'
+        fetch(apiUrl + `/Order/QuitOrder/${user_objectId}/${orderId}`, {
+            headers: {
+                'x-access-token': token
+            },
+            mode: 'cors', // no-cors, cors, *same-origin
+            method: 'POST'
         })
-        .catch(err => {
-            document.getElementById(orderId).innerText = 'error'
+            .then(res => res.json())
+            .then(json => {
+                var message = json.message
+                switch (message) {
+                    case 'you are already in this order':
+                        message = 'Not joined'
+                        break;
+                    case 'success':
+                        message = 'Join'
+                        joinButton.classList.remove('joined')
+                    //     joinButton.onclick = undefined
+                    // default:
+                    //     joinButton.style.color = '#fff'
+                }
+                joinButton.innerText = message
+                joinButton.disabled = false
+            })
+            .catch(err => {
+                joinButton.classList.add('err')
+                joinButton.innerText = 'Our fault'
+                joinButton.disabled = false
+            })
+    } else {
+        // join order
+        joinButton.disabled = true
+        joinButton.innerHTML = 'joining...'
+        // joinButton.style.color = '#adadad'
+        fetch(apiUrl + `/Order/JoinOrder/${user_objectId}/${orderId}`, {
+            headers: {
+                'x-access-token': token
+            },
+            mode: 'cors', // no-cors, cors, *same-origin
         })
+            .then(res => res.json())
+            .then(json => {
+                var buttonText = json.message
+                switch (buttonText) {
+                    case 'you are already in this order':
+                        buttonText = 'Already joined'
+                        break;
+                    case 'success':
+                        // successfully joined
+                        buttonText = 'Joined'
+                        joinButton.title = "Click to cancel"
+                        joinButton.classList.add('joined')
+                    //     joinButton.onclick = undefined
+                    // default:
+                    //     joinButton.style.color = '#fff'
+                }
+                joinButton.innerText = buttonText
+                joinButton.disabled = false
+            })
+            .catch(err => {
+                joinButton.classList.add('err')
+                joinButton.innerText = 'Our fault'
+                joinButton.disabled = false
+            })
+    }
 }
 
 function clickHashTag(tag) {
@@ -110,24 +154,23 @@ function getDate(date) {
 function showOrders(orders) {
     var s = ''
     orders.forEach(order => {
-        // <span hidden>#${order._id}</span>
-        // <p style="margin: -10px;">-</p>
-        // <p>From ${order.meet_time[0].slice(0,-8)}</p>
-        // <p>To ${order.meet_time[1].slice(0,-8)}</p>
-        var joined = false
-        try {
-            for (let i = 0; i < order.join_people_id.length; i++) {
-                const e = order.join_people_id[i];
-                if (e == user_tsmcid) {
-                    joined = true
-                    break
+        var joinButton = ''
+        if (loggedIn) {
+            var joined = false
+            try {
+                for (let i = 0; i < order.join_people_id.length; i++) {
+                    const e = order.join_people_id[i];
+                    if (e == user_tsmcid) {
+                        joined = true
+                        break
+                    }
                 }
+            } catch (error) { }
+            if (joined) {
+                joinButton = `<button class="round_bar_button joined" onclick="onClickJoinButton(this, '${order._id}')" title="click to cancel">Joined</button>`
+            } else {
+                joinButton = `<button class="round_bar_button" onclick="onClickJoinButton(this, '${order._id}')">Join</button>`
             }
-        } catch (error) { }
-        if (joined) {
-            var joinButton = `<a class="round_bar_button joined_button">Joined</a>`
-        } else {
-            var joinButton = loggedIn ? `<a id="${order._id}" class="round_bar_button" onclick="joinOrder(this, '${order._id}')">Join</a>` : ''
         }
 
         var meet_time_start = new Date(order.meet_time[0])
@@ -151,8 +194,6 @@ function showOrders(orders) {
 
         var hashtags = ''
         order.hashtag.forEach(hashtag => {
-            // if(hashtags.length > 0)
-            //     hashtags += 
             hashtags += `<a class="hashtag hover_opacity" onclick="clickHashTag(this)">#${hashtag}</a> `
         })
 
@@ -181,14 +222,14 @@ function showOrders(orders) {
 }
 
 
-var searchStr=''
+var searchStr = ''
 function searchByHashTag(str) {
     // console.log('searchBar_onKeyUp()')
     // console.log(e)
     str = str.trim()
     if (str === searchStr)
         return
-    searchStr=str
+    searchStr = str
 
     // container.style.opacity = 0
     if (str == '') {
@@ -200,7 +241,7 @@ function searchByHashTag(str) {
     const url = 'https://tsmc-enjoin.herokuapp.com/Order/SearchByHashtag'
     // const url = 'http://localhost:5000/Order/SearchByHashtag'
     fetch(url, {
-        method: 'post',
+        method: 'POST',
         mode: 'cors', // no-cors, cors, *same-origin
         headers: {
             'Accept': 'application/json',
