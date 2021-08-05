@@ -20,9 +20,9 @@ const COOKIEid = document.cookie.replace(
   "$1"
 );
 
-console.log(token);
-console.log(COOKIE_id);
-console.log(COOKIEid);
+//console.log(token);
+//console.log(COOKIE_id);
+//console.log(COOKIEid);
 //const url = new URL(window.location.href);
 //const param = url.searchParams.get("id");
 const param = COOKIEid;
@@ -237,7 +237,7 @@ createApp({
         .then((res) => {
           button.disabled = false;
           if (res.data.message==="更新status成功") {
-            alert(res.data.message);
+            alert("更新揪團狀態成功!揪團已成立!");
             closeOrderModal.hide();
             this.getOwnerGroupOrder();
           } else {
@@ -282,10 +282,11 @@ createApp({
         .then((res) => {
           button.disabled = false;
           if (res.data.message==="Remove Success") {
-            alert(res.data.message);
+            alert("退出揪團成功!");
             this.getAllGroupOrder();
           } else {
             console.log(res.data.message);
+            alert(res.data.message);
           }
         })
         .catch((err) => {
@@ -331,11 +332,11 @@ createApp({
       }
       else if(value==='COMPLETED')
       {
-        return '人數已滿';
+        return '已滿';
       }
       else if(value==='CLOSED')
       {
-        return '揪團成立';
+        return '已成立';
       }
       return value;
     },
@@ -346,11 +347,11 @@ createApp({
         tmp = String(tmp).replace('Z',' ');
         if(type===0)
         {
-          return "開始: "+tmp;
+          return "自: "+tmp;
         }
         else if(type===1)
         {
-          return "結束: "+tmp;
+          return "至: "+tmp;
         }
         return tmp;
     },
