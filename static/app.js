@@ -206,11 +206,11 @@ function showOrders(orders) {
         s += `
             <div class="card" style="padding-bottom: ${loggedIn ? '272px' : '194px'};">
                 <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
-                <h1 class="card--title">${order.title}</h1>
+                <h1 class="card--title">${order.drink} ${order.title}</h1>
                 <span class="card--comment">${order.comment}</span>
                 <div class="absoluteBottom">
                     ${meet_time}
-                    <span class="card--fab">${meet_factory}</span>
+                    <span class="card--fab">${order.store}, ${meet_factory}</span>
                     <p>${hashtags}</p>
                     ${joinButton}
                 </div>
