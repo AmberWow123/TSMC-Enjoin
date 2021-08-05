@@ -138,7 +138,9 @@ createApp({
     updateOrder() {
       let url = ``;
       let http = "";
+      let button = document.getElementById("orderModal_confirmBTN");
       if (!this.isNew) {
+        button.disabled = true;
         url = `${apiUrl}/Account/UpdateOrder/${param}/${this.tempOrder._id}`;
         http = "post";
 
@@ -147,6 +149,7 @@ createApp({
           {headers: {'x-access-token': token}},
         )
         .then((res) => {
+          button.disabled=false;
           if (res.data.message==="編輯揪團單子成功") {
             alert(res.data.message);
             orderModal.hide();
@@ -163,12 +166,14 @@ createApp({
       {
         url = `${apiUrl}/Account/CreateOrder/${param}`;
         http = "post";
+        button.disabled = true;
 
         axios[http](url,
           this.tempOrder,
           {headers: {'x-access-token': token}},
         )
         .then((res) => {
+          button.disabled = false;
           if (res.data.message==="建立揪團單子成功") {
             alert(res.data.message);
             orderModal.hide();
@@ -197,11 +202,14 @@ createApp({
     },
 
     closeOrder(){
+      let button = document.getElementById("closeOrderModal_confirmBTN");
+      button.disabled = true;
       axios
         .post(`${apiUrl}/Account/CloseOrder/${param}/${this.tempOrder._id}`,{},{
           headers: {'x-access-token': token}
         })
         .then((res) => {
+          button.disabled = false;
           if (res.data.message==="更新status成功") {
             alert(res.data.message);
             closeOrderModal.hide();
@@ -216,11 +224,14 @@ createApp({
     },
 
     delOrder() {
+      let button = document.getElementById("delOrderModal_confirmBTN");
+      button.disabled = true;
       axios
         .delete(`${apiUrl}/Account/DeleteCreatedOrder/${param}/${this.tempOrder._id}`,{
           headers: {'x-access-token': token}
         })
         .then((res) => {
+          button.disabled = false;
           if (res.data.message==="刪除單子成功") {
             alert(res.data.message);
             delOrderModal.hide();
