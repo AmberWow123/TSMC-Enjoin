@@ -74,6 +74,7 @@ def SearchByHashtag():
     for s_k in search_key:
         search_result = list(db["order"].find({"title":{"$regex":s_k}}))
         result += search_result
+    result = list(set(result))
     for order in result:
             order['_id'] = str(order['_id'])
     return Response(json.dumps(result), mimetype="application/json")
