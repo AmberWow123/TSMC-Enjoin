@@ -276,7 +276,7 @@ createApp({
       let button = document.getElementById("leaveOrderBTN");
       button.disabled = true;
       axios
-        .delete(`${apiUrl}/Order/QuitOrder/${param}/${this.tempOrder._id}`,{
+        .post(`${apiUrl}/Order/QuitOrder/${param}/${this.tempOrder._id}`,{
           headers: {'x-access-token': token}
         })
         .then((res) => {
