@@ -271,7 +271,7 @@ createApp({
         });
     },
 
-    leaveOrder(){
+    leaveOrder(item){
       this.tempOrder = {...item};
       let button = document.getElementById("leaveOrderBTN");
       button.disabled = true;
