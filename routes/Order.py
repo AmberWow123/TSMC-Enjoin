@@ -138,7 +138,8 @@ def QuitOrder(uuid, goid):
         for account in accounts:
             account["_id"] = str(account["_id"])
             account_lst.append(account)
-        return jsonify(message = "This order is already closed, you couldn't quit", order=order_lst, account=account_lst)
+        return Response(json.dumps(order_lst), json.dumps(account_lst), mimetype="application/json")
+        #return jsonify(message = "This order is already closed, you couldn't quit", order=order_lst, account=account_lst)
     
     ## Find account and remove order from join order
     account_result = db["account"].find_one({'_id': ObjectId(uuid)})
@@ -159,5 +160,14 @@ def QuitOrder(uuid, goid):
     account_lst = []
     for account in accounts:
         account["_id"] = str(account["_id"])
+        if account.get("joinOrder")!=None:
+            for i in range (len(account["joinOrder"])):
+                account["joinOrder"][i] = str(account["joinOrder"][i])
+        if account.get("ownOrder") !=None:
+            for i in range (len(account["ownOrder"])):
+                account["ownOrder"][i] = str(account["ownOrder"][i])
+
+        #account["joinOrder"] = str(account["joinOrder"])
         account_lst.append(account)
+    #return Response(json.dumps(order_lst), mimetype="application/json")
     return jsonify(message='Remove Success!', order=order_lst, account=account_lst)
