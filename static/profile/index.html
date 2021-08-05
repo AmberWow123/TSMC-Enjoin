@@ -237,12 +237,16 @@
               </div> -->
               <div class="form-group col-md-6">
                 <label for="meet_time1">會面時間(開始)</label>
-                <input id="meet_time1" v-model="tempOrder.meet_time_start" type="datetime-local" class="form-control"
+                <input v-if="isNew" id="meet_time1" v-model="tempOrder.meet_time_start" type="datetime-local" class="form-control"
+                  placeholder="請輸入會面開始時間" required>
+                <input v-else value=tempOrder.meet_time[0] id="meet_time1" v-model="tempOrder.meet_time_start" type="datetime-local" class="form-control"
                   placeholder="請輸入會面開始時間" required>
               </div>
               <div class="form-group col-md-6">
                 <label for="meet_time2">會面時間(結束)</label>
-                <input id="meet_time2" v-model="tempOrder.meet_time_end" type="datetime-local" class="form-control"
+                <input v-if="isNew" id="meet_time2" v-model="tempOrder.meet_time_end" type="datetime-local" class="form-control"
+                  placeholder="請輸入會面結束時間" required>
+                <input v-else value=tempOrder.meet_time[1] id="meet_time2" v-model="tempOrder.meet_time_end" type="datetime-local" class="form-control"
                   placeholder="請輸入會面結束時間" required>
               </div>
             </div>
