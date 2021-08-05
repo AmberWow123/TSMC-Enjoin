@@ -255,7 +255,7 @@ function searchByHashTag(str) {
 }
 
 function showAllOrders() {
-    const url = 'https://tsmc-enjoin.herokuapp.com/Order/ListAllGroupOrder'
+    const url = 'https://tsmc-enjoin.herokuapp.com/Order/ListAllInProgressGroupOrder'
     fetch(url, {
         mode: 'cors',
     })
