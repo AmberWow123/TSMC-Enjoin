@@ -116,3 +116,44 @@ def JoinOrder(uuid, goid):
     # db['account'].insert_one({'id': _id, 'password': password, 'fab': fab})
     return jsonify(message="success")
 
+@routes.route("/Order/QuitOrder/<string:uuid>/<string:goid>", methods=["POST"])
+def QuitOrder(uuid, goid):
+    ## uuid is ObjectId(account _id)
+    ## goid is ObjectId(order _id)
+    
+    order_result = db["order"].find_one({'_id': ObjectId(goid)})
+    if order_result["status"]=="CLOSED":
+        ## Return old account collections and order collections
+        orders = db["order"].find()
+        order_lst = []
+        for order in orders:
+            order["_id"] = str(order["_id"])
+            order_lst.append(order)
+        accounts = db["account"].find()
+        account_lst = []
+        for account in accounts:
+            account["_id"] = str(account["_id"])
+            account_lst.append(account)
+        return jsonify(message = "This order is already closed, you couldn't quit", order=order_lst, account=account_lst)
+    
+    ## Find account and remove order from join order
+    account_result = db["account"].find_one({'_id': ObjectId(uuid)})
+    account_result["joinOrder"].remove(ObjectId(goid))
+    db['account'].update_one({'_id': ObjectId(uuid)}, {"$set": {"joinOrder": account_result["joinOrder"]}})
+    ## Remove join account from order
+    order_result["join_people_id"].remove(account_result["id"])
+    #print("After join_people_id: ", join_id_list)
+    join_people = order_result["join_people"]-1
+    db["order"].update_one({'_id': ObjectId(goid)}, {"$set": {"join_people": join_people, "join_people_id":order_result["join_people_id"], "status":"IN_PROGRESS"}})
+    ## Return new account collections and order collections
+    orders = db["order"].find()
+    order_lst = []
+    for order in orders:
+        order["_id"] = str(order["_id"])
+        order_lst.append(order)
+    accounts = db["account"].find()
+    account_lst = []
+    for account in accounts:
+        account["_id"] = str(account["_id"])
+        account_lst.append(account)
+    return jsonify(message='Remove Success!', order=order_lst, account=account_lst)
