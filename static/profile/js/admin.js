@@ -27,6 +27,10 @@ console.log(COOKIEid);
 //const param = url.searchParams.get("id");
 const param = COOKIEid;
 
+function removeCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+}
+
 createApp({
   data() {
     return {
@@ -308,8 +312,12 @@ createApp({
     },
     
     logout() {
-      alert("登出成功!!");
-      window.location = "../LoginRegister";
+      removeCookie('Token');
+      removeCookie('_id');
+      removeCookie('id');
+      window.location.replace('/')
+      // alert("登出成功!!");
+      // window.location = "../LoginRegister";
     },
   },
 }).mount("#app");
