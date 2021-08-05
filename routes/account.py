@@ -39,10 +39,20 @@ def test():
     print("authorized")
     return jsonify(message="Authorized, is already logged in")
 
+#show DB values
 @routes.route('/testDB', methods=['GET'])
 def testDB():
-    print(db.collection_names())
-    return jsonify(message='it works!')
+    orders = db["order"].find()
+    order_lst = []
+    for order in orders:
+        order["_id"] = str(order["_id"])
+        order_lst.append(order)
+    accounts = db["account"].find()
+    account_lst = []
+    for account in accounts:
+        account["_id"] = str(account["_id"])
+        account_lst.append(account)
+    return jsonify(message='it works!', order=order_lst, account=account_lst)
 
 #create account
 @routes.route("/Account/Create", methods=['POST'])
