@@ -86,9 +86,10 @@ def JoinOrder(uuid, goid):
     join_id_list = [account_result["id"]]
     join_order_list = [ObjectId(goid)]
     if "joinOrder" in account_result:
-        if ObjectId(goid) in account_result["joinOrder"]:
-            return jsonify(message="you are already in this order")
-        join_order_list += account_result["joinOrder"]
+        if account_result["joinOrder"]:
+            if ObjectId(goid) in account_result["joinOrder"]:
+                return jsonify(message="you are already in this order")
+            join_order_list += account_result["joinOrder"]
     db['account'].update_one({'_id': ObjectId(uuid)}, {"$set": {"joinOrder": join_order_list}})
 
     ## Update Order join people
