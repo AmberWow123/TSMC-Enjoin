@@ -139,9 +139,18 @@ createApp({
 
     updateOrder() {
       let checkValidate = false;
-      if(this.tempOrder.title && this.tempOrder.store && this.tempOrder.drink && this.tempOrder.meet_factory && this.tempOrder.join_people_bound && this.tempOrder.meet_factory && this.tempOrder.meet_time_start && this.tempOrder.meet_time_end)
-        { checkValidate = true; }
-      if(checkValidate)
+      let timeDiff_positive = false;
+      if(this.tempOrder.title && this.tempOrder.store && this.tempOrder.drink 
+        && this.tempOrder.meet_factory && this.tempOrder.join_people_bound 
+        && this.tempOrder.meet_factory && this.tempOrder.meet_time_start && this.tempOrder.meet_time_end)
+        { 
+          checkValidate = true;
+          if(new Date(this.tempOrder.meet_time_end) - new Date(this.tempOrder.meet_time_start)>0)
+          {
+            timeDiff_positive = true;
+          }
+        }
+      if(checkValidate && timeDiff_positive)
       {
         let url = ``;
         let http = "";
@@ -206,6 +215,10 @@ createApp({
         //formData.append('hashtag', this.tempOrder.hashtag);
         formData.append('join_people_bound', this.tempOrder.join_people_bound);
         */
+      }
+      else if(checkValidate && !timeDiff_positive)
+      {
+        alert("結束時間與開始時間有誤!(結束時間應大於開始時間)");
       }
       else
       {
