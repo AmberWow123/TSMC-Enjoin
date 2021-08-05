@@ -113,7 +113,8 @@ def JoinOrder(uuid, goid):
     order_result = db["order"].find_one({'_id': ObjectId(goid)})
     join_people = order_result["join_people"]+1
     if "join_people_id" in order_result:
-        join_id_list += order_result["join_people_id"]
+        if order_result["join_people_id"]:
+            join_id_list += order_result["join_people_id"]
     if join_people == order_result["join_people_bound"]:
         db["order"].update_one({'_id': ObjectId(goid)}, {"$set": {"join_people": join_people, "status":"COMPLETED", "join_people_id":join_id_list}})
     else:
