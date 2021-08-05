@@ -252,7 +252,7 @@
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
               取消
             </button>
-            <button type="button" class="btn btn-primary" @click="updateOrder">
+            <button id="orderModal_confirmBTN" type="button" class="btn btn-primary" @click="updateOrder">
               確認
             </button>
           </div>
@@ -277,7 +277,7 @@
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
               取消
             </button>
-            <button type="button" class="btn btn-danger" @click="delOrder">
+            <button id="delOrderModal_confirmBTN" type="button" class="btn btn-danger" @click="delOrder">
               確認刪除
             </button>
           </div>
@@ -302,7 +302,7 @@
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
               取消
             </button>
-            <button type="button" class="btn btn-danger" @click="closeOrder">
+            <button id="closeOrderModal_confirmBTN" type="button" class="btn btn-danger" @click="closeOrder">
               確認結單
             </button>
           </div>
