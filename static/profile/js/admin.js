@@ -106,7 +106,7 @@ createApp({
             if (res.data.message==='success') {
               this.ownList = res.data.data;
             } else {
-              console.log(res.data.message);
+              alert(res.data.message);
             }
           })
           .catch((err) => {
@@ -131,7 +131,7 @@ createApp({
             this.followList = res.data.data;
             followModal.show();
           } else {
-            console.log(res.data.message);
+            alert(res.data.message);
           }
         })
         .catch((err) => {

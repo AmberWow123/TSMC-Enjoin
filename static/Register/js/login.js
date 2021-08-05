@@ -23,7 +23,7 @@ createApp({
         .then((res) => {
           console.log(res);
           alert(res.data.message);
-
+          window.location.href = `/`;
         })
         .catch((err) => {
           console.log(err);
