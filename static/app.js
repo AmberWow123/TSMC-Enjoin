@@ -186,8 +186,7 @@ function showOrders(orders) {
         } else {
             meet_time = `
                 <p class="lightgraytext">
-                    From ${meet_time_start.toLocaleString()}
-                    To ${meet_time_end.toLocaleString()}
+                    ${meet_time_start.toLocaleString().slice(0,-3)} - ${meet_time_end.toLocaleString().slice(0,-3)}
                 </p>
             `;
         }
@@ -204,10 +203,11 @@ function showOrders(orders) {
         } catch (error) { }
 
         s += `
-            <div class="card" style="padding-bottom: ${loggedIn ? '272px' : '194px'};">
+            <div class="card ${loggedIn ? 'loggedIn' : ''}">
                 <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
                 <h1 class="card--title">${order.drink} ${order.title}</h1>
-                <span class="card--comment">${order.comment}</span>
+                <p class="card--comment">${order.comment}</p>
+                <p class="card--creator_id">${order.creator_id}</p>
                 <div class="absoluteBottom">
                     ${meet_time}
                     <span class="card--fab">${order.store}, ${meet_factory}</span>
