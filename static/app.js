@@ -65,8 +65,7 @@ logoutButton.onclick = logout
 // }
 
 function onClickJoinButton(joinButton, orderId) {
-    if (joinButton.classList.contains('joined')) {
-        // quit order
+    if (joinButton.classList.contains('joined')) { // quit order
         joinButton.disabled = true
         joinButton.innerHTML = 'canceling...'
         // joinButton.style.color = '#adadad'
@@ -84,7 +83,7 @@ function onClickJoinButton(joinButton, orderId) {
                     case 'you are already in this order':
                         message = 'Not joined'
                         break;
-                    case 'success':
+                    case 'Remove Success!"':
                         message = 'Join'
                         joinButton.classList.remove('joined')
                     //     joinButton.onclick = undefined
@@ -99,8 +98,7 @@ function onClickJoinButton(joinButton, orderId) {
                 joinButton.innerText = 'Our fault'
                 joinButton.disabled = false
             })
-    } else {
-        // join order
+    } else { // join order
         joinButton.disabled = true
         joinButton.innerHTML = 'joining...'
         // joinButton.style.color = '#adadad'
@@ -204,14 +202,22 @@ function showOrders(orders) {
 
         s += `
             <div class="card ${loggedIn ? 'loggedIn' : ''}">
-                <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
-                <h1 class="card--title">${order.drink} ${order.title}</h1>
-                <p class="card--comment">${order.comment}</p>
-                <p class="card--creator_id">${order.creator_id}</p>
+                <div class="invisible_scroll">
+                    <div>
+                        <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
+                        <h1 class="card--title">${order.drink} ${order.title}</h1>
+                        <p class="card--comment">${order.comment}</p>
+                        <p class="card--creator_id" title="Creator">${order.creator_id}</p>
+                    </div>
+                </div>
                 <div class="absoluteBottom">
                     ${meet_time}
-                    <span class="card--fab">${order.store}, ${meet_factory}</span>
-                    <p>${hashtags}</p>
+                    <div class="invisible_scroll hashtag_panel">
+                        <div>
+                            <span class="card--fab">${order.store}, ${meet_factory}</span>
+                            <p>${hashtags}</p>
+                        </div>
+                    </div>
                     ${joinButton}
                 </div>
             </div>
