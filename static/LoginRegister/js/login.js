@@ -18,10 +18,13 @@ createApp({
   },
   methods: {
     login() {
+      let button = document.getElementById("registerBTN");
+      button.disabled = true;
       axios
         .post(`${this.apiUrl}/Account/Login`, this.user)
         .then((res) => {
-          console.log(res);
+          button.disabled = false;
+          //console.log(res);
           if (res.data.message === "成功登入") {
             const { token, expired, _id, id } = res.data;
             // Warn!

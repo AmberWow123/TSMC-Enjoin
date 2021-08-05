@@ -18,11 +18,14 @@ createApp({
   },
   methods: {
     create() {
+      let button = document.getElementById("registerBTN");
+      button.disabled = true;
       axios
         .post(`${this.apiUrl}/Account/Create`, this.register)
         .then((res) => {
           console.log(res);
           alert(res.data.message);
+          button.disabled = false;
           window.location.href = `/`;
         })
         .catch((err) => {
