@@ -133,7 +133,7 @@ div.absoluteBottom {
 
 .row {
   text-align: center;
-  margin-bottom: 50px;
+  margin: 27px 0;
 }
 
 #app {
@@ -250,6 +250,12 @@ div.absoluteBottom {
   display: block;
 }
 
+div.search_bar_container {
+  /* this keeps search_bar at center on very narrow screens */
+  padding: 13px;
+  display: inline-block;
+}
+
 #search_bar {
   max-width: 173px;
   width: 100%;
@@ -259,7 +265,6 @@ div.absoluteBottom {
   padding: 12px 16px;
   font-size: 14px;
   transition: 0.2s ease-in-out all;
-  margin-right: 13px;
 }
 
 #search_bar:focus {

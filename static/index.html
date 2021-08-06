@@ -2,37 +2,34 @@
 <html>
 
 <head></head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
-    <title>TSMC Enjoin</title>
-    <link rel="shortcut icon" type="image/png" href="/favicon-round-2-200.png" sizes="200x200">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+<title>TSMC Enjoin</title>
+<link rel="shortcut icon" type="image/png" href="/favicon-round-2-200.png" sizes="200x200">
 </head>
 
 <body>
     <main>
         <h2 style="text-align:center">TSMC Enjoin</h2>
-        <div class="row">
-            <div class="header_card" id="test1">
-                <h1 id="user_id">User</h1>
-                <!-- <p class="price">FAB</p> -->
-                <p>Welcome</p>
-                <div class="button red_bg">
-                    <a id="login" href="/LoginRegister/">Login</a>
-                </div>
-                <div class="button">
-                    <a id="myorders" href="/profile/">My Orders</a>
-                </div>
-                <div class="button">
-                    <a id="logout">Logout</a>
-                </div>
+        <div class="header_card" id="test1">
+            <h1 id="user_id">User</h1>
+            <!-- <p class="price">FAB</p> -->
+            <p>Welcome</p>
+            <div class="button red_bg">
+                <a id="login" href="/LoginRegister/">Login</a>
+            </div>
+            <div class="button">
+                <a id="myorders" href="/profile/">My Orders</a>
+            </div>
+            <div class="button">
+                <a id="logout">Logout</a>
             </div>
         </div>
         <div class="row">
-            <!-- <form id="search_form" method="POST" onsubmit="false"> -->
-                <!-- <button type="submit" disabled hidden>This Button is here to prevent 'enter' submit</button> -->
+            <div class="search_bar_container">
                 <input type="text" id="search_bar" name="search_key" placeholder="Search"
                     oninput="searchByHashTag(this.value)">
-            <!-- </form> -->
+            </div>
             <span id="toggle_bar">
                 <button onclick="onclickToggleBarButton(this)" class="accent_color">In Progress</button>
                 <button onclick="onclickToggleBarButton(this, 'ListAllCompletedGroupOrder')">Completed</button>
