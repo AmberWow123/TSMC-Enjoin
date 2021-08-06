@@ -68,8 +68,9 @@ def push_v1():
         res=send_web_push(token, message)
         print('done send_web_push()')
         print('===============================')
-        # return jsonify({'success':1})
-        return res
+        print('res:', res, ', type:', type(res))
+        return jsonify({'success':1})
+        # return res
     except Exception as e:
         print("error",e)
         return jsonify({'failed':str(e)})
