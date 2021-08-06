@@ -89,8 +89,8 @@ function onClickJoinButton(joinButton, orderId) {
             .then(json => {
                 var message = json.message
                 switch (message) {
-                    case 'you are already in this order':
-                        message = 'Not joined'
+                    case "This order is already closed, you couldn't quit":
+                        message = "Couldn't quit"
                         break;
                     case 'Remove Success!':
                         message = 'Join'
@@ -162,7 +162,7 @@ function showOrders(orders) {
     var s = ''
     orders.forEach(order => {
         var joinButton = ''
-        if (loggedIn) {
+        if (loggedIn && order.status != 'CLOSED') {
             var joined = false
             try {
                 for (let i = 0; i < order.join_people_id.length; i++) {
