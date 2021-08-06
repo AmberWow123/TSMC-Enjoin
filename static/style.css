@@ -297,7 +297,8 @@ button {
 }
 
 button:hover {
-  background-color: #00000012;
+  /* background-color: #00000004; */
+  transform: scale(1.1);
 }
 
 button:active {
