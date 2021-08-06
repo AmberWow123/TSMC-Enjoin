@@ -32,7 +32,9 @@ mongo.init_app(app)
 
 
 from routes import *
+import webpush.main as webpush
 app.register_blueprint(routes)
+app.register_blueprint(webpush.app, url_prefix='/webpush')
 # @app.route('/<string:folder>')
 # def pages(folder):
 #     print(db.collection_names())
