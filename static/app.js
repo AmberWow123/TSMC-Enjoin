@@ -77,7 +77,7 @@ function onClickJoinButton(joinButton, orderId) {
     if (joinButton.classList.contains('joined')) { // quit order
         joinButton.disabled = true
         joinButton.innerHTML = 'unjoining...'
-        // joinButton.style.color = '#adadad'
+
         fetch(apiUrl + `/Order/QuitOrder/${user_objectId}/${orderId}`, {
             headers: {
                 'x-access-token': token
@@ -95,22 +95,19 @@ function onClickJoinButton(joinButton, orderId) {
                     case 'Remove Success!':
                         message = 'Join'
                         joinButton.classList.remove('joined')
-                    //     joinButton.onclick = undefined
-                    // default:
-                    //     joinButton.style.color = '#fff'
                 }
                 joinButton.innerText = message
-                joinButton.disabled = false
             })
             .catch(err => {
                 joinButton.classList.add('err')
                 joinButton.innerText = 'Our fault'
+            }).finally(() => {
                 joinButton.disabled = false
             })
     } else { // join order
         joinButton.disabled = true
         joinButton.innerHTML = 'joining...'
-        // joinButton.style.color = '#adadad'
+
         fetch(apiUrl + `/Order/JoinOrder/${user_objectId}/${orderId}`, {
             headers: {
                 'x-access-token': token
@@ -127,113 +124,120 @@ function onClickJoinButton(joinButton, orderId) {
                     case 'success':
                         // successfully joined
                         buttonText = 'Joined'
-                        joinButton.title = "Click to cancel"
+                        // joinButton.title = "Click to cancel"
                         joinButton.classList.add('joined')
-                    //     joinButton.onclick = undefined
-                    // default:
-                    //     joinButton.style.color = '#fff'
                 }
                 joinButton.innerText = buttonText
-                joinButton.disabled = false
             })
             .catch(err => {
                 joinButton.classList.add('err')
                 joinButton.innerText = 'Our fault'
+            }).finally(() => {
                 joinButton.disabled = false
             })
     }
 }
 
-function clickHashTag(tag) {
-    const str = tag.text.slice(1) // #text -> text
+function onClickHashTag(tag) {
+    const str = tag.text.slice(1) // '#hashtag' -> 'hashtag'
     search_input.value = str
     searchByHashTag(str)
 }
 
+// convert a Date object to e.g. '9:00'
 function getTime(date) {
     return `${date.getHours()}:${('0' + date.getMinutes()).slice(-2)}`
 }
 
+// convert a Date object to e.g. '7/21'
 function getDate(date) {
     return `${date.getMonth() + 1}/${date.getDate()}`
 }
 
+// after you get the 'orders' data,
+// use this function to display them.
 function showOrders(orders) {
-    var s = ''
-    orders.forEach(order => {
-        var joinButton = ''
-        if (loggedIn && order.status != 'CLOSED') {
-            var joined = false
-            try {
-                for (let i = 0; i < order.join_people_id.length; i++) {
-                    const e = order.join_people_id[i];
-                    if (e == user_tsmcid) {
-                        joined = true
-                        break
-                    }
-                }
-            } catch (error) { }
-            if (joined) {
-                joinButton = `<button class="round_bar_button joined" onclick="onClickJoinButton(this, '${order._id}')" title="click to cancel">Joined</button>`
-            } else {
-                joinButton = `<button class="round_bar_button" onclick="onClickJoinButton(this, '${order._id}')">Join</button>`
-            }
-        }
+    if (orders.length) {
+        var s = ''
+        orders.forEach(order => {
 
-        var meet_time_start = new Date(order.meet_time[0])
-        var meet_time_end = new Date(order.meet_time[1])
-        var meet_time
-        if (meet_time_start.toLocaleDateString() == meet_time_end.toLocaleDateString()) {
-            meet_time = `
+            // make join button
+            var joinButton = ''
+            if (loggedIn && order.status != 'CLOSED') {
+                var joined = false
+                try {
+                    for (let i = 0; i < order.join_people_id.length; i++) {
+                        const e = order.join_people_id[i];
+                        if (e == user_tsmcid) {
+                            joined = true
+                            break
+                        }
+                    }
+                } catch (error) { }
+                if (joined) {
+                    joinButton = `<button class="round_bar_button joined" onclick="onClickJoinButton(this, '${order._id}')" title="click to cancel">Joined</button>`
+                } else {
+                    joinButton = `<button class="round_bar_button" onclick="onClickJoinButton(this, '${order._id}')">Join</button>`
+                }
+            }
+
+            // make meet time
+            var meet_time_start = new Date(order.meet_time[0])
+            var meet_time_end = new Date(order.meet_time[1])
+            var meet_time
+            if (meet_time_start.toLocaleDateString() == meet_time_end.toLocaleDateString()) {
+                meet_time = `
                 <p class="lightgraytext">
                     <span class="short_date">${getDate(meet_time_start)}</span><br>
                     ${getTime(meet_time_start)} - ${getTime(meet_time_end)}
                 </p>
             `;
-        } else {
-            meet_time = `
+            } else {
+                meet_time = `
                 <p class="lightgraytext">
                     ${meet_time_start.toLocaleString().slice(0, -3)} - ${meet_time_end.toLocaleString().slice(0, -3)}
                 </p>
             `;
-        }
+            }
 
-        var hashtags = ''
-        order.hashtag.forEach(hashtag => {
-            hashtags += `<a class="hashtag hover_opacity" onclick="clickHashTag(this)">#${hashtag}</a> `
-        })
+            // make hashtags
+            var hashtags = ''
+            order.hashtag.forEach(hashtag => {
+                hashtags += `<a class="hashtag hover_opacity" onclick="onClickHashTag(this)">#${hashtag}</a> `
+            })
 
-        var meet_factory = order.meet_factory
-        try {
-            if (!isNaN(meet_factory[0]))
-                meet_factory = 'FAB' + meet_factory
-        } catch (error) { }
+            // fix factory text.  E.g. 14P7 -> FAB14P7
+            var meet_factory = order.meet_factory
+            try {
+                if (!isNaN(meet_factory[0]))
+                    meet_factory = 'FAB' + meet_factory
+            } catch (error) { }
 
-        s += `
-            <div class="card ${loggedIn ? 'loggedIn' : ''}">
-                <div class="invisible_scroll title_scroll">
-                    <div>
-                        <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
+            s += `
+                <div class="card ${loggedIn ? 'loggedIn' : ''}">
+                    <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
+                    <div class="invisible_scroll">
                         <h1 class="card--title">${order.drink} ${order.title}</h1>
                         <p class="card--comment">${order.comment}</p>
-                        <p class="card--creator_id mar_bottom0" title="Creator">${order.creator_id}</p>
+                        <p class="card--creator_id" title="Creator">${order.creator_id}</p>
                     </div>
-                </div>
-                <div class="absoluteBottom">
-                    ${meet_time}
-                    <div class="invisible_scroll hashtag_panel">
-                        <div>
-                            <span class="card--fab">${order.store}, ${meet_factory}</span>
-                            <p class="mar_bottom0">${hashtags}</p>
+                    <div class="absoluteBottom">
+                        ${meet_time}
+                        <div class="invisible_scroll hashtag_panel_height">
+                            <p class="card--fab">${order.store}, ${meet_factory}</p>
+                            <p>${hashtags}</p>
                         </div>
+                        ${joinButton}
                     </div>
-                    ${joinButton}
                 </div>
-            </div>
-        `;
-    });
+            `;
+        });
+    } else {
+        // s = '<p>Nothing to show</p>'
+        s = `<div><button class="round_bar_button no_result">No result</button><div>`
+    }
     container.innerHTML = s
-    container.style.opacity = 1
+    container.style.opacity = 1 // fadein cards
 }
 
 
