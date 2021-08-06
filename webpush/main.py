@@ -48,9 +48,10 @@ def subscription():
     subscription_token = request.get_json("subscription_token")
     return Response(status=201, mimetype="application/json")
 
+from datetime import datetime
 @app.route("/push_v1/",methods=['POST'])
 def push_v1():
-    message = "Push Test v1"
+    message = "Enjoin Test at " + str(datetime.now())
     print("is_json",request.is_json)
 
     if not request.json or not request.json.get('sub_token'):
@@ -60,15 +61,12 @@ def push_v1():
 
     token = request.json.get('sub_token')
     try:
-        print('token',token)
-        print('===============================')
         token = json.loads(token)
         print('json.loads',token)
         print('===============================')
         res=send_web_push(token, message)
         print('done send_web_push()')
-        print('===============================')
-        print('res:', res, ', type:', type(res))
+        print('res:', res, res.content, ', type:', type(res))
         return jsonify({'success':1})
         # return res
     except Exception as e:
