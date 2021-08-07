@@ -42,6 +42,19 @@ animateHidden(document.getElementById('login').parentNode, loggedIn)
 animateHidden(myorders.parentNode, !loggedIn)
 animateHidden(logoutButton.parentNode, !loggedIn)
 
+var dark_theme
+function onClickChangeTheme(button) {
+    if (dark_theme) {
+        dark_theme = null
+        localStorage.removeItem('dark_theme')
+        document.body.classList.remove('dark')
+    } else {
+        dark_theme = 'true'
+        localStorage.setItem('dark_theme', dark_theme)
+        document.body.classList.add('dark')
+    }
+}
+
 function removeCookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 }
@@ -226,8 +239,8 @@ function showOrders(orders) {
             }
 
             s += `
-                <div class="card ${loggedIn ? 'loggedIn' : ''}">
-                    <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
+                <div class="card ${loggedIn ? 'loggedIn' : ''} ${order.epidemic_prevention_group}">
+                    <span class="card--group">${order.epidemic_prevention_group}</span>
                     <div class="invisible_scroll">
                         <h1 class="card--title">${order.drink} ${order.title}</h1>
                         <p class="card--comment">${order.comment}</p>
