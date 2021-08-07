@@ -1,4 +1,4 @@
-const apiUrl = ''
+const apiUrl = 'https://tsmc-enjoin.herokuapp.com'
 const container = document.getElementById("app");
 
 const token = document.cookie.replace(
@@ -160,10 +160,11 @@ function showOrders(orders) {
     if (orders.length) {
         var s = ''
         orders.forEach(order => {
+            var order_closed = order.status == 'CLOSED'
 
             // make join button
             var joinButton = ''
-            if (loggedIn && order.status != 'CLOSED') {
+            if (loggedIn && !order_closed) {
                 var joined = false
                 try {
                     for (let i = 0; i < order.join_people_id.length; i++) {
@@ -213,13 +214,21 @@ function showOrders(orders) {
                     meet_factory = 'FAB' + meet_factory
             } catch (error) { }
 
+            // order status indicator.  E.g. '3/5', 'Closed'
+            var order_status
+            if (order_closed) {
+                order_status = `<span title="Joined: ${order.join_people_id}">Closed</span>`
+            } else {
+                order_status = `<span title="Joined: ${order.join_people_id?.join(', ')}. 還差 ${order.join_people_bound - order.join_people} 人">${order.join_people}/${order.join_people_bound}</span>`
+            }
+            
             s += `
                 <div class="card ${loggedIn ? 'loggedIn' : ''}">
                     <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
                     <div class="invisible_scroll">
                         <h1 class="card--title">${order.drink} ${order.title}</h1>
                         <p class="card--comment">${order.comment}</p>
-                        <p class="card--creator_id" title="Creator">${order.creator_id}</p>
+                        <p class="card--creator_id" title="Creator">${order.creator_id}, ${order_status}</p>
                     </div>
                     <div class="absoluteBottom">
                         ${meet_time}
