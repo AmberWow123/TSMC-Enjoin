@@ -1,18 +1,15 @@
 const apiUrl = 'https://tsmc-enjoin.herokuapp.com'
 const container = document.getElementById("app");
 
-const token = document.cookie.replace(
-    /(?:(?:^|.*;\s*)Token\s*=\s*([^;]*).*$)|^.*$/,
-    "$1"
-);
-const user_objectId = document.cookie.replace(
-    /(?:(?:^|.*;\s*)_id\s*=\s*([^;]*).*$)|^.*$/,
-    "$1"
-);
-const user_tsmcid = document.cookie.replace(
-    /(?:(?:^|.*;\s*)id\s*=\s*([^;]*).*$)|^.*$/,
-    "$1"
-);
+function getCookie(name) {
+    return document.cookie.replace(
+        new RegExp(`(?:(?:^|.*;\\s*)${name}\\s*=\\s*([^;]*).*$)|^.*$`),
+        "$1"
+    );
+}
+const token = getCookie('Token')
+const user_objectId = getCookie('_id')
+const user_tsmcid = getCookie('id')
 // console.log('cookie:', document.cookie)
 // console.log('token:', token)
 // console.log('user_objectId:', user_objectId)
@@ -24,12 +21,14 @@ const logoutButton = document.getElementById('logout')
 const toggle_bar = document.getElementById('toggle_bar')
 
 function onclickToggleBarButton(button, routeName) {
+    // update button color
     toggle_bar.childNodes.forEach(e => {
         try {
             e.classList.remove('accent_color')
         } catch { }
     })
     button.classList.add('accent_color')
+
     fetchOrders(routeName)
 }
 
@@ -50,11 +49,14 @@ function logout() {
     removeCookie('Token');
     removeCookie('_id');
     removeCookie('id');
+
+    // redirect to main page
     window.location.replace('/')
 }
 logoutButton.onclick = logout
 
-// fetch template
+// Post JSON template
+// 
 // function postJSON(url, data) {
 //     // Default options are marked with *
 //     return fetch(url, {
@@ -73,6 +75,7 @@ logoutButton.onclick = logout
 //         .then(response => response.json()) // 輸出成 json
 // }
 
+// update join button UI & make join/unjoin requests
 function onClickJoinButton(joinButton, orderId) {
     if (joinButton.classList.contains('joined')) { // quit order
         joinButton.disabled = true
@@ -221,7 +224,7 @@ function showOrders(orders) {
             } else {
                 order_status = `<span title="Joined: ${order.join_people_id?.join(', ')}. 還差 ${order.join_people_bound - order.join_people} 人">${order.join_people}/${order.join_people_bound}</span>`
             }
-            
+
             s += `
                 <div class="card ${loggedIn ? 'loggedIn' : ''}">
                     <span class="card--group ${order.epidemic_prevention_group}">${order.epidemic_prevention_group}</span>
@@ -279,6 +282,7 @@ function searchByHashTag(str) {
     // .catch(error => {})
 }
 
+// fetch & show orders
 function fetchOrders(route = 'ListAllInProgressGroupOrder') {
     container.style.opacity = 0
     fetch(apiUrl + '/Order/' + route, {
