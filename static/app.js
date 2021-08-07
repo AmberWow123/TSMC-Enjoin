@@ -42,17 +42,16 @@ animateHidden(document.getElementById('login').parentNode, loggedIn)
 animateHidden(myorders.parentNode, !loggedIn)
 animateHidden(logoutButton.parentNode, !loggedIn)
 
-var dark_theme
+var dark_theme // may be null, 'true', or 'false'
 function onClickChangeTheme(button) {
-    if (dark_theme) {
-        dark_theme = null
-        localStorage.removeItem('dark_theme')
-        document.body.classList.remove('dark')
-    } else {
+    if (dark_theme === null || dark_theme == 'false') {
         dark_theme = 'true'
-        localStorage.setItem('dark_theme', dark_theme)
         document.body.classList.add('dark')
+    } else {
+        dark_theme = 'false'
+        document.body.classList.remove('dark')
     }
+    localStorage.setItem('dark_theme', dark_theme)
 }
 
 function removeCookie(name) {
@@ -306,3 +305,14 @@ function fetchOrders(route = 'ListAllInProgressGroupOrder') {
 }
 
 fetchOrders()
+
+const button_change_theme = document.getElementById('button_change_theme')
+if (dark_theme === null) { // if user haven't tried dark theme
+    // intent user to try out dark theme
+    setTimeout(() => {
+        button_change_theme.classList.add('hightlight')
+        setTimeout(() => {
+            button_change_theme.classList.remove('hightlight')
+        }, 5000);
+    }, 1000);
+}

@@ -12,24 +12,24 @@
     <!-- trying to avoid splash on refresh -->
     <script>
         var dark_theme = localStorage.getItem('dark_theme')
-        if (!dark_theme) {
+        if (dark_theme === null || dark_theme == 'false') {
             document.body.classList.remove('dark')
         }
     </script>
     <main>
-        <button class="button_change_theme" onclick="onClickChangeTheme(this)"><img
-                src="https://img.icons8.com/ios-glyphs/30/000000/moon-symbol.png" /></button>
+        <img id="button_change_theme" class="button" onclick="onClickChangeTheme(this)"
+            src="https://img.icons8.com/ios-glyphs/30/000000/moon-symbol.png" />
         <h2 style="text-align:center">TSMC Enjoin</h2>
         <div class="header_card" id="test1">
             <h1 id="user_id">User</h1>
             <p>Welcome</p>
-            <div class="button red_bg">
+            <div class="href_button red_bg">
                 <a id="login" href="/LoginRegister/">Login</a>
             </div>
-            <div class="button">
+            <div class="href_button">
                 <a id="myorders" href="/profile/">My Orders</a>
             </div>
-            <div class="button">
+            <div class="href_button">
                 <a id="logout">Logout</a>
             </div>
         </div>
