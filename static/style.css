@@ -58,6 +58,7 @@ main {
   outline: 0;
   padding: 12px;
   color: white;
+  /* background-color: #d60000; */
   background-color: #000;
   text-align: center;
   cursor: pointer;
@@ -69,7 +70,7 @@ main {
 }
 
 .red_bg a {
-  background-color: #ff5050;
+  background-color: #e80000;
 }
 
 .round_bar_button {
@@ -393,7 +394,7 @@ button:active, .button:active {
 }
 
 .dark .red_bg a {
-  background-color: #e80000;
+  background-color: #d00000;
 }
 
 .dark #search_bar {
