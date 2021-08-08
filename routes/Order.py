@@ -83,7 +83,10 @@ def SearchByHashtag():
 def JoinOrder(uuid, goid):
     print("uuid",uuid)
     print("goid", goid)
-
+    order_result = db["order"].find_one({'_id': ObjectId(goid)})
+    if order_result["join_people"]==order_result["join_people_bound"]:
+        print("The number is full")
+        return jsonify(message="The number is full")
     ## Update account joinOrder, add order id into joinOrder
     account_result = db["account"].find_one({'_id': ObjectId(uuid)})
     join_id_list = [account_result["id"]]
@@ -136,13 +139,13 @@ def QuitOrder(uuid, goid):
         accounts = db["account"].find()
         account_lst = []
         for account in accounts:
-        account["_id"] = str(account["_id"])
-        if account.get("joinOrder")!=None:
-            for i in range (len(account["joinOrder"])):
-                account["joinOrder"][i] = str(account["joinOrder"][i])
-        if account.get("ownOrder") !=None:
-            for i in range (len(account["ownOrder"])):
-                account["ownOrder"][i] = str(account["ownOrder"][i])
+            account["_id"] = str(account["_id"])
+            if account.get("joinOrder")!=None:
+                for i in range (len(account["joinOrder"])):
+                    account["joinOrder"][i] = str(account["joinOrder"][i])
+            if account.get("ownOrder") !=None:
+                for i in range (len(account["ownOrder"])):
+                    account["ownOrder"][i] = str(account["ownOrder"][i])
             account_lst.append(account)
         return Response(json.dumps(order_lst), json.dumps(account_lst), mimetype="application/json")
         #return jsonify(message = "This order is already closed, you couldn't quit", order=order_lst, account=account_lst)
