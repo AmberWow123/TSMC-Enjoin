@@ -180,20 +180,24 @@ function showOrders(orders) {
             // make join button
             var joinButton = ''
             if (loggedIn && !order_closed) {
-                var joined = false
-                try {
-                    for (let i = 0; i < order.join_people_id.length; i++) {
-                        const e = order.join_people_id[i];
-                        if (e == user_tsmcid) {
-                            joined = true
-                            break
+                if (order.creator_id != user_tsmcid) {
+                    var joined = false
+                    try {
+                        for (let i = 0; i < order.join_people_id.length; i++) {
+                            const e = order.join_people_id[i];
+                            if (e == user_tsmcid) {
+                                joined = true
+                                break
+                            }
                         }
+                    } catch (error) { }
+                    if (joined) {
+                        joinButton = `<button class="round_bar_button joined" onclick="onClickJoinButton(this, '${order._id}')" title="click to cancel">Joined</button>`
+                    } else {
+                        joinButton = `<button class="round_bar_button" onclick="onClickJoinButton(this, '${order._id}')">Join</button>`
                     }
-                } catch (error) { }
-                if (joined) {
-                    joinButton = `<button class="round_bar_button joined" onclick="onClickJoinButton(this, '${order._id}')" title="click to cancel">Joined</button>`
                 } else {
-                    joinButton = `<button class="round_bar_button" onclick="onClickJoinButton(this, '${order._id}')">Join</button>`
+                    joinButton = `<p>My Order</p>`
                 }
             }
 
