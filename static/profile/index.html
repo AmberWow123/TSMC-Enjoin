@@ -45,9 +45,9 @@
                 <th width="90">店家</th>
                 <th width="90">品項</th>
                 <th width="120">會面廠區</th>
-                <th width="150">標籤</th>
                 <th width="150">已有</th>
                 <th width="150">需求</th>
+                <th width="210">揪團夥伴</th>
                 <th width="300">時間</th>
                 <th width="120">狀態</th>
                 <th width="200">編輯</th>
@@ -61,11 +61,11 @@
                 <td>{{ item.store }}</td>
                 <td>{{ item.drink }}</td>
                 <td>{{ item.meet_factory }}</td>
-                <td>
-                  <div v-for="tag in item.hashtag">{{ tag }}</div>
-                </td>
                 <td>{{ item.join_people }}</td>
                 <td>{{ item.join_people_bound }}</td>
+                <td>
+                  <div v-for="ids in item.join_people_id">{{ ids }}</div>
+                </td>
                 <td>
                   <div>{{ formatDate(item.meet_time[0],0) }}</div>
                   <div>{{ formatDate(item.meet_time[1],1) }}</div>
@@ -108,7 +108,6 @@
                   <th width="90">店家</th>
                   <th width="90">品項</th>
                   <th width="120">廠區</th>
-                  <th width="150">標籤</th>
                   <th width="150">已有</th>
                   <th width="150">需求</th>
                   <th width="180">創單人</th>
@@ -127,9 +126,6 @@
                   <td>{{ item.store }}</td>
                   <td>{{ item.drink }}</td>
                   <td>{{ item.meet_factory }}</td>
-                  <td>
-                    <div v-for="tag in item.hashtag">{{ tag }}</div>
-                  </td>
                   <td>{{ item.join_people }}</td>
                   <td>{{ item.join_people_bound }}</td>
                   <td>{{ item.creator_id }}</td>
