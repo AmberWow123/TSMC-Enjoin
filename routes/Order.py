@@ -61,21 +61,14 @@ def ListAllClosedGroupOrder():
 def SearchByHashtag():
     order_table = db['order']
     # list of hashtags
-    # search_key = request.form.get("search_key").split()
     search_key = request.get_json()['search_key'].split()
-    # search key=["FAB18", "starbucks", "美式咖啡"]
 
-    result = []
+    query=[]
     for s_k in search_key:
-        search_result = list(db["order"].find({"hashtag":{"$regex":s_k}}))
-        result += search_result
-    for s_k in search_key:
-        search_result = list(db["order"].find({"title":{"$regex":s_k}}))
-        result += search_result
-    result = list(set(result))
-    for order in result:
-            order['_id'] = str(order['_id'])
-    return Response(json.dumps(result), mimetype="application/json")
+        for field in ['title', 'comment', 'hashtag', 'store', 'drink', 'creator_id', 'meet_factory', 'meet_time']:
+            query.append({field: {"$regex": s_k, '$options': 'i'}})
+    result = list(db["order"].find({'$or': query}))
+    return jsonify(result)
 
 
 
