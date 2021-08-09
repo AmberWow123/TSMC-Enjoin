@@ -281,7 +281,7 @@ createApp({
         })
         .then((res) => {
           button.disabled = false;
-          if (res.data.message==="Remove Success") {
+          if (res.data.message==="Remove Success!") {
             alert("退出揪團成功!");
             this.getAllGroupOrder();
           } else {
