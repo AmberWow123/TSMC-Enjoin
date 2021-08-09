@@ -26,10 +26,14 @@
     <div class="container">
       <div class="py-3">
         <div class="text-center">
-          <button type="button" class="btn btn-primary m-2" @click="openModal('newOrder')">新增單子</button>
-          <button type="button" class="btn btn-info m-2" @click="getAllGroupOrder()">取得所有跟團單</button>
-          <button type="button" class="btn btn-info m-2" @click="getOwnerGroupOrder()">取得創立單</button>
+          <button type="button" class="btn btn-primary m-2" @click="openModal('newOrder')">創立揪團</button>
+          <button type="button" class="btn btn-info m-2" @click="getAllGroupOrder()">顯示我的跟團</button>
+          <button type="button" class="btn btn-info m-2" @click="getOwnerGroupOrder()">刷新我的揪團</button>
           <button type="button" class="btn btn-danger m-2" @click="logout()">登出</button>
+        </div>
+        <hr>
+        <div>
+          <hr style="text-align:center">我的揪團單總覽</hr>
         </div>
         <div>
           <table class="table mt-4">
@@ -139,8 +143,7 @@
                   <td>{{ checkStatus(item.status) }}</td>
                   <td>
                     <div class="btn-group">
-                      <button type="button" class="btn btn-sm btn-outline-primary" @click="">聊天</button>
-                      <button id="leaveOrderBTN" type=" button" class="btn btn-sm btn-outline-danger" @click="leaveOrder(item)">刪除</button>
+                      <button id="leaveOrderBTN" type=" button" class="btn btn-sm btn-outline-danger" @click="leaveOrder(item)">取消跟團</button>
                     </div>
                   </td>
                 </tr>
