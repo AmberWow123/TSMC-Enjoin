@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, current_app
 from . import routes, db
 from bson.objectid import ObjectId
 from bson import json_util
@@ -55,9 +55,11 @@ def testDB():
 # 註冊
 @routes.route("/Account/Create", methods=['POST'])
 def accountCreate():
+    bcrypt = current_app.config["bcrypt"]
     req = request.get_json()
     _id = req['id']
-    password = req['password']
+    # 加密
+    password = bcrypt.generate_password_hash(req['password']).decode("utf-8")
     group = req['epidemic_prevention_group']
     result = db['account'].find_one({'id': _id})
     if result:
@@ -73,12 +75,13 @@ def accountCreate():
 #  登入
 @routes.route("/Account/Login", methods=['POST'])
 def accountLogin():
+    bcrypt = current_app.config["bcrypt"]
     req = request.get_json()
     _id = req['id']
     password = req['password']
     result = db['account'].find_one({'id': _id})
-    if result:
-        if result['password'] == password:
+    if result: 
+        if bcrypt.check_password_hash(result['password'], password):
             token = jwt.encode({
                 'id': _id,
                 'exp': datetime.utcnow() + timedelta(hours=24)

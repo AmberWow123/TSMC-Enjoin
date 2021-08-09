@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, send_from_directory, render_template
 from flask import send_from_directory, redirect, request
 from flask.helpers import send_file
+from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from werkzeug.exceptions import abort
 import os
@@ -16,36 +17,20 @@ class CustomJsonEncoder(JSONEncoder):
             return str(o)
         return super().default(o)
 
-# f = open('key.json', 'r')
-# data = json.load(f)
-# user = data["user"]
-# password = data["password"]
-# db = data["db"]
-# url = "mongodb://localhost:27017/hackathon"
-# url = "mongodb+srv://"+user+":"+password+db
 app = Flask(__name__, )
 app.json_encoder=CustomJsonEncoder
 app.config['JSON_AS_ASCII'] = False
 CORS(app)
 app.config["MONGO_URI"] = url
 mongo.init_app(app)
-
+bcrypt = Bcrypt(app)
+app.config["bcrypt"] = bcrypt
 
 from routes import *
 import webpush.main as webpush
 app.register_blueprint(routes)
 app.register_blueprint(webpush.app, url_prefix='/webpush')
-# @app.route('/<string:folder>')
-# def pages(folder):
-#     print(db.collection_names())
-#     url = folder+"/index.html"
-#     print(url)
-#     # return jsonify(message='it works!')
-#     return render_template(url)
 
-# @app.route('/')
-# def home():
-#     return render_template("index.html")
 
 @app.route('/', defaults={'path': 'index.html'}, methods=['GET'])
 @app.route('/<path:path>', methods=['GET'])
