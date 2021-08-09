@@ -140,7 +140,10 @@
                     <div>{{ formatDate(item.meet_time[0],0) }}</div>
                     <div>{{ formatDate(item.meet_time[1],1) }}</div>
                   </td>
-                  <td>{{ checkStatus(item.status) }}</td>
+                  <td v-if="item.status==='IN_PROGRESS'" class="text-primary">揪團中</td>
+                  <td v-else-if="item.status==='COMPLETED'" class="text-warning">已滿</td>
+                  <td v-else-if="item.status==='CLOSED'" class="text-danger">已成立</td>
+                  <td v-else>{{ checkStatus(item.status) }}</td>
                   <td>
                     <div class="btn-group">
                       <button id="leaveOrderBTN" type=" button" class="btn btn-sm btn-outline-danger" @click="leaveOrder(item)">退出</button>
