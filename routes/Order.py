@@ -3,8 +3,6 @@ from . import routes, db
 import json
 from bson.objectid import ObjectId
 from bson import json_util
-from .account import token_required
-
 import datetime
 # {    # account
 #     id: 工號(int) # primary key, not null
@@ -67,20 +65,28 @@ def SearchByHashtag():
     search_key = request.get_json()['search_key'].split()
     # search key=["FAB18", "starbucks", "美式咖啡"]
 
-    query=[]
+    result = []
     for s_k in search_key:
-        for field in ['title', 'comment', 'hashtag', 'store', 'drink', 'creator_id', 'meet_factory', 'meet_time']:
-            query.append({field: {"$regex": s_k, '$options': 'i'}})
-    result = list(db["order"].find({'$or': query}))
-    return jsonify(result)
+        search_result = list(db["order"].find({"hashtag":{"$regex":s_k}}))
+        result += search_result
+    for s_k in search_key:
+        search_result = list(db["order"].find({"title":{"$regex":s_k}}))
+        result += search_result
+    result = list(set(result))
+    for order in result:
+            order['_id'] = str(order['_id'])
+    return Response(json.dumps(result), mimetype="application/json")
 
 
-@routes.route("/Order/JoinOrder/<string:uuid>/<string:goid>", methods=["GET"])
-@token_required
+
+@routes.route("/Order/JoinOrder/<string:uuid>/<string:goid>", methods=["POST"])
 def JoinOrder(uuid, goid):
     print("uuid",uuid)
     print("goid", goid)
-
+    order_result = db["order"].find_one({'_id': ObjectId(goid)})
+    if order_result["join_people"]==order_result["join_people_bound"]:
+        print("The number is full")
+        return jsonify(message="The number is full")
     ## Update account joinOrder, add order id into joinOrder
     account_result = db["account"].find_one({'_id': ObjectId(uuid)})
     join_id_list = [account_result["id"]]
@@ -109,8 +115,7 @@ def JoinOrder(uuid, goid):
     order_result = db["order"].find_one({'_id': ObjectId(goid)})
     join_people = order_result["join_people"]+1
     if "join_people_id" in order_result:
-        if order_result["join_people_id"]:
-            join_id_list += order_result["join_people_id"]
+        join_id_list += order_result["join_people_id"]
     if join_people == order_result["join_people_bound"]:
         db["order"].update_one({'_id': ObjectId(goid)}, {"$set": {"join_people": join_people, "status":"COMPLETED", "join_people_id":join_id_list}})
     else:
@@ -127,48 +132,51 @@ def QuitOrder(uuid, goid):
     if order_result["status"]=="CLOSED":
         ## Return old account collections and order collections
         orders = db["order"].find()
-        # order_lst = []
-        # for order in orders:
-        #     order["_id"] = str(order["_id"])
-        #     order_lst.append(order)
+        order_lst = []
+        for order in orders:
+            order["_id"] = str(order["_id"])
+            order_lst.append(order)
         accounts = db["account"].find()
-        # account_lst = []
-        # for account in accounts:
-        #     account["_id"] = str(account["_id"])
-        #     account_lst.append(account)
-        # return jsonify(message = "This order is already closed, you couldn't quit", order=order_lst, account=account_lst)
-        return jsonify(message = "This order is already closed, you couldn't quit", order=list(orders), account=list(accounts))
+        account_lst = []
+        for account in accounts:
+            account["_id"] = str(account["_id"])
+            if account.get("joinOrder")!=None:
+                for i in range (len(account["joinOrder"])):
+                    account["joinOrder"][i] = str(account["joinOrder"][i])
+            if account.get("ownOrder") !=None:
+                for i in range (len(account["ownOrder"])):
+                    account["ownOrder"][i] = str(account["ownOrder"][i])
+            account_lst.append(account)
+        return Response(json.dumps(order_lst), json.dumps(account_lst), mimetype="application/json")
+        #return jsonify(message = "This order is already closed, you couldn't quit", order=order_lst, account=account_lst)
     
     ## Find account and remove order from join order
     account_result = db["account"].find_one({'_id': ObjectId(uuid)})
-    for objectId in account_result["joinOrder"]:
-        if str(objectId) == goid:
-            account_result["joinOrder"].remove(objectId)
-            break
-    db['account'].update_one({'_id': ObjectId(uuid)}, {"$set": {"joinOrder": account_result["joinOrder"]}})
-    ## Remove join account from order
-    order_result["join_people_id"].remove(account_result["id"])
-    #print("After join_people_id: ", join_id_list)
-    join_people = order_result["join_people"]-1
-    db["order"].update_one({'_id': ObjectId(goid)}, {"$set": {"join_people": join_people, "join_people_id":order_result["join_people_id"], "status":"IN_PROGRESS"}})
+    if ObjectId(goid) in account_result["joinOrder"]:
+        account_result["joinOrder"].remove(ObjectId(goid))
+        db['account'].update_one({'_id': ObjectId(uuid)}, {"$set": {"joinOrder": account_result["joinOrder"]}})
+        ## Remove join account from order
+        order_result["join_people_id"].remove(account_result["id"])
+        join_people = order_result["join_people"]-1
+        db["order"].update_one({'_id': ObjectId(goid)}, {"$set": {"join_people": join_people, "join_people_id":order_result["join_people_id"], "status":"IN_PROGRESS"}})
     ## Return new account collections and order collections
     orders = db["order"].find()
-    # order_lst = []
-    # for order in orders:
-    #     order["_id"] = str(order["_id"])
-    #     order_lst.append(order)
+    order_lst = []
+    for order in orders:
+        order["_id"] = str(order["_id"])
+        order_lst.append(order)
     accounts = db["account"].find()
-    # account_lst = []
-    # for account in accounts:
-    #     account["_id"] = str(account["_id"])
-    #     if account.get("joinOrder")!=None:
-    #         for i in range (len(account["joinOrder"])):
-    #             account["joinOrder"][i] = str(account["joinOrder"][i])
-    #     if account.get("ownOrder") !=None:
-    #         for i in range (len(account["ownOrder"])):
-    #             account["ownOrder"][i] = str(account["ownOrder"][i])
+    account_lst = []
+    for account in accounts:
+        account["_id"] = str(account["_id"])
+        if account.get("joinOrder")!=None:
+            for i in range (len(account["joinOrder"])):
+                account["joinOrder"][i] = str(account["joinOrder"][i])
+        if account.get("ownOrder") !=None:
+            for i in range (len(account["ownOrder"])):
+                account["ownOrder"][i] = str(account["ownOrder"][i])
 
-    #     account["joinOrder"] = str(account["joinOrder"])
-    #     account_lst.append(account)
-    # return jsonify(message='Remove Success!', order=order_lst, account=account_lst)
-    return jsonify(message='Remove Success!', order=list(orders), account=list(accounts))
+        #account["joinOrder"] = str(account["joinOrder"])
+        account_lst.append(account)
+    #return Response(json.dumps(order_lst), mimetype="application/json")
+    return jsonify(message='Remove Success!', order=order_lst, account=account_lst)
