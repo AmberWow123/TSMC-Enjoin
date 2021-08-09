@@ -134,6 +134,9 @@ function onClickJoinButton(joinButton, orderId) {
             .then(json => {
                 var buttonText = json.message
                 switch (buttonText) {
+                    case 'The number is full':
+                        buttonText = 'Full'
+                        break;
                     case 'you are already in this order':
                         buttonText = 'Already joined'
                         break;
@@ -182,20 +185,24 @@ function showOrders(orders) {
             var joinButton = ''
             if (loggedIn && !order_closed) {
                 if (order.creator_id != user_tsmcid) {
-                    var joined = false
-                    try {
-                        for (let i = 0; i < order.join_people_id.length; i++) {
-                            const e = order.join_people_id[i];
-                            if (e == user_tsmcid) {
-                                joined = true
-                                break
+                    if (order.join_people < order.join_people_bound) {
+                        var joined = false
+                        try {
+                            for (let i = 0; i < order.join_people_id.length; i++) {
+                                const e = order.join_people_id[i];
+                                if (e == user_tsmcid) {
+                                    joined = true
+                                    break
+                                }
                             }
+                        } catch (error) { }
+                        if (joined) {
+                            joinButton = `<button class="round_bar_button joined" onclick="onClickJoinButton(this, '${order._id}')">Joined</button>`
+                        } else {
+                            joinButton = `<button class="round_bar_button" onclick="onClickJoinButton(this, '${order._id}')">Join</button>`
                         }
-                    } catch (error) { }
-                    if (joined) {
-                        joinButton = `<button class="round_bar_button joined" onclick="onClickJoinButton(this, '${order._id}')" title="click to cancel">Joined</button>`
                     } else {
-                        joinButton = `<button class="round_bar_button" onclick="onClickJoinButton(this, '${order._id}')">Join</button>`
+                        joinButton = `<button class="round_bar_button" onclick="onClickJoinButton(this, '${order._id}')">Full</button>`
                     }
                 } else {
                     joinButton = `<p>My Order</p>`
