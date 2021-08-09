@@ -128,6 +128,7 @@ function onClickJoinButton(joinButton, orderId) {
                 'x-access-token': token
             },
             mode: 'cors', // no-cors, cors, *same-origin
+            method: 'POST'
         })
             .then(res => res.json())
             .then(json => {
