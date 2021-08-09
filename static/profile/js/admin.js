@@ -274,13 +274,11 @@ createApp({
     leaveOrder(item){
       this.tempOrder = {...item};
       let button = document.getElementById("leaveOrderBTN");
-      button.disabled = true;
       axios
         .post(`${apiUrl}/Order/QuitOrder/${COOKIE_id}/${this.tempOrder._id}`,{
           headers: {'x-access-token': token}
         })
         .then((res) => {
-          button.disabled = false;
           if (res.data.message==="Remove Success!") {
             alert("退出揪團成功!");
             this.getAllGroupOrder();
