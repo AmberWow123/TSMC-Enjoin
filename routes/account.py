@@ -23,23 +23,21 @@ def token_required(f):
             token = request.headers['x-access-token']
         if not token:
             return 'Unauthorized Access!', 401
-        print("check token ", token)
         data = jwt.decode(token, config.SECRET_KEY, algorithm="HS256")
-        print("token decode: ", data)
         current_user = db['account'].find_one({'id': data['id']})
         if not current_user:
             return 'Unauthorized Access!', 401
         return f(*args, **kwargs)
     return decorated
 
-#account api
+# test
 @routes.route('/Account/LoginTest', methods=['GET'])
 @token_required
 def test():
     print("authorized")
     return jsonify(message="Authorized, is already logged in")
 
-#show DB values
+# show DB values
 @routes.route('/testDB', methods=['GET'])
 def testDB():
     orders = db["order"].find()
@@ -54,7 +52,7 @@ def testDB():
         account_lst.append(account)
     return jsonify(message='it works!', order=order_lst, account=account_lst)
 
-#create account
+# 註冊
 @routes.route("/Account/Create", methods=['POST'])
 def accountCreate():
     req = request.get_json()
@@ -72,6 +70,7 @@ def accountCreate():
     response.headers['Access-Control-Allow-Headers'] = '*'
     return response
 
+#  登入
 @routes.route("/Account/Login", methods=['POST'])
 def accountLogin():
     req = request.get_json()
@@ -94,7 +93,7 @@ def accountLogin():
     response.headers['Access-Control-Allow-Headers'] = '*'
     return response    
 
-
+#  新增單子
 @routes.route("/Account/CreateOrder/<string:tsmcid>", methods=['POST'])
 @token_required
 def createOrder(tsmcid):
@@ -114,7 +113,6 @@ def createOrder(tsmcid):
             form['epidemic_prevention_group'] = result["epidemic_prevention_group"]
         del form['meet_time_start']
         del form['meet_time_end']
-        print(form)
         insert = db['order'].insert_one(form)
         orderUuid = insert.inserted_id 
 
@@ -139,8 +137,9 @@ def editOrder(tsmcid, goid):
     form = request.get_json()
     account = db['account'].find_one({'id': tsmcid})
     if account:
-        #確認單子是否為此擁有者
+        # 確認帳號是否有創建單子
         if "ownOrder" in account:
+            # 確認單子是否為此擁有者
             if ObjectId(goid) in account["ownOrder"]:
                 result = db['order'].find_one({'_id': ObjectId(goid)})
                 if result:
@@ -151,12 +150,11 @@ def editOrder(tsmcid, goid):
                     result["drink"] = drink
                     result["meet_factory"] = meet_factory
                     result['hashtag'] = [meet_factory, store, drink]
-                    # result['meet_time'] = form["meet_time"]
                     result['meet_time'] = [form["meet_time_start"], form["meet_time_end"]]
                     result['join_people_bound'] = int(form["join_people_bound"])
                     result['comment'] = form["comment"]
                     result['title'] = form["title"]
-                    print(result)
+                    # print(result)
                     if (result['join_people_bound'] > result['join_people']):
                         result["status"] = "IN_PROGRESS"
                         db["order"].replace_one({'_id': ObjectId(goid)}, result)
@@ -185,7 +183,6 @@ def editOrder(tsmcid, goid):
 @token_required
 def closeOrder(tsmcid, goid):
     result = db['account'].find_one({'id': tsmcid})
-    print(result)
     if result: 
         if "ownOrder" in result:
             if ObjectId(goid) in result["ownOrder"]:
