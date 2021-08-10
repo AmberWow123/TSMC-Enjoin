@@ -44,20 +44,20 @@ animateHidden(myorders.parentNode, !loggedIn)
 animateHidden(logoutButton.parentNode, !loggedIn)
 
 const nextTheme = loggedIn ? {
-    default: 'light',
-    light: 'light2',
-    light2: 'dark',
-    dark: 'default'
+    light2: 'light',
+    light: 'default',
+    default: 'dark',
+    dark: 'light2'
 } : {
     default: 'dark',
     light: 'dark',
     light2: 'dark',
-    dark: 'light'
+    dark: 'light2'
 }
 var theme // may be null, 'light', 'light2', 'dark', 'default'
 function onClickChangeTheme(button) {
     document.body.classList.remove(theme)
-    theme = nextTheme[theme] || 'light'
+    theme = nextTheme[theme] || 'light2'
     document.body.classList.add(theme)
     localStorage.setItem('theme', theme)
 }
