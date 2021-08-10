@@ -114,6 +114,8 @@ def createOrder(tsmcid):
         form['join_people'] = 0
         if "epidemic_prevention_group" in result:
             form['epidemic_prevention_group'] = result["epidemic_prevention_group"]
+        if "comment" not in form:
+            form['comment'] = ""
         del form['meet_time_start']
         del form['meet_time_end']
         insert = db['order'].insert_one(form)
