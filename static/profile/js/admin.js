@@ -293,6 +293,9 @@ createApp({
 
 
     openModal(status, item) {
+      if (!('comment' in item)) {
+        item.comment = ''
+      }
       if(status === "newOrder")
       {
         this.tempOrder = {
