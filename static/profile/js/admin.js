@@ -293,9 +293,6 @@ createApp({
 
 
     openModal(status, item) {
-      if (!('comment' in item)) {
-        item.comment = ''
-      }
       if(status === "newOrder")
       {
         this.tempOrder = {
@@ -306,6 +303,9 @@ createApp({
       }
       else if(status === "editOrder")
       {
+        if (!('comment' in item)) {
+          item.comment = ''
+        }
         this.tempOrder = {
           ...item,
           meet_time_start: item.meet_time[0],
