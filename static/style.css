@@ -27,6 +27,7 @@ main {
   font-family: arial;
   border-radius: 10px;
   overflow: hidden;
+  background: white;
 }
 
 .price {
@@ -58,19 +59,20 @@ main {
   outline: 0;
   padding: 12px;
   color: white;
-  /* background-color: #d60000; */
   background-color: #000;
   text-align: center;
   cursor: pointer;
   font-size: 18px;
+  transition: all .2s;
 }
 
 .href_button a:hover {
-  opacity: 0.7;
+  opacity: 0.77;
 }
 
-.red_bg a {
+.red_button a {
   background-color: #e80000;
+  color: white;
 }
 
 .round_bar_button {
@@ -352,6 +354,15 @@ button:active, .button:active {
   opacity: 20%;
 }
 
+#button_change_theme.hightlight:hover {
+  transform: scale(1.1);
+  opacity: 20%;
+}
+
+#button_change_theme.hightlight:active {
+  transform: scale(.9);
+}
+
 /* ============================== */
 
 /*           DARK THEME           */
@@ -359,6 +370,10 @@ button:active, .button:active {
 .dark {
   background: #000;
   color: #fff;
+}
+
+.dark .header_card {
+  background: #000;
 }
 
 .dark .card {
@@ -393,7 +408,7 @@ button:active, .button:active {
   background-color: #b60000;
 }
 
-.dark .red_bg a {
+.dark .red_button a {
   background-color: #d00000;
 }
 
@@ -434,4 +449,48 @@ button:active, .button:active {
 
 .dark #button_change_theme:hover {
   opacity: 40%;
+}
+
+/* ============================== */
+
+/*           LIGHT THEME          */
+
+/*           gray Button          */
+
+.light .header_card {
+  background: #fafafa;
+}
+
+.light .href_button a {
+  /* background-color: #d60000; */
+  background-color: #f3f3f3;
+  color: black;
+}
+
+.light .href_button a:hover {
+  color: #737373;
+}
+
+.light .red_button a {
+  background-color: #e80000;
+  color: white;
+}
+
+.light .red_button a:hover {
+  color: white;
+}
+
+/* ============================== */
+
+/*          LIGHT2 THEME          */
+
+/*           Red Button           */
+
+.light2 .href_button a {
+  background-color: #d60000;
+  color: white;
+}
+
+.light2 .red_button a {
+  background-color: #e80000;
 }

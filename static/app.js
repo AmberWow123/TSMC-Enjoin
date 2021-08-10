@@ -19,6 +19,9 @@ const myorders = document.getElementById('myorders')
 const search_input = document.getElementById('search_bar')
 const logoutButton = document.getElementById('logout')
 const toggle_bar = document.getElementById('toggle_bar')
+const loginButton = document.getElementById('user_id')
+
+loginButton.innerText = user_tsmcid
 
 function onclickToggleBarButton(button, routeName) {
     // update button color
@@ -32,8 +35,6 @@ function onclickToggleBarButton(button, routeName) {
     fetchOrders(routeName)
 }
 
-document.getElementById('user_id').innerText = user_tsmcid
-
 const loggedIn = (token != '')
 function animateHidden(e, hidden) {
     e.style.height = hidden ? 0 : e.scrollHeight + 'px'
@@ -42,16 +43,23 @@ animateHidden(document.getElementById('login').parentNode, loggedIn)
 animateHidden(myorders.parentNode, !loggedIn)
 animateHidden(logoutButton.parentNode, !loggedIn)
 
-var dark_theme // may be null, 'true', or 'false'
+const nextTheme = loggedIn ? {
+    default: 'light',
+    light: 'light2',
+    light2: 'dark',
+    dark: 'default'
+} : {
+    default: 'dark',
+    light: 'dark',
+    light2: 'dark',
+    dark: 'light'
+}
+var theme // may be null, 'light', 'light2', 'dark', 'default'
 function onClickChangeTheme(button) {
-    if (dark_theme === null || dark_theme == 'false') {
-        dark_theme = 'true'
-        document.body.classList.add('dark')
-    } else {
-        dark_theme = 'false'
-        document.body.classList.remove('dark')
-    }
-    localStorage.setItem('dark_theme', dark_theme)
+    document.body.classList.remove(theme)
+    theme = nextTheme[theme] || 'light'
+    document.body.classList.add(theme)
+    localStorage.setItem('theme', theme)
 }
 
 function removeCookie(name) {
@@ -318,8 +326,8 @@ function fetchOrders(route = 'ListAllInProgressGroupOrder') {
 
 fetchOrders()
 
-const button_change_theme = document.getElementById('button_change_theme')
-if (dark_theme === null) { // if user haven't tried dark theme
+if (localStorage.getItem('theme') === null) { // if user haven't tried other theme
+    const button_change_theme = document.getElementById('button_change_theme')
     // intent user to try out dark theme
     setTimeout(() => {
         button_change_theme.classList.add('hightlight')
