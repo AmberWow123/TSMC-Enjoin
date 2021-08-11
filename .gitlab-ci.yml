@@ -54,11 +54,12 @@ app:
     script:
         - apt-get update -qy
         - apt-get install -y ruby-dev
+        - apt-get install -y python-dev python-pip
+        - pip install -r requirements.txt
         - gem install dpl
 
         - dpl --provider=heroku --app=$HEROKU_APP_BACKUP --api-key=$HEROKU_SECRET_KEY
         - export MONGODB_URL=$MONGODB_URL
-        # - pip install -r requirements.txt
     only:
         - backup
 
