@@ -1,4 +1,4 @@
-**Deployed at https://enjoin-tsmc.herokuapp.com**
+**Deployed at https://hackathon-enjoin.herokuapp.com**
 
 > 錢多大魯再加蛋，孤單寂寞沒人伴，Enjoin 讓你找到伴 – 家浩, 羿婷, 同益, 雅心, 秉諭, 志健, 哲銓
 

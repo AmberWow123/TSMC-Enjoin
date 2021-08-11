@@ -1,5 +1,5 @@
 import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.esm-browser.prod.js";
-const apiUrl = "https://enjoin-tsmc.herokuapp.com";
+const apiUrl = "https://hackathon-enjoin.herokuapp.com";
 //const apiUrl = `http://127.0.0.1:5000`;
 
 let orderModal = null;
