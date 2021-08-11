@@ -50,7 +50,7 @@
 #     - pip install -r requirements.txt
 
 staging:
-    stage: deploy
+    type: deploy
     script:
         - apt-get update -qy
         - apt-get install -y ruby-dev
@@ -63,7 +63,7 @@ staging:
         - backup
 
 app:
-    stage: deploy
+    type: deploy
     script:
         - apt-get update -qy
         - apt-get install -y ruby-dev
