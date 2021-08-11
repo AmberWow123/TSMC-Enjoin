@@ -3,7 +3,7 @@ import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.9/vue.
 createApp({
   data() {
     return {
-      apiUrl: `https://tsmc-enjoin.herokuapp.com`,
+      apiUrl: `https://enjoin-t.herokuapp.com`,
       //apiUrl: `http://127.0.0.1:5000`,
       user: {
         id: "",

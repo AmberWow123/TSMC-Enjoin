@@ -1,4 +1,4 @@
-const apiUrl = 'https://tsmc-enjoin.herokuapp.com'
+const apiUrl = 'https://enjoin-t.herokuapp.com'
 const container = document.getElementById("app");
 
 function getCookie(name) {
