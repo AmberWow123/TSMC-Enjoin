@@ -49,7 +49,7 @@
 #     - apt-get install -y python-dev python-pip
 #     - pip install -r requirements.txt
 
-app:
+staging:
     stage: deploy
     script:
         - apt-get update -qy
@@ -62,16 +62,16 @@ app:
     only:
         - backup
 
-# app:
-#     stage: deploy
-#     script:
-#         - apt-get update -qy
-#         - apt-get install -y ruby-dev
-#         - gem install dpl
-#         - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_SECRET_KEY --skip-cleanup
+app:
+    stage: deploy
+    script:
+        - apt-get update -qy
+        - apt-get install -y ruby-dev
+        - gem install dpl
+        - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_SECRET_KEY --skip-cleanup
         
-#         # - pip install -r requirements.txt
-#         - export MONGODB_URL=$MONGODB_URL
-#     only:
-#         - master
+        # - pip install -r requirements.txt
+        - export MONGODB_URL=$MONGODB_URL
+    only:
+        - master
  
