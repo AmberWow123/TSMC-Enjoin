@@ -8,6 +8,17 @@ Restful API, Python 3.7
 ```
 pip install -r requirements.txt
 ```
+And a /key.json file is needed to connect to a mongo db server.
+
+E.g.
+
+```
+{
+    "db": "@123.123.mongodb.net/myDatabase?retryWrites=true&w=majority",
+    "user": "xxx",
+    "password": "123"
+}
+```
 
 ## Run
 ```
