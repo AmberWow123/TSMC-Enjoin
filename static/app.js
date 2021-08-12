@@ -1,4 +1,4 @@
-const apiUrl = 'https://enjoin-t.herokuapp.com'
+const apiUrl = ''
 const container = document.getElementById("app");
 
 function getCookie(name) {
